@@ -38,6 +38,7 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   const claseId = req.params.claseId;
   try {
     const clase = await getClaseById(claseId);
+    console.log(clase);
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     const contributions = await getClaseWithContribuciones(claseId);
     res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, layout: 'layouts/unilayout' });

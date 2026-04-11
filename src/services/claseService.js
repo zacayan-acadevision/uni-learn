@@ -3,9 +3,34 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getClaseById = async (intId) => {
-  return await prisma.clases.findUnique({
+  const currentClase = await prisma.clases.findUnique({
     where: { id: parseInt(intId) },
   });
+
+  if (!currentClase) return null;
+
+  const [prevClass, nextClass] = await Promise.all([
+    prisma.clases.findFirst({
+      where: {
+        materiaId: currentClase.materiaId,
+        id: { lt: currentClase.id },
+      },
+      orderBy: { id: 'desc' },
+    }),
+    prisma.clases.findFirst({
+      where: {
+        materiaId: currentClase.materiaId,
+        id: { gt: currentClase.id },
+      },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  return {
+    ...currentClase,
+    prevClass,
+    nextClass,
+  };
 };
 
 export const updateClaseContent = async (id, content) => {
