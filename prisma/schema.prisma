@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn from the docs: https://pris.ly/d/prisma-schema
+
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model materias {
+  id        Int        @id @default(autoincrement())
+  content   String
+  clases    clases[]
+  ejercicios ejercicios[]
+}
+
+model clases {
+  id        Int     @id @default(autoincrement())
+  content   String
+  materiaId Int
+  materia   materias @relation(fields: [materiaId], references: [id])
+  contribuciones contribuciones[]
+}
+
+model ejercicios {
+  id        Int      @id @default(autoincrement())
+  content   String
+  materiaId Int
+  materia   materias @relation(fields: [materiaId], references: [id])
+}
+
+model contribuciones {
+  id        Int      @id @default(autoincrement())
+  content   String
+  claseId   Int
+  clase     clases    @relation(fields: [claseId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,30 @@
+{
+  "name": "p30",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": " $env:NODE_OPTIONS=\"--experimental-vm-modules\"; npx jest test",
+    "dev": "nodemon src/index.js",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^17.4.1",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "method-override": "^3.0.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^6.19.3"
+  }
+}

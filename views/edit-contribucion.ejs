@@ -1,0 +1,10 @@
+<h1 id="title">Editar Contribución</h1>
+<form action="/admin/clases/<%= contribucion.claseId %>/contribuciones/<%= contribucion.id %>" method="POST">
+  <label for="content">Contenido:</label>
+  <textarea name="content" id="content"><%= contribucion.content %></textarea>
+  <button type="submit">Guardar</button>
+</form>
+<form action="/admin/clases/<%= contribucion.claseId %>/contribuciones/<%= contribucion.id %>/delete" method="POST" style="display: inline;">
+  <button type="submit" style="color: red; background: none; border: 1px solid red; padding: 5px 10px; cursor: pointer; margin-left: 10px;">Eliminar</button>
+</form>
+<a href="/admin/clase/<%= contribucion.claseId %>/contribuciones">Volver</a>

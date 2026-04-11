@@ -1,0 +1,10 @@
+<h1 id="title">Editar Ejercicio</h1>
+<form action="/admin/ejercicios/<%= ejercicio.id %>" method="POST">
+  <label for="content">Contenido:</label>
+  <textarea name="content" id="content"><%= ejercicio.content %></textarea>
+  <button type="submit">Guardar</button>
+</form>
+<form action="/admin/ejercicios/<%= ejercicio.id %>/delete" method="POST" style="display: inline;">
+  <button type="submit" style="color: red; background: none; border: 1px solid red; padding: 5px 10px; cursor: pointer; margin-left: 10px;">Eliminar</button>
+</form>
+<a href="/admin">Volver</a>

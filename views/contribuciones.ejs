@@ -1,0 +1,14 @@
+<h1 id="title">Contribuciones</h1>
+<h2><%= clase.content %></h2>
+<ul>
+  <% clase.contribuciones.forEach(contribucion => { %>
+    <li>
+      <%= contribucion.content %>
+      <a href="/admin/clase/<%= clase.id %>/contribuciones/<%= contribucion.id %>">Editar</a>
+      <form action="/admin/clase/<%= clase.id %>/contribuciones/<%= contribucion.id %>/delete" method="POST" style="display: inline;">
+        <button type="submit" style="color: red; background: none; border: 1px solid red; padding: 5px 10px; cursor: pointer; margin-left: 10px;">Eliminar</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+<a href="/admin/clases/<%= clase.id %>">Volver</a>
