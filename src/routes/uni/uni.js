@@ -2,6 +2,7 @@ import express from 'express';
 import { getMateriaById, getMateriasWithClases } from '../../services/materiaService.js';
 import { getClaseById } from '../../services/claseService.js';
 import { getEjerciciosByMateriaId } from '../../services/ejercicioService.js';
+import { getClaseWithContribuciones } from '../../services/contribucionService.js';
 
 
 
@@ -38,7 +39,8 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   try {
     const clase = await getClaseById(claseId);
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
-    res.render('pages/clase', { title: 'Home', clase, ejercicios, layout: 'layouts/unilayout' });
+    const contributions = await getClaseWithContribuciones(claseId);
+    res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(apiError);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });

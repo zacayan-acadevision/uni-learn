@@ -35,3 +35,5 @@ export const deleteContribucion = async (id) => {
     where: { id: parseInt(id) }
   });
 };
+
+//get contrinbution by classid

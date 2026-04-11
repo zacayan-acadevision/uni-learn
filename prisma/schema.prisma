@@ -13,17 +13,17 @@ datasource db {
 }
 
 model materias {
-  id        Int        @id @default(autoincrement())
-  content   String
-  clases    clases[]
+  id         Int          @id @default(autoincrement())
+  content    String
+  clases     clases[]
   ejercicios ejercicios[]
 }
 
 model clases {
-  id        Int     @id @default(autoincrement())
-  content   String
-  materiaId Int
-  materia   materias @relation(fields: [materiaId], references: [id])
+  id             Int              @id @default(autoincrement())
+  content        String
+  materiaId      Int
+  materia        materias         @relation(fields: [materiaId], references: [id])
   contribuciones contribuciones[]
 }
 
@@ -35,10 +35,19 @@ model ejercicios {
 }
 
 model contribuciones {
-  id        Int      @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   content   String
+  tipo      ContribucionTipo
   claseId   Int
-  clase     clases    @relation(fields: [claseId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  clase     clases           @relation(fields: [claseId], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+enum ContribucionTipo {
+  COMENTARIO
+  FILE
+  YOUTUBE
+  AUDIO
+  MARKDOWN
 }

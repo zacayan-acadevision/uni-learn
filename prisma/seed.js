@@ -7,6 +7,9 @@ async function main() {
   await prisma.ejercicios.deleteMany();
   await prisma.clases.deleteMany();
   await prisma.materias.deleteMany();
+  await prisma.contribuciones.deleteMany();
+
+  const tipos = ['COMENTARIO', 'FILE', 'YOUTUBE', 'AUDIO', 'MARKDOWN'];
 
   for (let i = 1; i <= 5; i++) {
     const materia = await prisma.materias.create({
@@ -29,15 +32,18 @@ async function main() {
     });
     console.log(`Created materia: ${materia.content}`);
 
-    // Crear 3 contribuciones por cada clase
+    // Crear 2 contribuciones de cada tipo por cada clase
     for (const clase of materia.clases) {
-      for (let j = 1; j <= 3; j++) {
-        await prisma.contribuciones.create({
-          data: {
-            content: `Contribución ${j} para clase ${clase.id}`,
-            claseId: clase.id
-          }
-        });
+      for (const tipo of tipos) {
+        for (let j = 1; j <= 2; j++) {
+          await prisma.contribuciones.create({
+            data: {
+              content: `${tipo} ${j} para clase ${clase.id}`,
+              tipo: tipo,
+              claseId: clase.id
+            }
+          });
+        }
       }
     }
   }

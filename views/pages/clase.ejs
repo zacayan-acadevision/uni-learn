@@ -20,14 +20,14 @@
 
             <div class="card">
                 <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
-                <div class="list-item">
-                    <span>Apuntes_Clase1.pdf</span>
-                    <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-                </div>
-                <div class="list-item">
-                    <span>Grafica_Funcion.png</span>
-                    <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-                </div>
+                <% contributions.contribuciones.filter(c=> c.tipo == "FILE").forEach(contrib => { %>
+                    <div class="list-item">
+                        <span>
+                            <%= contrib.content %>
+                        </span>
+                        <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+                    </div>
+                    <% }) %>
             </div>
 
             <div class="card">
@@ -131,7 +131,7 @@
             </div>
             <div class="card">
                 <h3 style="margin-bottom:15px;">📝 Banco de Ejercicios</h3>
-                <% ejercicios.forEach(ejercicio => { %>
+                <% ejercicios.forEach(ejercicio=> { %>
                     <div class="list-item">
                         <span>Ejercicio <%= ejercicio.id %>: <%= ejercicio.content %></span>
                         <a href="ejercicio_page.html" class="btn btn-primary"
@@ -143,9 +143,20 @@
             </div>
             <div class="card">
                 <h3 style="margin-bottom:15px;">🎵 Audio de Apoyo</h3>
-                <iframe src="audio_card_iframe.html"
-                    style="width: 100%; height: auto; min-height: 150px; border: none; display: block;"
-                    title="Audio de Apoyo"></iframe>
+                <% contributions.contribuciones.filter(c=> c.tipo == "AUDIO").forEach(contrib => { %>
+                <div class="audio-container list-item">
+                    <p><%= contrib.content %></p>
+                    <div class="play-control">
+                        <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
+                        <div id="controls-audio1" class="controls-wrap" style="display: none;">
+                            <audio id="audio1" style="display: none;">
+                                <source src="aaa.mp3" type="audio/mpeg">
+                                Tu navegador no soporta el elemento de audio.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
             </div>
 
 
@@ -156,7 +167,8 @@
                 </div>
                 <div style="margin-bottom:15px;">
                     <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." rows="3"
-                        style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"></textarea>
+                        style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"><% contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO").forEach(contrib => { %><%= contrib.content %>
+<% }) %></textarea>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button onclick="addComment()"
@@ -172,20 +184,14 @@
             <div class="card" style="margin-top:30px;">
                 <h3 style="margin-bottom:15px;">🎥 Vídeos Relacionable</h3>
                 <div id="video-grid" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                    <% contributions.contribuciones.filter(c=> c.tipo == "YOUTUBE").forEach(contrib => { %>
                     <div class="video-thumb" onclick="playVideo('rzYDWIQh2r4')"
                         style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px;">
                         <img src="https://img.youtube.com/vi/rzYDWIQh2r4/mqdefault.jpg"
                             style="width:100%; display:block;">
-                        <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;">Concepto de
-                            Límite</div>
+                        <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;"><%= contrib.content %></div>
                     </div>
-                    <div class="video-thumb" onclick="playVideo('p6ynR1c5TPA')"
-                        style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px;">
-                        <img src="https://img.youtube.com/vi/p6ynR1c5TPA/mqdefault.jpg"
-                            style="width:100%; display:block;">
-                        <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;">Introducción al
-                            Álgebra</div>
-                    </div>
+                    <% }) %>
                 </div>
             </div>
 
