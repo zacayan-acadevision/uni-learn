@@ -1,0 +1,81 @@
+<div class="page-content">
+    <div class="breadcrumb">
+        <!-- El enlace 'Volver' SI debe usar target='mainFrame' porque este archivo vive dentro del iframe y queremos que el contenido cambie en él -->
+        <a href="view_materias.html" target="mainFrame">← Volver a Materias</a> &nbsp; | &nbsp; <span>Cálculo Diferencial</span>
+    </div>
+
+    <h1 style="margin-top:20px;">Detalle de la Asignatura</h1>
+
+    <!-- Buscador dinámico -->
+    <div class="search-box">
+        <input type="text" id="buscadorClases" placeholder="🔍 Buscar clase (ej: 'Límites' o 'Derivadas')..." onkeyup="filtrarClases()">
+    </div>
+
+    <div style="display: flex; gap: 30px;">
+        <!-- Columna Izquierda: Clases y Ejercicios -->
+        <div style="flex: 2;">
+            <div class="card">
+                <h2 style="margin-bottom:15px;">Clases Disponibles</h2>
+                <div id="listaClases">
+                    <div class="list-item" data-n="clase 1 limites">
+                        <span class="item-text"><strong style="color:var(--primary)">Clase 1:</strong> Límites XD</span>
+                        <!-- target="_self" es el comportamiento natural para navegar dentro del mismo iframe -->
+                        <a href="/uni/clase" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+                    </div>
+                    <div class="list-item" data-n="clase 2 derivadas">
+                        <span class="item-text"><strong style="color:var(--primary)">Clase 2:</strong> Derivadas</span>
+                        <a href="class_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+                    </div>
+                    <div class="list-item" data-n="clase nueva">
+                        <span class="item-text"><strong style="color:var(--primary)">Nueva Clase:</strong> Editor de Contenido</span>
+                        <a href="new_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Editar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom:15px;">Banco de Ejercicios</h2>
+<div class="list-item">
+                        <span>Ejercicio 1.1: Límite lateral</span>
+                        <a href="ejercicio_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Ejercicio</a>
+                    </div>
+                    <div class="list-item">
+                        <span>Ejercicio 1.2: Indeterminación 0/0</span>
+                        <a href="ejercicio_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Ejercicio</a>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div style="flex: 1;">
+            <div class="card">
+                <h3 style="margin-bottom:10px;">📢 Novedades</h3>
+                <p style="font-size: 0.85rem; color: #64748b;">• Nuevo PDF disponible.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom:10px;">💬 Comentarios</h3>
+                <div style="font-size: 0.85rem; color: #475565;">
+                    <strong style="display:block; margin-bottom:5px;">Prof. García:</strong>
+                    No olviden repasar la guía.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filtrarClases() {
+            const input = document.getElementById('buscadorClases');
+            const filter = input.value.toLowerCase();
+            const items = document.querySelectorAll('#listaClases .list-item');
+
+            items.forEach(item => {
+                const text = item.getAttribute('data-n');
+                if (text && text.includes(filter)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Materias | UNI-LEARN</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-content">
+    <h1>Explorar Materias</h1>
+    <p style="margin-bottom: 20px; color: #64748b;">Selecciona una asignatura para ver sus clases y contenidos.</p>
+    
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+        <!-- Materia 1 -->
+        <div class="card">
+            <h3>Cálculo Diferencial</h3>
+            <p style="font-size: 0.9rem; color: #64748b;">Estado: Activa</p>
+            <br>
+            <a href="view_materia_detalle.html" target="_self" class="btn btn-primary">Entrar a la materia</a>
+        </div>
+
+        <!-- Materia 2 -->
+        <div class="card">
+            <h3>Álgebra Lineal</h3>
+            <p style="font-size: 0.9rem; color: #64748b;">Estado: Pendiente</p>
+            <br>
+            <button class="btn" disabled style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Bloqueada</button>
+        </div>
+
+        <!-- Materia 3 -->
+        <div class="card">
+            <h3>Física I</h3>
+            <p style="font-size: 0.9rem; color: #64748b;">Estado: Próximamente</p>
+            <br>
+            <button class="btn" disabled style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Bloqueada</button>
+        </div>
+    </div>
+</body>
+</html>
