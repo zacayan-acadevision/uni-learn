@@ -1,8 +1,8 @@
 <div class="page-content">
   <div class="breadcrumb">
-    <a href="view_materias.html" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
-    <a href="view_materia_detalle.html" target="_parent">Cálculo Diferencial</a> &nbsp; | &nbsp;
-    <span style="color:#3b82f5;">Clase 1: Límites</span>
+    <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
+    <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent"><%= ejercicios[0].materiaId %>: Nombre de materia</a> &nbsp; | &nbsp;
+    <span style="color:#3b82f5;"><%= clase.content %></span>
   </div>
 
   <h1 style="margin-top:20px;">Contenido de la Clase</h1>
