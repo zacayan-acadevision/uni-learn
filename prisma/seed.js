@@ -4,10 +4,20 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Clear existing data to avoid duplication during seeding
+  await prisma.news.deleteMany();
+  await prisma.contribuciones.deleteMany();
   await prisma.ejercicios.deleteMany();
   await prisma.clases.deleteMany();
   await prisma.materias.deleteMany();
-  await prisma.contribuciones.deleteMany();
+
+  // Create 10 news items
+  for (let i = 1; i <= 10; i++) {
+    await prisma.news.create({
+      data: {
+        content: `Noticia importante ${i}: ¡Bienvenido a la nueva actualización!`,
+      },
+    });
+  }
 
   const tipos = ['COMENTARIO', 'FILE', 'YOUTUBE', 'AUDIO', 'MARKDOWN'];
 
@@ -57,3 +67,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+

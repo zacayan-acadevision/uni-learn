@@ -3,6 +3,7 @@ import { getMateriaById, getMateriasWithClases } from '../../services/materiaSer
 import { getClaseById } from '../../services/claseService.js';
 import { getEjerciciosByMateriaId } from '../../services/ejercicioService.js';
 import { getClaseWithContribuciones } from '../../services/contribucionService.js';
+import { getNews } from '../../services/newsService.js';
 
 
 
@@ -37,11 +38,11 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   const materiaId = req.params.id;
   const claseId = req.params.claseId;
   try {
+    const news = await getNews();
     const clase = await getClaseById(claseId);
-    console.log(clase);
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     const contributions = await getClaseWithContribuciones(claseId);
-    res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, layout: 'layouts/unilayout' });
+    res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, news, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(apiError);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
