@@ -1,5 +1,7 @@
 import express from 'express';
-import { getMateriasWithClases } from '../../services/materiaService.js';
+import { getMateriaById, getMateriasWithClases } from '../../services/materiaService.js';
+import { getClaseById } from '../../services/claseService.js';
+import { getEjerciciosByMateriaId } from '../../services/ejercicioService.js';
 
 
 
@@ -12,27 +14,31 @@ router.get('/', async (req, res) => {
     const materias = await getMateriasWithClases();
     res.render('pages/home', { title: 'Home', materias, layout: 'layouts/unilayout' });
   } catch (error) {
-    console.error(apiError);
+    console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
   }
 });
 
 // /materia
-router.get('/materia', async (req, res) => {
+router.get('/materia/:id', async (req, res) => {
+  const materiaId = req.params.id;
   try {
-     const materias = await getMateriasWithClases();
-    res.render('pages/materia', { title: 'Home', materias, layout: 'layouts/unilayout' });
+    const clases = await getMateriaById(materiaId);
+    res.render('pages/materia', { title: 'Home', clases, layout: 'layouts/unilayout' });
   } catch (error) {
-    console.error(apiError);
+    console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
   }
 });
 
 // /materia
-router.get('/clase', async (req, res) => {
+router.get('/materia/:id/clase/:claseId', async (req, res) => {
+  const materiaId = req.params.id;
+  const claseId = req.params.claseId;
   try {
-     const materias = await getMateriasWithClases();
-    res.render('pages/clase', { title: 'Home', materias, layout: 'layouts/unilayout' });
+    const clase = await getClaseById(claseId);
+    const ejercicios = await getEjerciciosByMateriaId(materiaId);
+    res.render('pages/clase', { title: 'Home', clase, ejercicios, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(apiError);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });

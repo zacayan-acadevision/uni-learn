@@ -20,3 +20,18 @@ export const deleteEjercicio = async (id) => {
     where: { id: parseInt(id) },
   });
 };
+
+export const getEjerciciosByMateriaId = async (materiaId) => {
+  return await prisma.ejercicios.findMany({
+    where: { materiaId: parseInt(materiaId) },
+  });
+};
+
+export const createEjercicio = async (materiaId, content) => {
+  return await prisma.ejercicios.create({
+    data: {
+      content,
+      materiaId: parseInt(materiaId),
+    },
+  });
+};

@@ -1,30 +1,18 @@
 <div class="page-content">
-    <h1>Explorar Materias</h1>
-    <p style="margin-bottom: 20px; color: #64748b;">Selecciona una asignatura para ver sus clases y contenidos.</p>
-    
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
-        <!-- Materia 1 -->
-        <div class="card">
-            <h3>Cálculo Diferencial</h3>
-            <p style="font-size: 0.9rem; color: #64748b;">Estado: Activa</p>
-            <br>
-            <a href="uni/materia" target="_self" class="btn btn-primary">Entrar a la materia</a>
-        </div>
+  <h1>Explorar Materias</h1>
+  <p style="margin-bottom: 20px; color: #64748b;">Selecciona una asignatura para ver sus clases y contenidos.</p>
 
-        <!-- Materia 2 -->
-        <div class="card">
-            <h3>Álgebra Lineal</h3>
-            <p style="font-size: 0.9rem; color: #64748b;">Estado: Pendiente</p>
-            <br>
-            <button class="btn" disabled style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Bloqueada</button>
-        </div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
 
-        <!-- Materia 3 -->
-        <div class="card">
-            <h3>Física I</h3>
-            <p style="font-size: 0.9rem; color: #64748b;">Estado: Próximamente</p>
-            <br>
-            <button class="btn" disabled style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Bloqueada</button>
-        </div>
+    <% materias.forEach(materia => { %>
+    <div class="card">
+      <h3><%= materia.content %></h3>
+      <p style="font-size: 0.9rem; color: #64748b;">Estado: Activa</p>
+      <br>
+      <a href="uni/materia/<%= materia.id %>" target="_self" class="btn btn-primary">Entrar a la materia</a>
     </div>
+    <% }) %>
+
+    
+  </div>
 </div>
