@@ -49,6 +49,28 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   }
 });
 
+// /novedades
+router.get('/novedades', async (req, res) => {
+  try {
+    const news = await getNews();
+    res.render('pages/novedades', { title: 'Home', news, layout: 'layouts/unilayout' });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
+//admin
+router.get('/admin', async (req, res) => {
+  try {
+    const news = await getNews();
+    res.render('pages/novedades', { title: 'Home', news, layout: 'layouts/unilayout' });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
 
 export default router;
 
