@@ -16,20 +16,7 @@
     <div style="flex: 2;">
       <%- include('../partials/clases-disponibles', { clases: clases }); %>
 
-      <div class="card">
-        <h2 style="margin-bottom:15px;">Banco de Ejercicios</h2>
-        <% ejercicios.forEach(ejercicio=> { %>
-        <div class="list-item">
-          <span>Ejercicio <%= ejercicio.id %>: <%= ejercicio.content %></span>
-          <a href="ejercicio_page.html" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
-            Ejercicio</a>
-        </div>
-        <% }) %>
-        <div class="list-item">
-          <span>Ejercicio 1.2: Indeterminación 0/0</span>
-          <a href="ejercicio_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Ejercicio</a>
-        </div>
-      </div>
+      <%- include('../partials/banco-ejercicios', { ejercicios: ejercicios }); %>
     </div>
 
     <!-- Columna Derecha -->
