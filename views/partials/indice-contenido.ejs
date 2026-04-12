@@ -1,0 +1,189 @@
+<div class="card" id="indice-container">
+  <div style="display:flex; justify-content:space-between; align-items:center;" id="indice-header">
+    <h3 style="margin-bottom:0;">📌 Índice de Contenido</h3>
+    <button onclick="toggleIndice()"
+      style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
+      <span id="indice-toggle-icon">−</span>
+    </button>
+  </div>
+  <ul id="indice-list"
+    style="list-style:none; padding:0; font-size:0.85rem; transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
+    <li style="margin-bottom:8px;"><a href="#seccion-teoria" onclick="scrollToSection(event, 'seccion-teoria')"
+        class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 1)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion"
+        onclick="scrollToSection(event, 'sub-definicion')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 1)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo"
+        onclick="scrollToSection(event, 'sub-ejemplo')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 1)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla"
+        onclick="scrollToSection(event, 'sub-tabla')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 1)</a></li>
+    <li style="margin-bottom:8px;"><a href="#seccion-teoria-2"
+        onclick="scrollToSection(event, 'seccion-teoria-2')" class="nav-link"
+        style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 2)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-2"
+        onclick="scrollToSection(event, 'sub-definicion-parte-2')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 2)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-2"
+        onclick="scrollToSection(event, 'sub-ejemplo-parte-2')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 2)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-2"
+        onclick="scrollToSection(event, 'sub-tabla-parte-2')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 2)</a></li>
+    <li style="margin-bottom:8px;"><a href="#seccion-teoria-3"
+        onclick="scrollToSection(event, 'seccion-teoria-3')" class="nav-link"
+        style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 3)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-3"
+        onclick="scrollToSection(event, 'sub-definicion-parte-3')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 3)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-3"
+        onclick="scrollToSection(event, 'sub-ejemplo-parte-3')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 3)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-3"
+        onclick="scrollToSection(event, 'sub-tabla-parte-3')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 3)</a></li>
+    <li style="margin-bottom:8px;"><a href="#seccion-teoria-4"
+        onclick="scrollToSection(event, 'seccion-teoria-4')" class="nav-link"
+        style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 4)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-4"
+        onclick="scrollToSection(event, 'sub-definicion-parte-4')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 4)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-4"
+        onclick="scrollToSection(event, 'sub-ejemplo-parte-4')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 4)</a></li>
+    <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-4"
+        onclick="scrollToSection(event, 'sub-tabla-parte-4')" class="nav-link"
+        style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 4)</a></li>
+  </ul>
+  <button id="hide-indice-btn" onclick="toggleIndice()"
+    style="margin-top:10px; padding:5px 10px; font-size:0.8rem; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; display:none;">
+    Mostrar Índice
+  </button>
+</div>
+
+<script>
+  let indiceAutoCloseTimer;
+
+  function toggleIndice() {
+    const indiceList = document.getElementById('indice-list');
+    const toggleIcon = document.getElementById('indice-toggle-icon');
+    const hideButton = document.getElementById('hide-indice-btn');
+    const header = document.getElementById('indice-header');
+    if (indiceList.style.maxHeight === '0px') {
+      indiceList.style.marginTop = '15px';
+      indiceList.style.maxHeight = '1000px';
+      toggleIcon.textContent = '−';
+      hideButton.textContent = 'Ocultar Índice';
+      clearTimeout(indiceAutoCloseTimer);
+    } else {
+      indiceList.style.maxHeight = '0px';
+      indiceList.style.marginTop = '0px';
+      toggleIcon.textContent = '+';
+      hideButton.textContent = 'Mostrar Índice';
+      setTimeout(() => {
+        indiceList.style.maxHeight = '0px';
+      }, 300);
+    }
+  }
+
+  function scrollToSection(event, sectionId) {
+    event.preventDefault();
+    const container = document.getElementById('resumen-teoria-container');
+    const section = document.getElementById(sectionId);
+    if (container && section) {
+      const sectionTop = section.offsetTop - container.offsetTop;
+      container.scrollTo({
+        top: sectionTop,
+        behavior: 'smooth'
+      });
+      const allLinks = document.querySelectorAll('.nav-link');
+      allLinks.forEach(link => link.classList.remove('active'));
+      event.target.classList.add('active');
+      localStorage.setItem('activeSection', sectionId);
+
+      clearTimeout(indiceAutoCloseTimer);
+      const hideButton = document.getElementById('hide-indice-btn');
+      const indiceList = document.getElementById('indice-list');
+      const toggleIcon = document.getElementById('indice-toggle-icon');
+
+      if (indiceList.style.maxHeight !== '0px') {
+        indiceAutoCloseTimer = setTimeout(() => {
+          indiceList.style.maxHeight = '0px';
+          toggleIcon.textContent = '+';
+          hideButton.textContent = 'Mostrar Índice';
+        }, 10000);
+      }
+    }
+  }
+
+  function highlightActiveSection() {
+    const activeSection = localStorage.getItem('activeSection');
+    if (activeSection) {
+      const section = document.getElementById(activeSection);
+      const container = document.getElementById('resumen-teoria-container');
+      if (section && container) {
+        const sectionTop = section.offsetTop - container.offsetTop;
+        container.scrollTop = sectionTop;
+        const allLinks = document.querySelectorAll('.nav-link');
+        allLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+        updateIndiceButtons();
+      }
+    }
+
+    function updateIndiceButtons() {
+      const indiceList = document.getElementById('indice-list');
+      const toggleIcon = document.getElementById('indice-toggle-icon');
+      const hideButton = document.getElementById('hide-indice-btn');
+      const header = document.getElementById('indice-header');
+      if (indiceList.style.maxHeight === '0px') {
+        toggleIcon.textContent = '+';
+        hideButton.textContent = 'Mostrar Índice';
+        header.style.marginBottom = '0px';
+      } else {
+        toggleIcon.textContent = '−';
+        hideButton.textContent = 'Ocultar Índice';
+        header.style.marginBottom = '15px';
+      }
+    }
+  }
+
+  window.addEventListener('load', () => {
+    const indiceList = document.getElementById('indice-list');
+    const hideButton = document.getElementById('hide-indice-btn');
+    if (indiceList.style.maxHeight === '0px') {
+      hideButton.textContent = 'Mostrar Índice';
+    } else {
+      hideButton.textContent = 'Ocultar Índice';
+    }
+    highlightActiveSection();
+  });
+
+  window.addEventListener('scroll', () => {
+    const container = document.getElementById('resumen-teoria-container');
+    if (container) {
+      const activeSection = localStorage.getItem('activeSection');
+      if (activeSection) {
+        const section = document.getElementById(activeSection);
+        if (section && container.contains(section)) {
+          const sectionTop = section.offsetTop - container.scrollTop;
+          const sectionHeight = section.offsetHeight;
+          const containerHeight = container.offsetHeight;
+          if (sectionTop <= 20 && sectionTop + sectionHeight >= containerHeight - 20) {
+            const allLinks = document.querySelectorAll('.nav-link');
+            allLinks.forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
+            if (activeLink) {
+              activeLink.classList.add('active');
+            }
+            updateIndiceButtons();
+          }
+        }
+      }
+    }
+  });
+</script>

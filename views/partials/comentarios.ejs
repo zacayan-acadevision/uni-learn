@@ -1,0 +1,63 @@
+<div class="card">
+  <h3 style="margin-bottom:15px;">💬 Comentarios</h3>
+  <div id="comments-list" style="margin-bottom:15px;">
+    <p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>
+  </div>
+  <div style="margin-bottom:15px;">
+    <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." rows="3"
+      style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"><% contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO").forEach(contrib => { %><%= contrib.content %>
+<% }) %></textarea>
+  </div>
+  <div style="display:flex; gap:10px;">
+    <button onclick="addComment()"
+      style="flex:1; padding:8px 16px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
+      Publicar Comentario
+    </button>
+    <button onclick="clearComments()"
+      style="flex:1; padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
+      Limpiar
+    </button>
+  </div>
+</div>
+
+<script>
+  function addComment() {
+    const commentInput = document.getElementById('comment-input');
+    const commentsList = document.getElementById('comments-list');
+    const commentText = commentInput.value.trim();
+
+    if (commentText) {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      const dateString = now.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+
+      const newComment = document.createElement('div');
+      newComment.style.padding = '10px';
+      newComment.style.borderBottom = '1px solid var(--border)';
+      newComment.style.fontSize = '0.85rem';
+      newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+
+      const noComments = commentsList.querySelector('p');
+      if (noComments) {
+        noComments.style.display = 'none';
+      }
+
+      commentsList.appendChild(newComment);
+      commentInput.value = '';
+    }
+  }
+
+  function clearComments() {
+    const commentsList = document.getElementById('comments-list');
+    const commentInput = document.getElementById('comment-input');
+    commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
+    commentInput.value = '';
+  }
+</script>
