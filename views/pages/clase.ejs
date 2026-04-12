@@ -311,7 +311,8 @@
         visualizerBtn.textContent = 'Cancelar';
         visualizerBtn.onclick = cancelVisualization;
 
-        editadoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const h1 = document.querySelector('h1');
+        h1.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
