@@ -1,10 +1,18 @@
-<div class="card">
-  <h3 style="margin-bottom:10px;">📢 Novedades</h3>
-  <% if (locals.news && locals.news.length > 0) { %>
-    <% locals.news.forEach(item=> {%>
-      <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %></p>
-    <% }) %>
-  <% } else { %>
-    <p style="font-size: 0.85rem; color: #f59e0b;">⚠️ <strong>Variable 'news' no disponible</strong> - Por favor, envía el objeto news al partial en la vista que lo incluye.</p>
-  <% } %>
+<div class="card" id="novedades-card">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="margin-bottom:0px;">📢 Novedades</h3>
+    <button onclick="toggleCard('novedades-content', this)"
+      style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
+      <span id="novedades-toggle-icon">+</span>
+    </button>
+  </div>
+  <div id="novedades-content" style="transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
+    <% if (locals.news && locals.news.length > 0) { %>
+      <% locals.news.forEach(item=> {%>
+        <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %></p>
+      <% }) %>
+    <% } else { %>
+      <p style="font-size: 0.85rem; color: #f59e0b;">⚠️ <strong>Variable 'news' no disponible</strong> - Por favor, envía el objeto news al partial en la vista que lo incluye.</p>
+    <% } %>
+  </div>
 </div>
