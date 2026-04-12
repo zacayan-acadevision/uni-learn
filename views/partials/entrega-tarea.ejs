@@ -2,7 +2,48 @@
   <h2 style="margin-bottom:15px;">📤 Entrega de Tarea</h2>
   <form action="#" onsubmit="alert('Tarea enviada!'); return false;"
     style="display:flex; flex-direction:row; align-items:center; gap:10px;">
-    <input type="file" style="border:none; padding:0; font-size:0.8rem;">
+    <input type="file" id="file-input" style="display:none;" onchange="handleFileSelect()">
+    <button type="button" id="select-file-btn" onclick="document.getElementById('file-input').click()"
+      style="padding:8px 16px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem;">
+      📄 Seleccionar Archivo
+    </button>
+    <button type="button" id="cancel-file-btn" onclick="cancelFileSelect()"
+      style="display:none; padding:8px 16px; background:#ef4444; color:white; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem;">
+      ❌ Cancelar
+    </button>
+    <span id="file-name" style="font-size:0.85rem; color:#64748b; display:none;"></span>
     <button type="submit" class="btn btn-primary">Enviar</button>
   </form>
 </div>
+
+<script>
+function handleFileSelect() {
+  const fileInput = document.getElementById('file-input');
+  const selectBtn = document.getElementById('select-file-btn');
+  const cancelBtn = document.getElementById('cancel-file-btn');
+  const fileName = document.getElementById('file-name');
+
+  if (fileInput.files.length > 0) {
+    selectBtn.textContent = '📄 Cambiar Archivo';
+    cancelBtn.style.display = 'inline-block';
+    fileName.textContent = 'Archivo: ' + fileInput.files[0].name;
+    fileName.style.display = 'inline';
+  } else {
+    selectBtn.textContent = '📄 Seleccionar Archivo';
+    cancelBtn.style.display = 'none';
+    fileName.style.display = 'none';
+  }
+}
+
+function cancelFileSelect() {
+  const fileInput = document.getElementById('file-input');
+  const selectBtn = document.getElementById('select-file-btn');
+  const cancelBtn = document.getElementById('cancel-file-btn');
+  const fileName = document.getElementById('file-name');
+
+  fileInput.value = '';
+  selectBtn.textContent = '📄 Seleccionar Archivo';
+  cancelBtn.style.display = 'none';
+  fileName.style.display = 'none';
+}
+</script>
