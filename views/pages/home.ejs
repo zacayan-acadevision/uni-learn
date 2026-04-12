@@ -2,17 +2,132 @@
   <h1>Explorar Materias</h1>
   <p style="margin-bottom: 20px; color: #64748b;">Selecciona una asignatura para ver sus clases y contenidos.</p>
 
-  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+  <div id="materiasContainer" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
 
     <% materias.forEach(materia => { %>
-    <div class="card">
-      <h3><%= materia.content %></h3>
-      <p style="font-size: 0.9rem; color: #64748b;">Estado: Activa</p>
-      <br>
-      <a href="uni/materia/<%= materia.id %>" target="_self" class="btn btn-primary">Entrar a la materia</a>
+    <div class="card materia-card" data-id="<%= materia.id %>">
+      <div class="materia-view">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <h3><%= materia.content %></h3>
+          <button onclick="toggleEdit(this)" class="btn-icon" title="Editar">✏️</button>
+        </div>
+        <p style="font-disize: 0.9rem; color: #64748b;">Estado: Activa</p>
+        <br>
+        <a href="uni/materia/<%= materia.id %>" target="_self" class="btn btn-primary">Entrar a la materia</a>
+      </div>
+      
+      <div class="materia-edit" style="display: none;">
+        <input type="text" class="edit-input" value="<%= materia.content %>" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+        <div style="display: flex; gap: 10px;">
+          <button onclick="saveEdit(this)" class="btn btn-primary" style="flex: 1;">Guardar</button>
+          <button onclick="toggleEdit(this)" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
+        </div>
+      </div>
     </div>
     <% }) %>
-
-    
+    <!-- Card de Creación -->
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center; border: 2px dashed #cbd5e1; background: transparent;">
+      <h3 style="margin-top: 0;">Nueva Materia</h3>
+      <input type="text" id="materiaNameInput" placeholder="Nombre de la materia" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+      <button onclick="crearMateria()" class="btn btn-primary">Crear</button>
+    </div>
+  
   </div>
+
+    <script>
+      async function crearMateria() {
+        const input = document.getElementById('materiaNameInput');
+        const nombre = input.value.trim();
+        if (!nombre) return;
+
+        try {
+          const response = await fetch('/api/materias', {
+            method: 'POST',
+            headers: {
+              'Content:Type': 'application/json'
+            },
+            body: JSON.stringify({ content: nombre })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al crear la materia');
+          }
+
+          const nuevaMateria = await response.json();
+          const container = document.getElementById('materiasContainer');
+          const formCard = container.lastElementChild;
+
+          const newCard = document.createElement('div');
+          newCard.className = 'card materia-card';
+          newCard.setAttribute('data-id', nuevaMateria.id);
+          newCard.innerHTML = `
+            <div class="materia-view">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <h3>${nuevaMateria.content}</h3>
+                <button onclick="toggleEdit(this)" class="btn-icon" title="Editar">✏️</button>
+              </div>
+              <p style="font-size: 0.9rem; color: #64748b;">Estado: Activa</p>
+              <br>
+              <a href="/uni/materia/${nuevaMateria.id}" target="_self" class="btn btn-primary">Entrar a la materia</a>
+            </div>
+            <div class="materia-edit" style="display: none;">
+              <input type="text" class="edit-input" value="${nuevaMateria.content}" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+              <div style="display: flex; gap: 10px;">
+                <button onclick="saveEdit(this)" class="btn btn-primary" style="flex: 1;">Guardar</button>
+                <button onclick="toggleEdit(limpiarVista(this))" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
+              </div>
+            </div>
+          `;
+
+          container.insertBefore(newCard, formCard);
+          input.value = '';
+        } catch (error) {
+          console.error('Error:', error);
+          alert('No se pudo crear la materia.');
+        }
+      }
+
+      function toggleEdit(btn) {
+        const card = btn.closest('.materia-card');
+        const view = card.querySelector('.materia-view');
+        const edit = card.querySelector('.materia-edit');
+        
+        if (view.style.display === 'none') {
+          view.style.display = 'block';
+          edit.style.display = 'none';
+        } else {
+          view.style.display = 'none';
+          edit.style.display = 'block';
+        }
+      }
+
+      function limpiarVista(btn) {
+        const card = btn.closest('.materia-card');
+        const view = card.querySelector('.materia-view');
+        const edit = card.
+        card.querySelector('.materia-edit');
+        view.style.display = 'block';
+        edit.style.display = 'none';
+        return btn;
+      }
+
+      async function saveEdit(btn) {
+        const card = btn.closest('.materia-card');
+        const id = card.getAttribute('data-id');
+        const input = card.querySelector('.edit-input');
+        const newContent = input.value.trim();
+
+        if (!newContent) return;
+
+        // UI Only: Simulating save for now as requested
+        console.log(`Simulando guardado de materia ${id}: ${newContent}`);
+        
+        const h3 = card.querySelector('.materia-view h3');
+        h3.innerText = newContent;
+        
+        // Reset to view mode
+        card.querySelector('.materia-view').style.display = 'block';
+        card.querySelector('.materia-edit').style.display = 'none';
+      }
+    </script>
 </div>
