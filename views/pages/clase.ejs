@@ -99,28 +99,33 @@
 
             <div class="card">
               <h3 style="margin-bottom:15px;">🎵 Audio de Apoyo</h3>
-              <% contributions.contribuciones.filter(c=> c.tipo == "AUDIO").forEach(contrib => { %>
-                <div class="audio-container list-item">
-                  <p>
-                    <%= contrib.content %>
-                  </p>
-                  <div class="play-control">
-                    <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
-                    <div id="controls-audio1" class="controls-wrap" style="display: none;">
-                      <audio id="audio1" style="display: none;">
-                        <source src="aaa.mp3" type="audio/mpeg">
-                        Tu navegador no soporta el elemento de audio.
-                      </audio>
+              <% const audioContribs = contributions.contribuciones.filter(c=> c.tipo == "AUDIO"); %>
+              <% if (audioContribs.length > 0) { %>
+                <% audioContribs.forEach(contrib => { %>
+                  <div class="audio-container list-item">
+                    <p>
+                      <%= contrib.content %>
+                    </p>
+                    <div class="play-control">
+                      <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
+                      <div id="controls-audio1" class="controls-wrap" style="display: none;">
+                        <audio id="audio1" style="display: none;">
+                          <source src="aaa.mp3" type="audio/mpeg">
+                          Tu navegador no soporta el elemento de audio.
+                        </audio>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <% }) %>
+                  <% }) %>
+              <% } else { %>
+                <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay audios de apoyo</p>
+              <% } %>
             </div>
 
 
             <%- include('../partials/comentarios', { contributions: contributions, claseId: clase.id }); %>
 
-              <%- include('../partials/videos-relacionables', { contributions: contributions }); %>
+              <%- include('../partials/videos-relacionados', { contributions: contributions }); %>
     </div>
   </div>
 
