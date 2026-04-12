@@ -5,8 +5,10 @@
   </div>
   <div style="margin-bottom:15px;">
     <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." rows="3"
-      style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"><% contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO").forEach(contrib => { %><%= contrib.content %>
-<% }) %></textarea>
+      style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;">[<% const comentarios = contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO"); %>
+<% comentarios.forEach((contrib, index) => { %>
+        {"msg":"<%= contrib.content.replace(/"/g, '&quot;') %>"}<% if (index < comentarios.length - 1) { %>,<% } %>
+<% }) %>]</textarea>
   </div>
   <div style="display:flex; gap:10px;">
     <button onclick="addComment()"
@@ -21,6 +23,28 @@
 </div>
 
 <script>
+  function renderComments() {
+    const commentInput = document.getElementById('comment-input');
+    const commentsList = document.getElementById('comments-list');
+    const commentText = commentInput.value.trim();
+    if (commentText) {
+      try {
+        const comments = JSON.parse(commentText);
+        if (comments && comments.length > 0) {
+          commentsList.innerHTML = '';
+          comments.forEach(comment => {
+            commentInput.value = comment.msg;
+            addComment();
+          });
+        } else {
+          commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
+        }
+      } catch (error) {
+        console.error('Error al parsear comentarios:', error);
+      }
+    }
+  }
+
   function addComment() {
     const commentInput = document.getElementById('comment-input');
     const commentsList = document.getElementById('comments-list');
@@ -60,4 +84,9 @@
     commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
     commentInput.value = '';
   }
+
+  // Renderizar comentarios al cargar la página
+  window.addEventListener('DOMContentLoaded', function() {
+    renderComments();
+  });
 </script>
