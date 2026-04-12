@@ -89,7 +89,7 @@
 
   function scrollToSection(event, sectionId) {
     event.preventDefault();
-    const container = document.getElementById('resumen-teoria-container');
+    const container = document.getElementById('resumen-teoria-container').parentNode;
     const section = document.getElementById(sectionId);
     if (container && section) {
       const sectionTop = section.offsetTop - container.offsetTop;
@@ -149,6 +149,61 @@
         hideButton.textContent = 'Ocultar Índice';
         header.style.marginBottom = '15px';
       }
+    }
+  }
+
+  function generarIndiceDinamico() {
+    const container = document.getElementById('resumen-teoria-container');
+    const indiceList = document.getElementById('indice-list');
+    if (!container || !indiceList) return;
+
+    // Limpiar índice existente
+    indiceList.innerHTML = '';
+
+    // Escanear headers h1, h2, h3
+    const headers = container.querySelectorAll('h1, h2, h3');
+    let h1Count = 0;
+    let h2Count = 0;
+    let h3Count = 0;
+
+    headers.forEach((header, index) => {
+      const tagName = header.tagName.toLowerCase();
+      let linkText = header.textContent.trim();
+      let sectionId = '';
+
+      // Generar ID único
+      if (tagName === 'h1') {
+        h1Count++;
+        sectionId = `seccion-${h1Count}`;
+        linkText = `• ${linkText}`;
+      } else if (tagName === 'h2') {
+        h2Count++;
+        sectionId = `seccion-${h1Count}-${h2Count}`;
+        linkText = `  • ${linkText}`;
+      } else if (tagName === 'h3') {
+        h3Count++;
+        sectionId = `seccion-${h1Count}-${h2Count}-${h3Count}`;
+        linkText = `    • ${linkText}`;
+      }
+
+      // Asignar ID al header
+      header.id = sectionId;
+
+      // Crear link
+      const li = document.createElement('li');
+      li.style.marginBottom = '8px';
+      li.innerHTML = `
+        <a href="#${sectionId}" onclick="scrollToSection(event, '${sectionId}')"
+           class="nav-link" style="color:var(--accent); text-decoration:none;">${linkText}</a>
+      `;
+
+      indiceList.appendChild(li);
+    });
+
+    // Actualizar botón
+    const hideButton = document.getElementById('hide-indice-btn');
+    if (hideButton) {
+      hideButton.textContent = 'Ocultar Índice';
     }
   }
 

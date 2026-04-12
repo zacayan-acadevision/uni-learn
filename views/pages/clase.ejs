@@ -307,6 +307,7 @@
         // Procesar las ecuaciones con MathJax
         MathJax.typesetPromise([resumenContainer]).then(() => {
           console.log("MathJax ha renderizado las ecuaciones en el contenedor principal.");
+          generarIndiceDinamico()
         }).catch((err) => {
           console.error("Error al renderizar MathJax:", err);
         });
