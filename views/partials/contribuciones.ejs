@@ -1,25 +1,30 @@
 <div class="card">
   <h2 style="margin-bottom:15px;">📦 Contribuciones</h2>
-  <% if (contribs.length > 0) { %>
-    <% contribs.forEach((contrib, index) => { %>
-      <div class="list-item" id="contribItem<%= index %>" style="display:flex; justify-content:space-between; align-items:center;">
-        <span><%= contrib.content %></span>
-        <button onclick="mostrarFormularioEditarContribucion(<%= index %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
-      </div>
 
-      <!-- Formulario para editar contribución -->
-      <div id="formularioEditarContribucion<%= index %>" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
-        <input type="text" id="tituloContrib<%= index %>" placeholder="Contenido de la contribución" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
-        <div style="display:flex; gap:10px;">
-          <button onclick="confirmarEditarContribucion(<%= index %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Guardar</button>
-          <button onclick="cancelarEditarContribucion(<%= index %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
-          <button onclick="confirmarEliminarContribucion(<%= index %>)" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+  <!-- Contenedor específico para contribuciones -->
+  <div id="listaContribuciones" style="margin-top: 15px;">
+    <% if (contribs.length > 0) { %>
+      <% contribs.forEach((contrib, index) => { %>
+        <div class="list-item" id="contribItem<%= index %>" style="display:flex; justify-content:space-between; align-items:center;">
+          <span><%= contrib.content %></span>
+          <button onclick="mostrarFormularioEditarContribucion(<%= index %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
         </div>
-      </div>
+
+        <!-- Formulario para editar contribución -->
+        <div id="formularioEditarContribucion<%= index %>" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+          <input type="hidden" id="contribId<%= index %>" value="<%= contrib.id %>">
+          <input type="text" id="tituloContrib<%= index %>" placeholder="Contenido de la contribución" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+          <div style="display:flex; gap:10px;">
+            <button onclick="confirmarEditarContribucion(<%= index %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Guardar</button>
+            <button onclick="cancelarEditarContribucion(<%= index %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+            <button onclick="confirmarEliminarContribucion(<%= index %>)" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+          </div>
+        </div>
       <% }) %>
-  <% } else { %>
-    <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay contribuciones</p>
-  <% } %>
+    <% } else { %>
+      <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay contribuciones</p>
+    <% } %>
+  </div>
 
   <!-- Formulario para crear nueva contribución (siempre presente) -->
   <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
@@ -63,10 +68,11 @@
   }
 
   // Función para confirmar la edición
-  function confirmarEditarContribucion(index) {
+  async function confirmarEditarContribucion(index) {
     const formulario = document.getElementById('formularioEditarContribucion' + index);
     const contenido = document.getElementById('contribItem' + index).querySelector('span');
     const input = document.getElementById('tituloContrib' + index);
+    const contribId = document.getElementById('contribId' + index).value;
 
     // Verificar si el input tiene contenido
     if (input.value.trim() === '') {
@@ -74,23 +80,59 @@
       return;
     }
 
-    // Actualizar el contenido
-    contenido.textContent = input.value;
+    try {
+      // Hacer la llamada a la API para actualizar
+      const response = await fetch(`/api/contribuciones/${contribId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: input.value
+        })
+      });
 
-    // Ocultar el formulario y mostrar el elemento
-    formulario.style.display = 'none';
-    document.getElementById('contribItem' + index).style.display = 'flex';
+      if (response.ok) {
+        // Actualizar el contenido
+        contenido.textContent = input.value;
+
+        // Ocultar el formulario y mostrar el elemento
+        formulario.style.display = 'none';
+        document.getElementById('contribItem' + index).style.display = 'flex';
+      } else {
+        alert('Error al actualizar la contribución');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al actualizar la contribución: ' + error.message);
+    }
   }
 
   // Función para confirmar la eliminación
-  function confirmarEliminarContribucion(index) {
+  async function confirmarEliminarContribucion(index) {
     if (confirm('¿Estás seguro de que deseas eliminar esta contribución?')) {
-      const item = document.getElementById('contribItem' + index);
-      const formulario = document.getElementById('formularioEditarContribucion' + index);
+      const contribId = document.getElementById('contribId' + index).value;
 
-      // Eliminar el item y el formulario
-      item.remove();
-      formulario.remove();
+      try {
+        // Hacer la llamada a la API para eliminar
+        const response = await fetch(`/api/contribuciones/${contribId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          const item = document.getElementById('contribItem' + index);
+          const formulario = document.getElementById('formularioEditarContribucion' + index);
+
+          // Eliminar el item y el formulario
+          item.remove();
+          formulario.remove();
+        } else {
+          alert('Error al eliminar la contribución');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error al eliminar la contribución: ' + error.message);
+      }
     }
   }
 
@@ -128,10 +170,12 @@
       });
 
       if (response.ok) {
+        const nuevaContribucion = await response.json();
+
         // Crear el nuevo elemento de la lista
         const nuevoItem = document.createElement('div');
         nuevoItem.className = 'list-item';
-        nuevoItem.id = 'contribItem_nueva';
+        nuevoItem.id = 'contribItem_' + nuevaContribucion.id;
         nuevoItem.style.display = 'flex';
         nuevoItem.style.justifyContent = 'space-between';
         nuevoItem.style.alignItems = 'center';
@@ -147,16 +191,16 @@
         btnEditar.style.padding = '5px 10px';
         btnEditar.style.fontSize = '0.8rem';
         btnEditar.onclick = function() {
-          mostrarFormularioEditarContribucionNueva(contenido, tipo, nuevoItem);
+          mostrarFormularioEditarContribucionNueva(nuevaContribucion.id, contenido, tipo, nuevoItem);
         };
 
         nuevoItem.appendChild(span);
         nuevoItem.appendChild(btnEditar);
 
-        // Agregar el nuevo elemento después del formulario de edición
-        const formularioEditar = document.getElementById('formularioEditarContribucion');
-        if (formularioEditar && formularioEditar.parentNode) {
-          formularioEditar.parentNode.insertBefore(nuevoItem, formularioEditar.nextSibling);
+        // Agregar el nuevo elemento al contenedor de contribuciones
+        const listaContribuciones = document.getElementById('listaContribuciones');
+        if (listaContribuciones) {
+          listaContribuciones.appendChild(nuevoItem);
         }
 
         // Limpiar los campos
@@ -172,9 +216,9 @@
   }
 
   // Función para mostrar el formulario de edición de nueva contribución
-  async function mostrarFormularioEditarContribucionNueva(contenido, tipo, nuevoItem) {
+  async function mostrarFormularioEditarContribucionNueva(contribId, contenido, tipo, nuevoItem) {
     const nuevoFormulario = document.createElement('div');
-    nuevoFormulario.id = 'formularioEditarContribucionNueva';
+    nuevoFormulario.id = 'formularioEditarContribucion_' + contribId;
     nuevoFormulario.style.display = 'none';
     nuevoFormulario.style.marginTop = '10px';
     nuevoFormulario.style.padding = '15px';
@@ -184,7 +228,7 @@
 
     const input = document.createElement('input');
     input.type = 'text';
-    input.id = 'tituloContribNueva';
+    input.id = 'tituloContrib_' + contribId;
     input.placeholder = 'Contenido de la contribución';
     input.style.width = '100%';
     input.style.padding = '10px';
@@ -213,7 +257,7 @@
 
       try {
         // Hacer la llamada a la API para actualizar
-        const response = await fetch(`/api/contribuciones/${nuevoItem.id}`, {
+        const response = await fetch(`/api/contribuciones/${contribId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -253,7 +297,7 @@
       if (confirm('¿Estás seguro de que deseas eliminar esta contribución?')) {
         try {
           // Hacer la llamada a la API para eliminar
-          const response = await fetch(`/api/contribuciones/${nuevoItem.id}`, {
+          const response = await fetch(`/api/contribuciones/${contribId}`, {
             method: 'DELETE'
           });
 
