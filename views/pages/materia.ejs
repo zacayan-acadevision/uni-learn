@@ -143,6 +143,10 @@
           // Insertar antes del formulario
           listaClases.insertBefore(nuevoItem, formulario);
 
+          // Actualizar el href dinámicamente
+          const nuevoLink = nuevoItem.querySelector('a');
+          nuevoLink.href = `/uni/materia/${materiaId}/clase/${nuevaClase.id}`;
+
           // Ocultar formulario y mostrar el ítem de crear
           cancelarCrearClase();
         })
