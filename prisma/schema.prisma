@@ -21,6 +21,7 @@ model materias {
 
 model clases {
   id             Int              @id @default(autoincrement())
+  titulo         String
   content        String
   materiaId      Int
   materia        materias         @relation(fields: [materiaId], references: [id])

@@ -27,6 +27,7 @@ async function main() {
         content: `Materia ${i}`,
         clases: {
           create: Array.from({ length: 5 }, (_, j) => ({
+            titulo: `Título Clase ${j + 1} de Materia ${i}`,
             content: `Clase ${j + 1} de Materia ${i}`,
           })),
         },
