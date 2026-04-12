@@ -1,32 +1,65 @@
 /* Estilos para contenido Markdown y LaTeX */
 #resumen-teoria-container {
   max-width: 100%;
+  line-height: 1.6;
+  color: #334155;
+  font-size: 1rem;
+  overflow: hidden;
 }
 
 #resumen-teoria-container pre {
   max-width: 100%;
-  overflow-x: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
+  overflow-x: auto;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 #resumen-teoria-container code {
   max-width: 100%;
   overflow-x: auto;
+  background: #f1f5f9;
+  color: #e11d48;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
 }
 
 #resumen-teoria-container p {
   max-width: 100%;
-  overflow-y: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  margin: 12px 0;
+  line-height: 1.7;
+  color: #475569;
+  overflow-x: auto;
 }
 
 #resumen-teoria-container ul,
 #resumen-teoria-container ol {
   max-width: 100%;
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+#resumen-teoria-container ul {
+  list-style-type: disc;
+}
+
+#resumen-teoria-container ol {
+  list-style-type: decimal;
+}
+
+#resumen-teoria-container li {
+  max-width: 100%;
+  margin: 6px 0;
+  line-height: 1.6;
 }
 
 #resumen-teoria-container h1,
@@ -36,51 +69,168 @@
 #resumen-teoria-container h5,
 #resumen-teoria-container h6 {
   max-width: 100%;
+  margin: 24px 0 12px 0;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+#resumen-teoria-container h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+#resumen-teoria-container h2 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 6px;
+}
+
+#resumen-teoria-container h3 {
+  font-size: 1.5rem;
+}
+
+#resumen-teoria-container h4 {
+  font-size: 1.25rem;
+}
+
+#resumen-teoria-container h5 {
+  font-size: 1.1rem;
+}
+
+#resumen-teoria-container h6 {
+  font-size: 1rem;
+  color: #64748b;
 }
 
 #resumen-teoria-container table {
   max-width: 100%;
+  margin: 16px 0;
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#resumen-teoria-container table th,
+#resumen-teoria-container table td {
+  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+#resumen-teoria-container table th {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+#resumen-teoria-container table td {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+#resumen-teoria-container table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+#resumen-teoria-container table tr:hover {
+  background: #f1f5f9;
 }
 
 #resumen-teoria-container blockquote {
   max-width: 100%;
+  margin: 16px 0;
+  padding: 16px 20px;
+  border-left: 4px solid #3b82f6;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 0 8px 8px 0;
+  color: #1e40af;
+  font-style: italic;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
 #resumen-teoria-container img {
   max-width: 100%;
+  height: auto;
+  margin: 16px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: block;
 }
 
 #resumen-teoria-container hr {
   max-width: 100%;
+  margin: 24px 0;
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
+  border-radius: 2px;
 }
 
 /* Estilos para MathJax */
 .mjx-container {
   max-width: 100%;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-size: 1.1em;
+}
+
+/* Estilos específicos para MathJax con display mode */
+.mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 /* Estilos para elementos inline */
 #resumen-teoria-container span {
   max-width: 100%;
+  line-height: 1.6;
 }
 
 #resumen-teoria-container a {
   max-width: 100%;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+#resumen-teoria-container a:hover {
+  color: #2563eb;
+  text-decoration: underline;
 }
 
 #resumen-teoria-container strong {
   max-width: 100%;
+  color: #1e293b;
+  font-weight: 700;
 }
 
 #resumen-teoria-container em {
   max-width: 100%;
+  font-style: italic;
+  color: #475569;
 }
 
 #resumen-teoria-container del {
   max-width: 100%;
+  text-decoration: line-through;
+  color: #94a3b8;
 }
 
 #resumen-teoria-container ins {
   max-width: 100%;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #22c55e;
+  color: #15803d;
 }
 
