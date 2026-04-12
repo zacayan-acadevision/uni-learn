@@ -1,0 +1,40 @@
+<div class="card">
+  <h2 style="margin-bottom:15px;">Clases Disponibles</h2>
+  <div id="listaClases">
+
+    <% clases.clases.forEach(clase => { %>
+    <div class="list-item" data-n="clase <%= clase.id %> <%= clase.content %>" id="claseItem<%= clase.id %>">
+      <span class="item-text"><strong style="color:var(--primary)">Clase <%= clase.id %>:</strong> <%= clase.content %></span>
+      <div style="display:flex; gap:5px;">
+        <a href="/uni/materia/<%= clases.id%>/clase/<%= clase.id %>" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+        <button onclick="mostrarFormularioEditarClase(<%= clase.id %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar Clase</button>
+      </div>
+    </div>
+
+    <!-- Formulario para editar clase -->
+    <div id="formularioEditarClase<%= clase.id %>" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+      <input type="hidden" id="idClase<%= clase.id %>">
+      <input type="text" id="tituloClase<%= clase.id %>" placeholder="Título de la clase" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+      <div style="display:flex; gap:10px;">
+        <button onclick="confirmarEditarClase(<%= clase.id %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+        <button onclick="cancelarEditarClase(<%= clase.id %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+        <button onclick="confirmarEliminarClase(<%= clase.id %>)" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+      </div>
+    </div>
+    <% }) %>
+
+    <!-- Formulario para crear clase -->
+    <div id="formularioCrearClase" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+      <input type="text" id="tituloNuevaClase" placeholder="Título de la nueva clase" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+      <div style="display:flex; gap:10px;">
+        <button onclick="confirmarCrearClase()" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+        <button onclick="cancelarCrearClase()" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="list-item" id="crearClaseItem" data-n="clase nueva">
+      <span class="item-text"><strong style="color:var(--primary)">Crear nueva clase</strong></span>
+      <button onclick="mostrarFormularioCrearClase()" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Crear</button>
+    </div>
+  </div>
+</div>
