@@ -11,7 +11,7 @@
 <% }) %>]</textarea>
   </div>
   <div style="display:flex; gap:10px;">
-    <button onclick="addComment()"
+    <button onclick="addComment(<%= claseId %>)"
       style="flex:1; padding:8px 16px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
       Publicar Comentario
     </button>
@@ -23,18 +23,36 @@
 </div>
 
 <script>
-  function renderComments() {
+  function renderExistingComments() {
     const commentInput = document.getElementById('comment-input');
     const commentsList = document.getElementById('comments-list');
     const commentText = commentInput.value.trim();
+
     if (commentText) {
       try {
         const comments = JSON.parse(commentText);
         if (comments && comments.length > 0) {
           commentsList.innerHTML = '';
+
           comments.forEach(comment => {
-            commentInput.value = comment.msg;
-            addComment();
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+
+            const newComment = document.createElement('div');
+            newComment.style.padding = '10px';
+            newComment.style.borderBottom = '1px solid var(--border)';
+            newComment.style.fontSize = '0.85rem';
+            newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${comment.msg}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+
+            commentsList.appendChild(newComment);
           });
         } else {
           commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
@@ -43,38 +61,62 @@
         console.error('Error al parsear comentarios:', error);
       }
     }
+
+    // Limpiar el textarea después de renderizar los comentarios existentes
+    commentInput.value = '';
   }
 
-  function addComment() {
+  function addComment(claseId) {
     const commentInput = document.getElementById('comment-input');
     const commentsList = document.getElementById('comments-list');
     const commentText = commentInput.value.trim();
 
     if (commentText) {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      const dateString = now.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
+      // Guardar el comentario en el servidor
+      fetch('/api/contribuciones', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: commentText,
+          claseId: claseId,
+          tipo: 'COMENTARIO'
+        })
+      })
+        .then(response => {
+          if (response.ok) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
 
-      const newComment = document.createElement('div');
-      newComment.style.padding = '10px';
-      newComment.style.borderBottom = '1px solid var(--border)';
-      newComment.style.fontSize = '0.85rem';
-      newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+            const newComment = document.createElement('div');
+            newComment.style.padding = '10px';
+            newComment.style.borderBottom = '1px solid var(--border)';
+            newComment.style.fontSize = '0.85rem';
+            newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
 
-      const noComments = commentsList.querySelector('p');
-      if (noComments) {
-        noComments.style.display = 'none';
-      }
+            const noComments = commentsList.querySelector('p');
+            if (noComments) {
+              noComments.style.display = 'none';
+            }
 
-      commentsList.appendChild(newComment);
-      commentInput.value = '';
+            commentsList.appendChild(newComment);
+            commentInput.value = '';
+          } else {
+            alert('Error al guardar el comentario');
+          }
+        })
+        .catch(error => {
+          alert('Error al guardar el comentario: ' + error.message);
+        });
     }
   }
 
@@ -85,8 +127,8 @@
     commentInput.value = '';
   }
 
-  // Renderizar comentarios al cargar la página
+  // Renderizar comentarios existentes al cargar la página
   window.addEventListener('DOMContentLoaded', function() {
-    renderComments();
+    renderExistingComments();
   });
 </script>

@@ -135,11 +135,23 @@ router.get('/contribuciones', async (req, res) => {
 // POST create contribucion
 router.post('/contribuciones', async (req, res) => {
   try {
-    const { content, claseId } = req.body;
+    const { content, claseId, tipo } = req.body;
+
+    if (!tipo) {
+      return res.status(400).json({ error: 'El campo tipo es requerido' });
+    }
+
+    const tiposValidos = ['COMENTARIO', 'FILE', 'YOUTUBE', 'AUDIO', 'MARKDOWN'];
+
+    if (!tiposValidos.includes(tipo)) {
+      return res.status(400).json({ error: 'Tipo de contribución no válido' });
+    }
+
     const nuevaContribucion = await prisma.contribuciones.create({
       data: {
         content,
-        claseId: parseInt(claseId)
+        claseId: parseInt(claseId),
+        tipo
       }
     });
     res.status(201).json(nuevaContribucion);
