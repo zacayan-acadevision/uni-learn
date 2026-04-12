@@ -52,8 +52,9 @@
       const items = document.querySelectorAll('#listaClases .list-item');
 
       items.forEach(item => {
-        const text = item.getAttribute('data-n');
-        if (text && text.includes(filter)) {
+        const textElement = item.querySelector('.item-text');
+        const text = textElement ? textElement.textContent.toLowerCase() : '';
+        if (text.includes(filter)) {
           item.style.display = 'flex';
         } else {
           item.style.display = 'none';
