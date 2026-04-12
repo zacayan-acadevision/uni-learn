@@ -167,13 +167,15 @@
       const editadoContainer = document.getElementById('resumen-teoria-editado');
       const botonesContainer = document.getElementById('resumen-teoria-botones');
       const visualizerBtn = document.getElementById('visualizer-btn');
+      const visualizerCard = document.getElementById('visualizer-card');
 
-      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
         originalContainer.style.display = 'block';
         editadoContainer.style.display = 'none';
         botonesContainer.style.display = 'none';
         visualizerBtn.textContent = 'Visualizar';
         visualizerBtn.onclick = visualizeContent;
+        toggleCard('visualizer-content', visualizerCard.querySelector('button'));
       }
     }
 
@@ -184,9 +186,10 @@
         const editadoContainer = document.getElementById('resumen-teoria-editado');
         const botonesContainer = document.getElementById('resumen-teoria-botones');
         const visualizerBtn = document.getElementById('visualizer-btn');
+        const visualizerCard = document.getElementById('visualizer-card');
         const claseId = <%= clase.id %>;
 
-        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
           fetch(`/api/clases/${claseId}`, {
             method: 'PUT',
             headers: {
@@ -201,6 +204,8 @@
                 editadoContainer.style.display = 'none';
                 botonesContainer.style.display = 'none';
                 originalContainer.style.display = 'block';
+                // Colapsar el card de editar contenido
+                toggleCard('visualizer-content', visualizerCard.querySelector('button'));
               } else {
                 alert('Error al guardar los cambios');
               }

@@ -14,7 +14,7 @@
     <!-- Columna Izquierda: Resumen Teórico -->
     <div style="flex: 2;">
       <div class="card" style="max-height: 600px; overflow-y: auto;">
-        <div id="resumen-teoria-container">
+        <div id="resumen-teoria-container" style="display: block;">
           <%= ejercicio.content %>
         </div>
 
@@ -31,7 +31,7 @@
       </div>
 
 
-      <%- include('../partials/entrega-tarea'); %>
+      
 
       <div class="card" id="visualizer-card" style="margin-top: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -48,6 +48,9 @@
           </div>
         </div>
       </div>
+
+      <%- include('../partials/entrega-tarea'); %>
+
     </div>
 
     <!-- Columna Derecha -->
@@ -106,7 +109,7 @@
       const visualizerBtn = document.getElementById('visualizer-btn');
 
       if (input && editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
-        editadoContent.textContent = input.value;
+        editadoContent.innerHTML = input.value;
         originalContainer.style.display = 'none';
         editadoContainer.style.display = 'block';
         botonesContainer.style.display = 'block';
@@ -121,38 +124,53 @@
       const editadoContainer = document.getElementById('resumen-teoria-editado');
       const botonesContainer = document.getElementById('resumen-teoria-botones');
       const visualizerBtn = document.getElementById('visualizer-btn');
+      const visualizerCard = document.getElementById('visualizer-card');
 
-      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
         originalContainer.style.display = 'block';
         editadoContainer.style.display = 'none';
         botonesContainer.style.display = 'none';
         visualizerBtn.textContent = 'Visualizar';
         visualizerBtn.onclick = visualizeContent;
+        toggleCard('visualizer-content', visualizerCard.querySelector('button'));
       }
     }
 
     function confirmarGuardar() {
       if (confirm('¿Estás seguro? Los cambios serán irreversibles.')) {
-        const editadoContent = document.getElementById('resumen-teoria-editado-content').textContent;
+        const editadoContent = document.getElementById('resumen-teoria-editado-content');
+        const originalContainer = document.getElementById('resumen-teoria-container');
+        const editadoContainer = document.getElementById('resumen-teoria-editado');
+        const botonesContainer = document.getElementById('resumen-teoria-botones');
+        const visualizerBtn = document.getElementById('visualizer-btn');
+        const visualizerCard = document.getElementById('visualizer-card');
         const ejercicioId = <%= ejercicio.id %>;
 
-        fetch(`/api/ejercicios/${ejercicioId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ content: editadoContent })
-        })
-        .then(response => {
-          if (response.ok) {
-            alert('Cambios guardados correctamente');
-          } else {
-            alert('Error al guardar los cambios');
-          }
-        })
-        .catch(error => {
-          alert('Error al guardar los cambios: ' + error.message);
-        });
+        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
+          fetch(`/api/ejercicios/${ejercicioId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: editadoContent.innerHTML })
+          })
+            .then(response => {
+              if (response.ok) {
+                originalContainer.innerHTML = editadoContent.innerHTML;
+                // Ocultar el contenedor editado y los botones
+                editadoContainer.style.display = 'none';
+                botonesContainer.style.display = 'none';
+                originalContainer.style.display = 'block';
+                // Colapsar el card de editar contenido
+                toggleCard('visualizer-content', visualizerCard.querySelector('button'));
+              } else {
+                alert('Error al guardar los cambios');
+              }
+            })
+            .catch(error => {
+              alert('Error al guardar los cambios: ' + error.message);
+            });
+        }
       }
     }
   </script>
