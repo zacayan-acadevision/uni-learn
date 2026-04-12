@@ -119,15 +119,33 @@
 
         if (!newContent) return;
 
-        // UI Only: Simulating save for now as requested
-        console.log(`Simulando guardado de materia ${id}: ${newContent}`);
-        
-        const h3 = card.querySelector('.materia-view h3');
-        h3.innerText = newContent;
-        
-        // Reset to view mode
-        card.querySelector('.materia-view').style.display = 'block';
-        card.querySelector('.materia-edit').style.display = 'none';
+        try {
+          const response = await fetch(`/api/materias/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: newContent })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al actualizar la materia');
+          }
+
+          const updatedMateria = await response.json();
+          
+          // Actualizar la UI con los datos del backend
+          const h3 = card.querySelector('.materia-view h3');
+          h3.innerText = updatedMateria.content;
+          
+          // Volver al modo vista
+          card.querySelector('.materia-view').style.display = 'block';
+          card.querySelector('.materia-edit').style.display = 'none';
+          
+        } catch (error) {
+          console.error('Error:', error);
+          alert('No se pudo actualizar la materia: ' + error.message);
+        }
       }
     </script>
 </div>
