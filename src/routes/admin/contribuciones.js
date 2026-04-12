@@ -4,7 +4,7 @@ import {
   getContribucionById,
   createContribucion,
   updateContribucion,
-  deleteContribucion
+  deleteContribucion,
 } from '../../services/contribucionService.js';
 
 const router = express.Router();

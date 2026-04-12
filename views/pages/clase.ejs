@@ -1,9 +1,13 @@
 <div class="page-content">
   <div class="breadcrumb">
     <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
-    <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent">
-      <%= ejercicios[0].materiaId %>: Nombre de materia
-    </a> &nbsp; | &nbsp;
+    <% if (ejercicios && ejercicios.length > 0) { %>
+      <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent">
+        <%= ejercicios[0].materiaId %>: Nombre de materia
+      </a> &nbsp; | &nbsp;
+    <% } else { %>
+      <span>Nombre de materia</span> &nbsp; | &nbsp;
+    <% } %>
     <span style="color:#3b82f5;">
       <%= clase.content %>
     </span>
@@ -75,7 +79,7 @@
         <% } %>
       </div>
 
-      <%- include('../partials/contribuciones'); %>
+      <%- include('../partials/contribuciones', { contribs: contributions.contribuciones, claseId: clase.id}); %>
 
       
 

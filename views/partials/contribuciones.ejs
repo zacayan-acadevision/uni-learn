@@ -1,6 +1,5 @@
 <div class="card">
   <h2 style="margin-bottom:15px;">📦 Contribuciones</h2>
-  <% const contribs = contributions.contribuciones; %>
   <% if (contribs.length > 0) { %>
     <% contribs.forEach((contrib, index) => { %>
       <div class="list-item" id="contribItem<%= index %>" style="display:flex; justify-content:space-between; align-items:center;">
@@ -21,6 +20,22 @@
   <% } else { %>
     <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay contribuciones</p>
   <% } %>
+
+  <!-- Formulario para crear nueva contribución (siempre presente) -->
+  <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
+    <h3 style="margin:0 0 10px 0; font-size:1rem; color:#166534;">+ Nueva Contribución</h3>
+    <input type="text" id="nuevaContrib" placeholder="Contenido de la nueva contribución" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+    <select id="tipoContrib" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;" required>
+      <option value="">Selecciona un tipo</option>
+      <option value="COMENTARIO">Comentario</option>
+      <option value="FILE">Archivo</option>
+      <option value="YOUTUBE">YouTube</option>
+      <option value="AUDIO">Audio</option>
+      <option value="MARKDOWN">Markdown</option>
+    </select>
+    <button onclick="crearNuevaContribucion(<%= claseId %>)" class="btn btn-success" style="padding:8px 16px; font-size:0.85rem;">Crear</button>
+  </div>
+
 </div>
 
 <script>
@@ -77,5 +92,192 @@
       item.remove();
       formulario.remove();
     }
+  }
+
+  // Función para crear nueva contribución
+  async function crearNuevaContribucion(claseId) {
+    const input = document.getElementById('nuevaContrib');
+    const select = document.getElementById('tipoContrib');
+    const contenido = input.value.trim();
+    const tipo = select.value;
+
+    // Verificar si el input tiene contenido
+    if (contenido === '') {
+      alert('El contenido no puede estar vacío');
+      return;
+    }
+
+    // Verificar si se seleccionó un tipo
+    if (tipo === '') {
+      alert('Debes seleccionar un tipo de contribución');
+      return;
+    }
+
+    try {
+      // Hacer la llamada a la API
+      const response = await fetch('/api/contribuciones', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: contenido,
+          claseId: parseInt(claseId),
+          tipo: tipo
+        })
+      });
+
+      if (response.ok) {
+        // Crear el nuevo elemento de la lista
+        const nuevoItem = document.createElement('div');
+        nuevoItem.className = 'list-item';
+        nuevoItem.id = 'contribItem_nueva';
+        nuevoItem.style.display = 'flex';
+        nuevoItem.style.justifyContent = 'space-between';
+        nuevoItem.style.alignItems = 'center';
+        nuevoItem.style.marginTop = '10px';
+
+        const span = document.createElement('span');
+        span.textContent = contenido + ' (' + tipo + ')';
+        span.style.fontWeight = 'bold';
+
+        const btnEditar = document.createElement('button');
+        btnEditar.textContent = 'Editar';
+        btnEditar.className = 'btn btn-secondary';
+        btnEditar.style.padding = '5px 10px';
+        btnEditar.style.fontSize = '0.8rem';
+        btnEditar.onclick = function() {
+          mostrarFormularioEditarContribucionNueva(contenido, tipo, nuevoItem);
+        };
+
+        nuevoItem.appendChild(span);
+        nuevoItem.appendChild(btnEditar);
+
+        // Agregar el nuevo elemento después del formulario de edición
+        const formularioEditar = document.getElementById('formularioEditarContribucion');
+        if (formularioEditar && formularioEditar.parentNode) {
+          formularioEditar.parentNode.insertBefore(nuevoItem, formularioEditar.nextSibling);
+        }
+
+        // Limpiar los campos
+        input.value = '';
+        select.value = '';
+      } else {
+        alert('Error al crear la contribución');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al crear la contribución: ' + error.message);
+    }
+  }
+
+  // Función para mostrar el formulario de edición de nueva contribución
+  async function mostrarFormularioEditarContribucionNueva(contenido, tipo, nuevoItem) {
+    const nuevoFormulario = document.createElement('div');
+    nuevoFormulario.id = 'formularioEditarContribucionNueva';
+    nuevoFormulario.style.display = 'none';
+    nuevoFormulario.style.marginTop = '10px';
+    nuevoFormulario.style.padding = '15px';
+    nuevoFormulario.style.background = '#f8fafc';
+    nuevoFormulario.style.borderRadius = '8px';
+    nuevoFormulario.style.border = '1px solid #e2e8f0';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'tituloContribNueva';
+    input.placeholder = 'Contenido de la contribución';
+    input.style.width = '100%';
+    input.style.padding = '10px';
+    input.style.marginBottom = '10px';
+    input.style.border = '1px solid #cbd5e1';
+    input.style.borderRadius = '4px';
+    input.value = contenido;
+
+    const divBotones = document.createElement('div');
+    divBotones.style.display = 'flex';
+    divBotones.style.gap = '10px';
+
+    const btnGuardar = document.createElement('button');
+    btnGuardar.textContent = 'Guardar';
+    btnGuardar.className = 'btn btn-primary';
+    btnGuardar.style.padding = '8px 16px';
+    btnGuardar.style.fontSize = '0.85rem';
+    btnGuardar.onclick = async function() {
+      const nuevoSpan = nuevoItem.querySelector('span');
+      const nuevoContenido = input.value.trim();
+
+      if (nuevoContenido === '') {
+        alert('El contenido no puede estar vacío');
+        return;
+      }
+
+      try {
+        // Hacer la llamada a la API para actualizar
+        const response = await fetch(`/api/contribuciones/${nuevoItem.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: nuevoContenido
+          })
+        });
+
+        if (response.ok) {
+          nuevoSpan.textContent = nuevoContenido + ' (' + tipo + ')';
+          nuevoFormulario.remove();
+        } else {
+          alert('Error al actualizar la contribución');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error al actualizar la contribución: ' + error.message);
+      }
+    };
+
+    const btnCancelar = document.createElement('button');
+    btnCancelar.textContent = 'Cancelar';
+    btnCancelar.className = 'btn btn-secondary';
+    btnCancelar.style.padding = '8px 16px';
+    btnCancelar.style.fontSize = '0.85rem';
+    btnCancelar.onclick = function() {
+      nuevoFormulario.remove();
+    };
+
+    const btnEliminar = document.createElement('button');
+    btnEliminar.textContent = 'Eliminar';
+    btnEliminar.className = 'btn btn-danger';
+    btnEliminar.style.padding = '8px 16px';
+    btnEliminar.style.fontSize = '0.85rem';
+    btnEliminar.onclick = async function() {
+      if (confirm('¿Estás seguro de que deseas eliminar esta contribución?')) {
+        try {
+          // Hacer la llamada a la API para eliminar
+          const response = await fetch(`/api/contribuciones/${nuevoItem.id}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            nuevoItem.remove();
+            nuevoFormulario.remove();
+          } else {
+            alert('Error al eliminar la contribución');
+          }
+        } catch (error) {
+          console.error(error);
+          alert('Error al eliminar la contribución: ' + error.message);
+        }
+      }
+    };
+
+    divBotones.appendChild(btnGuardar);
+    divBotones.appendChild(btnCancelar);
+    divBotones.appendChild(btnEliminar);
+
+    nuevoFormulario.appendChild(input);
+    nuevoFormulario.appendChild(divBotones);
+
+    nuevoItem.parentNode.insertBefore(nuevoFormulario, nuevoItem.nextSibling);
+    nuevoFormulario.style.display = 'block';
   }
 </script>
