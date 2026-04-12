@@ -10,7 +10,7 @@
   </div>
 
   <h1 style="margin-top:20px;">
-    <%= clase.content %>
+   📖 <%= clase.content %>
   </h1>
 
   <!-- SECCIÓN DE CONTENIDO PRINCIPAL -->
@@ -37,23 +37,11 @@
       </div>
 
 
-      <div class="card">
-        <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
-        <% contributions.contribuciones.filter(c=> c.tipo == "FILE").forEach(contrib => { %>
-          <div class="list-item">
-            <span>
-              <%= contrib.content %>
-            </span>
-            <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-          </div>
-          <% }) %>
-      </div>
-
-      <%- include('../partials/entrega-tarea'); %>
+      
 
       <div class="card" id="visualizer-card" style="margin-top: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h2 style="margin-bottom:0px;">🔍 Visualización de Contenido</h2>
+          <h2 style="margin-bottom:0px;">✏️ Editar contenido</h2>
           <button onclick="toggleCard('visualizer-content', this)"
             style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
             <span id="visualizer-toggle-icon">+</span>
@@ -69,6 +57,22 @@
           </div>
         </div>
       </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
+        <% contributions.contribuciones.filter(c=> c.tipo == "FILE").forEach(contrib => { %>
+          <div class="list-item">
+            <span>
+              <%= contrib.content %>
+            </span>
+            <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+          </div>
+          <% }) %>
+      </div>
+
+      <%- include('../partials/entrega-tarea'); %>
+
+
     </div>
 
     <!-- Columna Derecha -->
