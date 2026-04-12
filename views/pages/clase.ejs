@@ -9,19 +9,19 @@
         <span>Nombre de materia</span> &nbsp; | &nbsp;
         <% } %>
           <span style="color:#3b82f5;">
-            <%= clase.content %>
+            <%= clase.titulo %>
           </span>
   </div>
 
   <h1 style="margin-top:20px;">
-    📖 <%= clase.content %>
+    📖 <%= clase.titulo %>
   </h1>
 
   <!-- SECCIÓN DE CONTENIDO PRINCIPAL -->
   <div style="display: flex; gap: 30px;">
     <!-- Columna Izquierda: Resumen Teórico -->
-    <div style="flex: 2;">
-      <div class="card" style="max-height: 600px; overflow-y: auto;">
+    <div style="flex: 2; max-width: 100%; overflow: auto;">
+      <div class="card" style="max-height: 600px; max-width: 100%; overflow: auto;">
         <div id="resumen-teoria-container" style="display: block;">
           <%= clase.content %>
         </div>
@@ -265,7 +265,7 @@
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ content: markdownText })
+            body: JSON.stringify({ content: '\n' + markdownText })
           })
             .then(response => {
               if (response.ok) {

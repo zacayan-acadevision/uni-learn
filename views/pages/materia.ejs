@@ -134,7 +134,7 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            content: titulo
+            titulo: titulo
           })
         })
         .then(response => {
@@ -148,7 +148,7 @@
           const formulario = document.getElementById('formularioEditarClase' + id);
 
           // Actualizar el contenido del ítem
-          item.querySelector('.item-text').innerHTML = `<strong style="color:var(--primary)">Clase ${claseActualizada.id}:</strong> ${claseActualizada.content}`;
+          item.querySelector('.item-text').innerHTML = `<strong style="color:var(--primary)">Clase ${claseActualizada.id}:</strong> ${claseActualizada.titulo}`;
 
           // Actualizar el href del enlace
           const link = item.querySelector('a');
@@ -193,7 +193,7 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            content: titulo,
+            titulo: titulo,
             materiaId: materiaId
           })
         })
@@ -213,7 +213,7 @@
           nuevoItem.setAttribute('data-n', titulo.toLowerCase());
           nuevoItem.id = 'claseItem' + nuevaClase.id;
           nuevoItem.innerHTML = `
-            <span class="item-text"><strong style="color:var(--primary)">Clase ${nuevaClase.id}:</strong> ${nuevaClase.content}</span>
+            <span class="item-text"><strong style="color:var(--primary)">Clase ${nuevaClase.id}:</strong> ${nuevaClase.titulo}</span>
             <div style="display:flex; gap:5px;">
               <a href="/uni/materia/${materiaId}/clase/${nuevaClase.id}" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
               <button onclick="mostrarFormularioEditarClase(${nuevaClase.id})" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar Clase</button>

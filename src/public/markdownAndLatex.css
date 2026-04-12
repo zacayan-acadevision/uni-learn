@@ -1,0 +1,86 @@
+/* Estilos para contenido Markdown y LaTeX */
+#resumen-teoria-container {
+  max-width: 100%;
+}
+
+#resumen-teoria-container pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+#resumen-teoria-container code {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+#resumen-teoria-container p {
+  max-width: 100%;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+#resumen-teoria-container ul,
+#resumen-teoria-container ol {
+  max-width: 100%;
+}
+
+#resumen-teoria-container h1,
+#resumen-teoria-container h2,
+#resumen-teoria-container h3,
+#resumen-teoria-container h4,
+#resumen-teoria-container h5,
+#resumen-teoria-container h6 {
+  max-width: 100%;
+}
+
+#resumen-teoria-container table {
+  max-width: 100%;
+}
+
+#resumen-teoria-container blockquote {
+  max-width: 100%;
+}
+
+#resumen-teoria-container img {
+  max-width: 100%;
+}
+
+#resumen-teoria-container hr {
+  max-width: 100%;
+}
+
+/* Estilos para MathJax */
+.mjx-container {
+  max-width: 100%;
+}
+
+/* Estilos para elementos inline */
+#resumen-teoria-container span {
+  max-width: 100%;
+}
+
+#resumen-teoria-container a {
+  max-width: 100%;
+}
+
+#resumen-teoria-container strong {
+  max-width: 100%;
+}
+
+#resumen-teoria-container em {
+  max-width: 100%;
+}
+
+#resumen-teoria-container del {
+  max-width: 100%;
+}
+
+#resumen-teoria-container ins {
+  max-width: 100%;
+}
+

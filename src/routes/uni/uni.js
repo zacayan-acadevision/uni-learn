@@ -28,6 +28,9 @@ router.get('/materia/:id', async (req, res) => {
   try {
     const news = await getNews();
     const clases = await getMateriaById(materiaId);
+    if (!clases) {
+      return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
+    }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     res.render('pages/materia', { title: 'Home', clases, ejercicios, news, layout: 'layouts/unilayout' });
   } catch (error) {

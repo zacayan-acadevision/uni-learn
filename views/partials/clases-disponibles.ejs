@@ -3,8 +3,8 @@
   <div id="listaClases">
 
     <% clases.clases.forEach(clase => { %>
-    <div class="list-item" data-n="clase <%= clase.id %> <%= clase.content %>" id="claseItem<%= clase.id %>">
-      <span class="item-text"><strong style="color:var(--primary)">Clase <%= clase.id %>:</strong> <%= clase.content %></span>
+    <div class="list-item" data-n="clase <%= clase.id %> <%= clase.titulo %>" id="claseItem<%= clase.id %>">
+      <span class="item-text"><strong style="color:var(--primary)">Clase <%= clase.id %>:</strong> <%= clase.titulo %></span>
       <div style="display:flex; gap:5px;">
         <a href="/uni/materia/<%= clases.id%>/clase/<%= clase.id %>" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
         <button onclick="mostrarFormularioEditarClase(<%= clase.id %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar Clase</button>

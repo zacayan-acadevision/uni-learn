@@ -77,10 +77,10 @@ router.get('/clases', async (req, res) => {
 // POST create clase
 router.post('/clases', async (req, res) => {
   try {
-    const { content, materiaId } = req.body;
+    const { titulo, materiaId } = req.body;
     const nuevaClase = await prisma.clases.create({
-      data: { 
-        content,
+      data: {
+        titulo,
         materiaId: parseInt(materiaId)
       }
     });
@@ -94,10 +94,13 @@ router.post('/clases', async (req, res) => {
 router.put('/clases/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
+    const { titulo, content } = req.body;
+    const updateData = {};
+    if (titulo !== undefined) updateData.titulo = titulo;
+    if (content !== undefined) updateData.content = content;
     const claseActualizada = await prisma.clases.update({
       where: { id: parseInt(id) },
-      data: { content }
+      data: updateData
     });
     res.json(claseActualizada);
   } catch (error) {
