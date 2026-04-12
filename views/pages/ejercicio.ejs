@@ -81,48 +81,6 @@
 
 
   <script>
-    let indiceAutoCloseTimer;
-
-    function addComment() {
-      const commentInput = document.getElementById('comment-input');
-      const commentsList = document.getElementById('comments-list');
-      const commentText = commentInput.value.trim();
-
-      if (commentText) {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('es-ES', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        const dateString = now.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        });
-
-        const newComment = document.createElement('div');
-        newComment.style.padding = '10px';
-        newComment.style.borderBottom = '1px solid var(--border)';
-        newComment.style.fontSize = '0.85rem';
-        newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
-
-        const noComments = commentsList.querySelector('p');
-        if (noComments) {
-          noComments.style.display = 'none';
-        }
-
-        commentsList.appendChild(newComment);
-        commentInput.value = '';
-      }
-    }
-
-    function clearComments() {
-      const commentsList = document.getElementById('comments-list');
-      const commentInput = document.getElementById('comment-input');
-      commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
-      commentInput.value = '';
-    }
-
     function visualizeContent() {
       const input = document.getElementById('visualizer-input');
       const editadoContent = document.getElementById('resumen-teoria-editado-content');
@@ -181,51 +139,5 @@
         });
       }
     }
-
-    function highlightActiveSection() {
-      const activeSection = localStorage.getItem('activeSection');
-      if (activeSection) {
-        const section = document.getElementById(activeSection);
-        const container = document.getElementById('resumen-teoria-container');
-        if (section && container) {
-          const sectionTop = section.offsetTop - container.offsetTop;
-          container.scrollTop = sectionTop;
-          const allLinks = document.querySelectorAll('.nav-link');
-          allLinks.forEach(link => link.classList.remove('active'));
-          const activeLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-          }
-          updateIndiceButtons();
-        }
-      }
-
-      function updateIndiceButtons() {
-        const indiceList = document.getElementById('indice-list');
-        const toggleIcon = document.getElementById('indice-toggle-icon');
-        const hideButton = document.getElementById('hide-indice-btn');
-        const header = document.getElementById('indice-header');
-        if (indiceList.style.maxHeight === '0px') {
-          toggleIcon.textContent = '+';
-          hideButton.textContent = 'Mostrar Índice';
-          header.style.marginBottom = '0px';
-        } else {
-          toggleIcon.textContent = '−';
-          hideButton.textContent = 'Ocultar Índice';
-          header.style.marginBottom = '15px';
-        }
-      }
-    }
-
-    window.addEventListener('load', () => {
-      const indiceList = document.getElementById('indice-list');
-      const hideButton = document.getElementById('hide-indice-btn');
-      if (indiceList.style.maxHeight === '0px') {
-        hideButton.textContent = 'Mostrar Índice';
-      } else {
-        hideButton.textContent = 'Ocultar Índice';
-      }
-      highlightActiveSection();
-    });
   </script>
 </div>

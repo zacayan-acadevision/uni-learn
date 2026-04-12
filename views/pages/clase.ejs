@@ -124,6 +124,40 @@
 
 
   <script>
+    function visualizeContent() {
+      const input = document.getElementById('visualizer-input');
+      const editadoContent = document.getElementById('resumen-teoria-editado-content');
+      const originalContainer = document.getElementById('resumen-teoria-container');
+      const editadoContainer = document.getElementById('resumen-teoria-editado');
+      const botonesContainer = document.getElementById('resumen-teoria-botones');
+      const visualizerBtn = document.getElementById('visualizer-btn');
+
+      if (input && editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+        editadoContent.textContent = input.value;
+        originalContainer.style.display = 'none';
+        editadoContainer.style.display = 'block';
+        botonesContainer.style.display = 'block';
+
+        const h1 = document.querySelector('h1');
+        h1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function cancelVisualization() {
+      const originalContainer = document.getElementById('resumen-teoria-container');
+      const editadoContainer = document.getElementById('resumen-teoria-editado');
+      const botonesContainer = document.getElementById('resumen-teoria-botones');
+      const visualizerBtn = document.getElementById('visualizer-btn');
+
+      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+        originalContainer.style.display = 'block';
+        editadoContainer.style.display = 'none';
+        botonesContainer.style.display = 'none';
+        visualizerBtn.textContent = 'Visualizar';
+        visualizerBtn.onclick = visualizeContent;
+      }
+    }
+
     function confirmarGuardar() {
       if (confirm('¿Estás seguro? Los cambios serán irreversibles.')) {
         const editadoContent = document.getElementById('resumen-teoria-editado-content').textContent;
