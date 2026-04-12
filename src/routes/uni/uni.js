@@ -1,6 +1,7 @@
 import express from 'express';
 import { getMateriaById, getMateriasWithClases } from '../../services/materiaService.js';
 import { getClaseById } from '../../services/claseService.js';
+import { getEjercicioById } from '../../services/ejercicioService.js';
 import { getEjerciciosByMateriaId } from '../../services/ejercicioService.js';
 import { getClaseWithContribuciones } from '../../services/contribucionService.js';
 import { getNews } from '../../services/newsService.js';
@@ -41,11 +42,14 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   try {
     const news = await getNews();
     const clase = await getClaseById(claseId);
+    if (!clase) {
+      return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
+    }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     const contributions = await getClaseWithContribuciones(claseId);
     res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, news, layout: 'layouts/unilayout' });
   } catch (error) {
-    console.error(apiError);
+    console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
   }
 });
@@ -71,6 +75,23 @@ router.get('/admin', async (req, res) => {
   }
 });
 
+// /materia/:id/ejercicio/:ejercicioId
+router.get('/materia/:id/ejercicio/:ejercicioId', async (req, res) => {
+  const materiaId = req.params.id;
+  const ejercicioId = req.params.ejercicioId;
+  try {
+    const news = await getNews();
+    const ejercicio = await getEjercicioById(ejercicioId);
+    if (!ejercicio) {
+      return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
+    }
+    const ejercicios = await getEjerciciosByMateriaId(materiaId);
+    res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, layout: 'layouts/unilayout' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
+  }
+});
 
 
 export default router;

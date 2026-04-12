@@ -1,0 +1,363 @@
+<div class="page-content">
+  <div class="breadcrumb">
+    <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
+    <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent"><%= ejercicios[0].materiaId %>: Nombre de materia</a> &nbsp; | &nbsp;
+    <span style="color:#3b82f5;">Ejercicio</span>
+  </div>
+
+  <h1 style="margin-top:20px;">Ejercicio</h1>
+
+
+
+  <!-- SECCIÓN DE CONTENIDO PRINCIPAL -->
+  <div style="display: flex; gap: 30px;">
+    <!-- Columna Izquierda: Resumen Teórico -->
+    <div style="flex: 2;">
+      <div class="card" style="max-height: 600px; overflow-y: auto;">
+        <div id="resumen-teoria-container">
+          <%= ejercicio.content %>
+        </div>
+
+        <div id="resumen-teoria-editado" style="display: none;">
+          <div id="resumen-teoria-editado-content"></div>
+        </div>
+
+        <div id="resumen-teoria-botones" style="display: none;">
+          <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="cancelVisualization()">Cancelar</button>
+            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="confirmarGuardar()">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <h2 style="margin-bottom:15px;">📤 Entrega de Tarea</h2>
+        <form action="#" onsubmit="alert('Tarea enviada!'); return false;" style="display:flex; flex-direction:row; align-items:center; gap:10px;">
+          <input type="file" style="border:none; padding:0; font-size:0.8rem;">
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top: 20px;">
+        <h2 style="margin-bottom:15px;">🔍 Visualización de Contenido</h2>
+        <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..." onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="width: 100%; height: 80vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= ejercicio.content %></textarea>
+        <div style="margin-top: 15px;">
+          <button id="visualizer-btn" onclick="visualizeContent()" class="btn btn-primary" style="width: 100%;">Visualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha -->
+    <div style="flex: 1;">
+      <div class="card">
+        <h3 style="margin-bottom:10px;">📢 Novedades</h3>
+        <% news.forEach(item => {%>
+            <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %></p>
+        <% }) %>
+      </div>
+      <div class="card" id="indice-container">
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 0px;">
+          <% if (ejercicio.prevEjercicio) {%>
+          <a href="/uni/materia/<%= ejercicio.prevEjercicio.materiaId %>/ejercicio/<%= ejercicio.prevEjercicio.id %>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">&larr; Ejercicio
+            Anterior</a>
+          <% } %>
+          <% if (ejercicio.nextEjercicio) {%>
+          <a href="/uni/materia/<%= ejercicio.nextEjercicio.materiaId %>/ejercicio/<%= ejercicio.nextEjercicio.id %>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Próximo Ejercicio
+            &rarr;</a>
+          <% } %>
+        </div>
+      </div>
+      <div class="card" id="indice-container">
+        <div style="display:flex; justify-content:space-between; align-items:center;" id="indice-header">
+          <h3 style="margin-bottom:0;">📌 Índice de Contenido</h3>
+          <button onclick="toggleIndice()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
+            <span id="indice-toggle-icon">−</span>
+          </button>
+        </div>
+        <ul id="indice-list" style="list-style:none; padding:0; font-size:0.85rem; transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria" onclick="scrollToSection(event, 'seccion-teoria')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion" onclick="scrollToSection(event, 'sub-definicion')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo" onclick="scrollToSection(event, 'sub-ejemplo')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla" onclick="scrollToSection(event, 'sub-tabla')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 1)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-2" onclick="scrollToSection(event, 'seccion-teoria-2')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-2" onclick="scrollToSection(event, 'sub-definicion-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-2" onclick="scrollToSection(event, 'sub-ejemplo-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-2" onclick="scrollToSection(event, 'sub-tabla-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 2)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-3" onclick="scrollToSection(event, 'seccion-teoria-3')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-3" onclick="scrollToSection(event, 'sub-definicion-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-3" onclick="scrollToSection(event, 'sub-ejemplo-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-3" onclick="scrollToSection(event, 'sub-tabla-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 3)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-4" onclick="scrollToSection(event, 'seccion-teoria-4')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-4" onclick="scrollToSection(event, 'sub-definicion-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-4" onclick="scrollToSection(event, 'sub-ejemplo-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-4" onclick="scrollToSection(event, 'sub-tabla-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 4)</a></li>
+        </ul>
+        <button id="hide-indice-btn" onclick="toggleIndice()" style="margin-top:10px; padding:5px 10px; font-size:0.8rem; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; display:none;">
+          Mostrar Índice
+        </button>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:15px;">📝 Banco de Ejercicios</h3>
+        <% ejercicios.forEach(ejercicio=> { %>
+        <div class="list-item">
+          <span>Ejercicio <%= ejercicio.id %>: <%= ejercicio.content %></span>
+          <a href="/uni/materia/<%= ejercicio.materiaId %>/ejercicio/<%= ejercicio.id %>" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
+            Ejercicio</a>
+        </div>
+        <% }) %>
+
+      </div>
+     
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+  <script>
+    let indiceAutoCloseTimer;
+
+    function playVideo(id) {
+      const container = document.getElementById('main-player-container');
+      const player = document.getElementById('yt-player');
+      player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+      container.style.display = 'block';
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    function closePlayer() {
+      document.getElementById('main-player-container').style.display = 'none';
+      document.getElementById('yt-player').src = '';
+    }
+
+    function addComment() {
+      const commentInput = document.getElementById('comment-input');
+      const commentsList = document.getElementById('comments-list');
+      const commentText = commentInput.value.trim();
+
+      if (commentText) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        const dateString = now.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+
+        const newComment = document.createElement('div');
+        newComment.style.padding = '10px';
+        newComment.style.borderBottom = '1px solid var(--border)';
+        newComment.style.fontSize = '0.85rem';
+        newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+
+        const noComments = commentsList.querySelector('p');
+        if (noComments) {
+          noComments.style.display = 'none';
+        }
+
+        commentsList.appendChild(newComment);
+        commentInput.value = '';
+      }
+    }
+
+    function clearComments() {
+      const commentsList = document.getElementById('comments-list');
+      const commentInput = document.getElementById('comment-input');
+      commentsList.innerHTML = '<p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>';
+      commentInput.value = '';
+    }
+
+    function scrollToSection(event, sectionId) {
+      event.preventDefault();
+      const container = document.getElementById('resumen-teoria-container');
+      const section = document.getElementById(sectionId);
+      if (container && section) {
+        const sectionTop = section.offsetTop - container.offsetTop;
+        container.scrollTo({
+          top: sectionTop,
+          behavior: 'smooth'
+        });
+        const allLinks = document.querySelectorAll('.nav-link');
+        allLinks.forEach(link => link.classList.remove('active'));
+        event.target.classList.add('active');
+        localStorage.setItem('activeSection', sectionId);
+
+        clearTimeout(indiceAutoCloseTimer);
+        const hideButton = document.getElementById('hide-indice-btn');
+        const indiceList = document.getElementById('indice-list');
+        const toggleIcon = document.getElementById('indice-toggle-icon');
+
+        if (indiceList.style.maxHeight !== '0px') {
+          indiceAutoCloseTimer = setTimeout(() => {
+            indiceList.style.maxHeight = '0px';
+            toggleIcon.textContent = '+';
+            hideButton.textContent = 'Mostrar Índice';
+          }, 10000);
+        }
+      }
+    }
+
+    function toggleIndice() {
+      const indiceList = document.getElementById('indice-list');
+      const toggleIcon = document.getElementById('indice-toggle-icon');
+      const hideButton = document.getElementById('hide-indice-btn');
+      const header = document.getElementById('indice-header');
+      if (indiceList.style.maxHeight === '0px') {
+        indiceList.style.marginTop = '15px';
+        indiceList.style.maxHeight = '1000px';
+        toggleIcon.textContent = '−';
+        hideButton.textContent = 'Ocultar Índice';
+        clearTimeout(indiceAutoCloseTimer);
+      } else {
+        indiceList.style.maxHeight = '0px';
+        indiceList.style.marginTop = '0px';
+        toggleIcon.textContent = '+';
+        hideButton.textContent = 'Mostrar Índice';
+        setTimeout(() => {
+          indiceList.style.maxHeight = '0px';
+        }, 300);
+      }
+    }
+
+    function visualizeContent() {
+      const input = document.getElementById('visualizer-input');
+      const editadoContent = document.getElementById('resumen-teoria-editado-content');
+      const originalContainer = document.getElementById('resumen-teoria-container');
+      const editadoContainer = document.getElementById('resumen-teoria-editado');
+      const botonesContainer = document.getElementById('resumen-teoria-botones');
+      const visualizerBtn = document.getElementById('visualizer-btn');
+
+      if (input && editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+        editadoContent.textContent = input.value;
+        originalContainer.style.display = 'none';
+        editadoContainer.style.display = 'block';
+        botonesContainer.style.display = 'block';
+
+        const h1 = document.querySelector('h1');
+        h1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function cancelVisualization() {
+      const originalContainer = document.getElementById('resumen-teoria-container');
+      const editadoContainer = document.getElementById('resumen-teoria-editado');
+      const botonesContainer = document.getElementById('resumen-teoria-botones');
+      const visualizerBtn = document.getElementById('visualizer-btn');
+
+      if (originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
+        originalContainer.style.display = 'block';
+        editadoContainer.style.display = 'none';
+        botonesContainer.style.display = 'none';
+        visualizerBtn.textContent = 'Visualizar';
+        visualizerBtn.onclick = visualizeContent;
+      }
+    }
+
+    function confirmarGuardar() {
+      if (confirm('¿Estás seguro? Los cambios serán irreversibles.')) {
+        const editadoContent = document.getElementById('resumen-teoria-editado-content').textContent;
+        const ejercicioId = <%= ejercicio.id %>;
+
+        fetch(`/api/ejercicios/${ejercicioId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ content: editadoContent })
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Cambios guardados correctamente');
+          } else {
+            alert('Error al guardar los cambios');
+          }
+        })
+        .catch(error => {
+          alert('Error al guardar los cambios: ' + error.message);
+        });
+      }
+    }
+
+    function highlightActiveSection() {
+      const activeSection = localStorage.getItem('activeSection');
+      if (activeSection) {
+        const section = document.getElementById(activeSection);
+        const container = document.getElementById('resumen-teoria-container');
+        if (section && container) {
+          const sectionTop = section.offsetTop - container.offsetTop;
+          container.scrollTop = sectionTop;
+          const allLinks = document.querySelectorAll('.nav-link');
+          allLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
+          if (activeLink) {
+            activeLink.classList.add('active');
+          }
+          updateIndiceButtons();
+        }
+      }
+
+      function updateIndiceButtons() {
+        const indiceList = document.getElementById('indice-list');
+        const toggleIcon = document.getElementById('indice-toggle-icon');
+        const hideButton = document.getElementById('hide-indice-btn');
+        const header = document.getElementById('indice-header');
+        if (indiceList.style.maxHeight === '0px') {
+          toggleIcon.textContent = '+';
+          hideButton.textContent = 'Mostrar Índice';
+          header.style.marginBottom = '0px';
+        } else {
+          toggleIcon.textContent = '−';
+          hideButton.textContent = 'Ocultar Índice';
+          header.style.marginBottom = '15px';
+        }
+      }
+    }
+
+    window.addEventListener('load', () => {
+      const indiceList = document.getElementById('indice-list');
+      const hideButton = document.getElementById('hide-indice-btn');
+      if (indiceList.style.maxHeight === '0px') {
+        hideButton.textContent = 'Mostrar Índice';
+      } else {
+        hideButton.textContent = 'Ocultar Índice';
+      }
+      highlightActiveSection();
+    });
+
+    window.addEventListener('scroll', () => {
+      const container = document.getElementById('resumen-teoria-container');
+      if (container) {
+        const activeSection = localStorage.getItem('activeSection');
+        if (activeSection) {
+          const section = document.getElementById(activeSection);
+          if (section && container.contains(section)) {
+            const sectionTop = section.offsetTop - container.scrollTop;
+            const sectionHeight = section.offsetHeight;
+            const containerHeight = container.offsetHeight;
+            if (sectionTop <= 20 && sectionTop + sectionHeight >= containerHeight - 20) {
+              const allLinks = document.querySelectorAll('.nav-link');
+              allLinks.forEach(link => link.classList.remove('active'));
+              const activeLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
+              if (activeLink) {
+                activeLink.classList.add('active');
+              }
+              updateIndiceButtons();
+            }
+          }
+        }
+      }
+    });
+  </script>
+</div>
