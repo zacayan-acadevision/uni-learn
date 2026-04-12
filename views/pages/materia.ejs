@@ -107,24 +107,48 @@
 
     function confirmarCrearClase() {
       const titulo = document.getElementById('tituloNuevaClase').value;
+      const materiaId = <%= clases.id %>;
+
       if (titulo.trim() !== '') {
-        const listaClases = document.getElementById('listaClases');
-        const formulario = document.getElementById('formularioCrearClase');
+        // Hacer llamada al backend para crear la clase
+        fetch('/api/clases', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: titulo,
+            materiaId: materiaId
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al crear la clase');
+          }
+          return response.json();
+        })
+        .then(nuevaClase => {
+          const listaClases = document.getElementById('listaClases');
+          const formulario = document.getElementById('formularioCrearClase');
 
-        // Crear nuevo ítem igual que los demás
-        const nuevoItem = document.createElement('div');
-        nuevoItem.className = 'list-item';
-        nuevoItem.setAttribute('data-n', titulo.toLowerCase());
-        nuevoItem.innerHTML = `
-          <span class="item-text"><strong style="color:var(--primary)">Clase nueva:</strong> ${titulo}</span>
-          <a href="#" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
-        `;
+          // Crear nuevo ítem igual que los demás
+          const nuevoItem = document.createElement('div');
+          nuevoItem.className = 'list-item';
+          nuevoItem.setAttribute('data-n', titulo.toLowerCase());
+          nuevoItem.innerHTML = `
+            <span class="item-text"><strong style="color:var(--primary)">Clase ${nuevaClase.id}:</strong> ${nuevaClase.content}</span>
+            <a href="#" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+          `;
 
-        // Insertar antes del formulario
-        listaClases.insertBefore(nuevoItem, formulario);
+          // Insertar antes del formulario
+          listaClases.insertBefore(nuevoItem, formulario);
 
-        // Ocultar formulario y mostrar el ítem de crear
-        cancelarCrearClase();
+          // Ocultar formulario y mostrar el ítem de crear
+          cancelarCrearClase();
+        })
+        .catch(error => {
+          alert('Error al crear la clase: ' + error.message);
+        });
       } else {
         alert('Por favor ingresa un título para la clase');
       }
