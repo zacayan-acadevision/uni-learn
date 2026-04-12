@@ -19,10 +19,22 @@
         <div id="listaClases">
 
           <% clases.clases.forEach(clase => { %>
-          <div class="list-item" data-n="clase 1 limites">
-            <span class="item-text"><strong style="color:var(--primary)">Clase 1:</strong> <%= clase.content %></span>
-            <!-- target="_self" es el comportamiento natural para navegar dentro del mismo iframe -->
-            <a href="/uni/materia/<%= clases.id%>/clase/<%= clase.id %>" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+          <div class="list-item" data-n="clase <%= clase.id %> <%= clase.content %>" id="claseItem<%= clase.id %>">
+            <span class="item-text"><strong style="color:var(--primary)">Clase <%= clase.id %>:</strong> <%= clase.content %></span>
+            <div style="display:flex; gap:5px;">
+              <a href="/uni/materia/<%= clases.id%>/clase/<%= clase.id %>" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+              <button onclick="mostrarFormularioEditarClase(<%= clase.id %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar Clase</button>
+            </div>
+          </div>
+
+          <!-- Formulario para editar clase -->
+          <div id="formularioEditarClase<%= clase.id %>" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+            <input type="hidden" id="idClase<%= clase.id %>">
+            <input type="text" id="tituloClase<%= clase.id %>" placeholder="Título de la clase" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+            <div style="display:flex; gap:10px;">
+              <button onclick="confirmarEditarClase(<%= clase.id %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+              <button onclick="cancelarEditarClase(<%= clase.id %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+            </div>
           </div>
           <% }) %>
 
@@ -152,6 +164,75 @@
         })
         .catch(error => {
           alert('Error al crear la clase: ' + error.message);
+        });
+      } else {
+        alert('Por favor ingresa un título para la clase');
+      }
+    }
+
+    function mostrarFormularioEditarClase(id) {
+      const item = document.getElementById('claseItem' + id);
+      const formulario = document.getElementById('formularioEditarClase' + id);
+
+      // Guardar el contenido original
+      const contenidoOriginal = item.querySelector('.item-text').textContent;
+
+      // Ocultar el ítem y mostrar el formulario
+      item.style.display = 'none';
+      formulario.style.display = 'block';
+
+      // Llenar el formulario con el contenido actual
+      document.getElementById('idClase' + id).value = id;
+      document.getElementById('tituloClase' + id).value = contenidoOriginal.replace('Clase ' + id + ': ', '');
+    }
+
+    function cancelarEditarClase(id) {
+      const item = document.getElementById('claseItem' + id);
+      const formulario = document.getElementById('formularioEditarClase' + id);
+
+      // Ocultar el formulario y mostrar el ítem original
+      formulario.style.display = 'none';
+      item.style.display = 'flex';
+    }
+
+    function confirmarEditarClase(id) {
+      const titulo = document.getElementById('tituloClase' + id).value;
+      const materiaId = <%= clases.id %>;
+
+      if (titulo.trim() !== '') {
+        // Hacer llamada al backend para actualizar la clase
+        fetch('/api/clases/' + id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: titulo
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al editar la clase');
+          }
+          return response.json();
+        })
+        .then(claseActualizada => {
+          const item = document.getElementById('claseItem' + id);
+          const formulario = document.getElementById('formularioEditarClase' + id);
+
+          // Actualizar el contenido del ítem
+          item.querySelector('.item-text').innerHTML = `<strong style="color:var(--primary)">Clase ${claseActualizada.id}:</strong> ${claseActualizada.content}`;
+
+          // Actualizar el href del enlace
+          const link = item.querySelector('a');
+          link.href = `/uni/materia/${materiaId}/clase/${claseActualizada.id}`;
+
+          // Ocultar el formulario y mostrar el ítem
+          formulario.style.display = 'none';
+          item.style.display = 'flex';
+        })
+        .catch(error => {
+          alert('Error al editar la clase: ' + error.message);
         });
       } else {
         alert('Por favor ingresa un título para la clase');
