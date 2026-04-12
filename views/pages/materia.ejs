@@ -65,5 +65,193 @@
         icon.textContent = '+';
       }
     }
+
+    function mostrarFormularioEditarClase(id) {
+      const item = document.getElementById('claseItem' + id);
+      const formulario = document.getElementById('formularioEditarClase' + id);
+
+      // Guardar el contenido original
+      const contenidoOriginal = item.querySelector('.item-text').textContent;
+
+      // Ocultar el ítem y mostrar el formulario
+      item.style.display = 'none';
+      formulario.style.display = 'block';
+
+      // Llenar el formulario con el contenido actual
+      document.getElementById('idClase' + id).value = id;
+      document.getElementById('tituloClase' + id).value = contenidoOriginal.replace('Clase ' + id + ': ', '');
+    }
+
+    function cancelarEditarClase(id) {
+      const item = document.getElementById('claseItem' + id);
+      const formulario = document.getElementById('formularioEditarClase' + id);
+
+      // Ocultar el formulario y mostrar el ítem original
+      formulario.style.display = 'none';
+      item.style.display = 'flex';
+    }
+
+    function confirmarEliminarClase(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar esta clase?')) {
+        const item = document.getElementById('claseItem' + id);
+        const formulario = document.getElementById('formularioEditarClase' + id);
+
+        // Hacer llamada al backend para eliminar la clase
+        fetch('/api/clases/' + id, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al eliminar la clase');
+          }
+          return response;
+        })
+        .then(() => {
+          // Eliminar el ítem de la lista
+          item.remove();
+
+          // Ocultar el formulario
+          formulario.style.display = 'none';
+        })
+        .catch(error => {
+          alert('Error al eliminar la clase: ' + error.message);
+        });
+      }
+    }
+
+    function confirmarEditarClase(id) {
+      const titulo = document.getElementById('tituloClase' + id).value;
+      const materiaId = <%= clases.id %>;
+
+      if (titulo.trim() !== '') {
+        // Hacer llamada al backend para actualizar la clase
+        fetch('/api/clases/' + id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: titulo
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al editar la clase');
+          }
+          return response.json();
+        })
+        .then(claseActualizada => {
+          const item = document.getElementById('claseItem' + id);
+          const formulario = document.getElementById('formularioEditarClase' + id);
+
+          // Actualizar el contenido del ítem
+          item.querySelector('.item-text').innerHTML = `<strong style="color:var(--primary)">Clase ${claseActualizada.id}:</strong> ${claseActualizada.content}`;
+
+          // Actualizar el href del enlace
+          const link = item.querySelector('a');
+          link.href = `/uni/materia/${materiaId}/clase/${claseActualizada.id}`;
+
+          // Ocultar el formulario y mostrar el ítem
+          formulario.style.display = 'none';
+          item.style.display = 'flex';
+        })
+        .catch(error => {
+          alert('Error al editar la clase: ' + error.message);
+        });
+      } else {
+        alert('Por favor ingresa un título para la clase');
+      }
+    }
+
+    function mostrarFormularioCrearClase() {
+      const formulario = document.getElementById('formularioCrearClase');
+      const crearItem = document.getElementById('crearClaseItem');
+      formulario.style.display = 'block';
+      crearItem.style.display = 'none';
+    }
+
+    function cancelarCrearClase() {
+      const formulario = document.getElementById('formularioCrearClase');
+      const crearItem = document.getElementById('crearClaseItem');
+      formulario.style.display = 'none';
+      crearItem.style.display = 'flex';
+      document.getElementById('tituloNuevaClase').value = '';
+    }
+
+    function confirmarCrearClase() {
+      const titulo = document.getElementById('tituloNuevaClase').value;
+      const materiaId = <%= clases.id %>;
+
+      if (titulo.trim() !== '') {
+        // Hacer llamada al backend para crear la clase
+        fetch('/api/clases', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: titulo,
+            materiaId: materiaId
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al crear la clase');
+          }
+          return response.json();
+        })
+        .then(nuevaClase => {
+          const listaClases = document.getElementById('listaClases');
+          const formulario = document.getElementById('formularioCrearClase');
+
+          // Crear nuevo ítem igual que los demás
+          const nuevoItem = document.createElement('div');
+          nuevoItem.className = 'list-item';
+          nuevoItem.setAttribute('data-n', titulo.toLowerCase());
+          nuevoItem.id = 'claseItem' + nuevaClase.id;
+          nuevoItem.innerHTML = `
+            <span class="item-text"><strong style="color:var(--primary)">Clase ${nuevaClase.id}:</strong> ${nuevaClase.content}</span>
+            <div style="display:flex; gap:5px;">
+              <a href="/uni/materia/${materiaId}/clase/${nuevaClase.id}" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+              <button onclick="mostrarFormularioEditarClase(${nuevaClase.id})" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar Clase</button>
+            </div>
+          `;
+
+          // Insertar antes del formulario
+          listaClases.insertBefore(nuevoItem, formulario);
+
+          // Crear formulario oculto para editar la nueva clase
+          const formularioEditar = document.createElement('div');
+          formularioEditar.id = 'formularioEditarClase' + nuevaClase.id;
+          formularioEditar.style.display = 'none';
+          formularioEditar.style.marginTop = '10px';
+          formularioEditar.style.padding = '15px';
+          formularioEditar.style.background = '#f8fafc';
+          formularioEditar.style.borderRadius = '8px';
+          formularioEditar.style.border = '1px solid #e2e8f0';
+          formularioEditar.innerHTML = `
+            <input type="hidden" id="idClase${nuevaClase.id}" value="${nuevaClase.id}">
+            <input type="text" id="tituloClase${nuevaClase.id}" placeholder="Título de la clase" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+            <div style="display:flex; gap:10px;">
+              <button onclick="confirmarEditarClase(${nuevaClase.id})" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+              <button onclick="cancelarEditarClase(${nuevaClase.id})" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+              <button onclick="confirmarEliminarClase(${nuevaClase.id})" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+            </div>
+          `;
+          listaClases.insertBefore(formularioEditar, formulario);
+
+          // Ocultar formulario y mostrar el ítem de crear
+          cancelarCrearClase();
+        })
+        .catch(error => {
+          alert('Error al crear la clase: ' + error.message);
+        });
+      } else {
+        alert('Por favor ingresa un título para la clase');
+      }
+    }
   </script>
 </div>

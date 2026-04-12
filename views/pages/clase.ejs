@@ -60,14 +60,19 @@
 
       <div class="card">
         <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
-        <% contributions.contribuciones.filter(c=> c.tipo == "FILE").forEach(contrib => { %>
-          <div class="list-item">
-            <span>
-              <%= contrib.content %>
-            </span>
-            <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-          </div>
-          <% }) %>
+        <% const fileContribs = contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>
+        <% if (fileContribs.length > 0) { %>
+          <% fileContribs.forEach(contrib => { %>
+            <div class="list-item">
+              <span>
+                <%= contrib.content %>
+              </span>
+              <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+            </div>
+            <% }) %>
+        <% } else { %>
+          <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay material descargable</p>
+        <% } %>
       </div>
 
       <%- include('../partials/entrega-tarea'); %>
