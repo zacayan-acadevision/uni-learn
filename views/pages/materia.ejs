@@ -26,9 +26,18 @@
           </div>
           <% }) %>
 
-          <div class="list-item" data-n="clase nueva">
+          <!-- Formulario para crear clase -->
+          <div id="formularioCrearClase" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+            <input type="text" id="tituloNuevaClase" placeholder="Título de la nueva clase" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+            <div style="display:flex; gap:10px;">
+              <button onclick="confirmarCrearClase()" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+              <button onclick="cancelarCrearClase()" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="list-item" id="crearClaseItem" data-n="clase nueva">
             <span class="item-text"><strong style="color:var(--primary)">Crear nueva clase</strong></span>
-            <a href="new_page.html" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Crear</a>
+            <button onclick="mostrarFormularioCrearClase()" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Crear</button>
           </div>
         </div>
       </div>
@@ -79,6 +88,46 @@
           item.style.display = 'none';
         }
       });
+    }
+
+    function mostrarFormularioCrearClase() {
+      const formulario = document.getElementById('formularioCrearClase');
+      const crearItem = document.getElementById('crearClaseItem');
+      formulario.style.display = 'block';
+      crearItem.style.display = 'none';
+    }
+
+    function cancelarCrearClase() {
+      const formulario = document.getElementById('formularioCrearClase');
+      const crearItem = document.getElementById('crearClaseItem');
+      formulario.style.display = 'none';
+      crearItem.style.display = 'flex';
+      document.getElementById('tituloNuevaClase').value = '';
+    }
+
+    function confirmarCrearClase() {
+      const titulo = document.getElementById('tituloNuevaClase').value;
+      if (titulo.trim() !== '') {
+        const listaClases = document.getElementById('listaClases');
+        const formulario = document.getElementById('formularioCrearClase');
+
+        // Crear nuevo ítem igual que los demás
+        const nuevoItem = document.createElement('div');
+        nuevoItem.className = 'list-item';
+        nuevoItem.setAttribute('data-n', titulo.toLowerCase());
+        nuevoItem.innerHTML = `
+          <span class="item-text"><strong style="color:var(--primary)">Clase nueva:</strong> ${titulo}</span>
+          <a href="#" target="_self" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Clase</a>
+        `;
+
+        // Insertar antes del formulario
+        listaClases.insertBefore(nuevoItem, formulario);
+
+        // Ocultar formulario y mostrar el ítem de crear
+        cancelarCrearClase();
+      } else {
+        alert('Por favor ingresa un título para la clase');
+      }
     }
   </script>
 </div>
