@@ -86,7 +86,8 @@ router.get('/materia/:id/ejercicio/:ejercicioId', async (req, res) => {
       return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
     }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
-    res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, layout: 'layouts/unilayout' });
+    const clases = await getMateriaById(materiaId);
+    res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, clases, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });

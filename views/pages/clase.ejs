@@ -1,11 +1,17 @@
 <div class="page-content">
   <div class="breadcrumb">
     <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
-    <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent"><%= ejercicios[0].materiaId %>: Nombre de materia</a> &nbsp; | &nbsp;
-    <span style="color:#3b82f5;"><%= clase.content %></span>
+    <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent">
+      <%= ejercicios[0].materiaId %>: Nombre de materia
+    </a> &nbsp; | &nbsp;
+    <span style="color:#3b82f5;">
+      <%= clase.content %>
+    </span>
   </div>
 
-  <h1 style="margin-top:20px;"><%= clase.content %></h1>
+  <h1 style="margin-top:20px;">
+    <%= clase.content %>
+  </h1>
 
 
 
@@ -24,8 +30,10 @@
 
         <div id="resumen-teoria-botones" style="display: none;">
           <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="cancelVisualization()">Cancelar</button>
-            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="confirmarGuardar()">Guardar cambios</button>
+            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;"
+              onclick="cancelVisualization()">Cancelar</button>
+            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;"
+              onclick="confirmarGuardar()">Guardar cambios</button>
           </div>
         </div>
       </div>
@@ -34,18 +42,19 @@
       <div class="card">
         <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
         <% contributions.contribuciones.filter(c=> c.tipo == "FILE").forEach(contrib => { %>
-        <div class="list-item">
-          <span>
-            <%= contrib.content %>
-          </span>
-          <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-        </div>
-        <% }) %>
+          <div class="list-item">
+            <span>
+              <%= contrib.content %>
+            </span>
+            <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+          </div>
+          <% }) %>
       </div>
 
       <div class="card">
         <h2 style="margin-bottom:15px;">📤 Entrega de Tarea</h2>
-        <form action="#" onsubmit="alert('Tarea enviada!'); return false;" style="display:flex; flex-direction:row; align-items:center; gap:10px;">
+        <form action="#" onsubmit="alert('Tarea enviada!'); return false;"
+          style="display:flex; flex-direction:row; align-items:center; gap:10px;">
           <input type="file" style="border:none; padding:0; font-size:0.8rem;">
           <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
@@ -53,9 +62,12 @@
 
       <div class="card" style="margin-top: 20px;">
         <h2 style="margin-bottom:15px;">🔍 Visualización de Contenido</h2>
-        <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..." onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="width: 100%; height: 80vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= clase.content %></textarea>
+        <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..."
+          onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });"
+          style="width: 100%; height: 80vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= clase.content %></textarea>
         <div style="margin-top: 15px;">
-          <button id="visualizer-btn" onclick="visualizeContent()" class="btn btn-primary" style="width: 100%;">Visualizar</button>
+          <button id="visualizer-btn" onclick="visualizeContent()" class="btn btn-primary"
+            style="width: 100%;">Visualizar</button>
         </div>
       </div>
     </div>
@@ -64,112 +76,159 @@
     <div style="flex: 1;">
       <div class="card">
         <h3 style="margin-bottom:10px;">📢 Novedades</h3>
-        <% news.forEach(item => {%>
-            <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %></p>
-        <% }) %>
+        <% news.forEach(item=> {%>
+          <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %>
+          </p>
+          <% }) %>
       </div>
       <div class="card" id="indice-container">
         <div style="display: flex; justify-content: center; gap: 20px; margin-top: 0px;">
           <% if (clase.prevClass) {%>
-          <a href="/uni/materia/<%= clase.prevClass.materiaId %>/clase/<%= clase.prevClass.id %>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">&larr; Clase
-            Anterior</a>
-          <% } %>
-          <% if (clase.nextClass) {%>
-          <a href="/uni/materia/<%= clase.nextClass.materiaId %>/clase/<%= clase.nextClass.id %>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Próxima Clase
-            &rarr;</a>
-          <% } %>
+            <a href="/uni/materia/<%= clase.prevClass.materiaId %>/clase/<%= clase.prevClass.id %>"
+              class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">&larr; Clase
+              Anterior</a>
+            <% } %>
+              <% if (clase.nextClass) {%>
+                <a href="/uni/materia/<%= clase.nextClass.materiaId %>/clase/<%= clase.nextClass.id %>"
+                  class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Próxima Clase
+                  &rarr;</a>
+                <% } %>
         </div>
       </div>
       <div class="card" id="indice-container">
         <div style="display:flex; justify-content:space-between; align-items:center;" id="indice-header">
           <h3 style="margin-bottom:0;">📌 Índice de Contenido</h3>
-          <button onclick="toggleIndice()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
+          <button onclick="toggleIndice()"
+            style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">
             <span id="indice-toggle-icon">−</span>
           </button>
         </div>
-        <ul id="indice-list" style="list-style:none; padding:0; font-size:0.85rem; transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
-          <li style="margin-bottom:8px;"><a href="#seccion-teoria" onclick="scrollToSection(event, 'seccion-teoria')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 1)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion" onclick="scrollToSection(event, 'sub-definicion')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 1)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo" onclick="scrollToSection(event, 'sub-ejemplo')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 1)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla" onclick="scrollToSection(event, 'sub-tabla')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 1)</a></li>
-          <li style="margin-bottom:8px;"><a href="#seccion-teoria-2" onclick="scrollToSection(event, 'seccion-teoria-2')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 2)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-2" onclick="scrollToSection(event, 'sub-definicion-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 2)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-2" onclick="scrollToSection(event, 'sub-ejemplo-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 2)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-2" onclick="scrollToSection(event, 'sub-tabla-parte-2')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 2)</a></li>
-          <li style="margin-bottom:8px;"><a href="#seccion-teoria-3" onclick="scrollToSection(event, 'seccion-teoria-3')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 3)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-3" onclick="scrollToSection(event, 'sub-definicion-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 3)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-3" onclick="scrollToSection(event, 'sub-ejemplo-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 3)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-3" onclick="scrollToSection(event, 'sub-tabla-parte-3')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 3)</a></li>
-          <li style="margin-bottom:8px;"><a href="#seccion-teoria-4" onclick="scrollToSection(event, 'seccion-teoria-4')" class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 4)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-4" onclick="scrollToSection(event, 'sub-definicion-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 4)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-4" onclick="scrollToSection(event, 'sub-ejemplo-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 4)</a></li>
-          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-4" onclick="scrollToSection(event, 'sub-tabla-parte-4')" class="nav-link" style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 4)</a></li>
+        <ul id="indice-list"
+          style="list-style:none; padding:0; font-size:0.85rem; transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria" onclick="scrollToSection(event, 'seccion-teoria')"
+              class="nav-link" style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion"
+              onclick="scrollToSection(event, 'sub-definicion')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo"
+              onclick="scrollToSection(event, 'sub-ejemplo')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 1)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla"
+              onclick="scrollToSection(event, 'sub-tabla')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 1)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-2"
+              onclick="scrollToSection(event, 'seccion-teoria-2')" class="nav-link"
+              style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-2"
+              onclick="scrollToSection(event, 'sub-definicion-parte-2')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-2"
+              onclick="scrollToSection(event, 'sub-ejemplo-parte-2')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 2)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-2"
+              onclick="scrollToSection(event, 'sub-tabla-parte-2')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 2)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-3"
+              onclick="scrollToSection(event, 'seccion-teoria-3')" class="nav-link"
+              style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-3"
+              onclick="scrollToSection(event, 'sub-definicion-parte-3')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-3"
+              onclick="scrollToSection(event, 'sub-ejemplo-parte-3')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 3)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-3"
+              onclick="scrollToSection(event, 'sub-tabla-parte-3')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 3)</a></li>
+          <li style="margin-bottom:8px;"><a href="#seccion-teoria-4"
+              onclick="scrollToSection(event, 'seccion-teoria-4')" class="nav-link"
+              style="color:var(--accent); text-decoration:none;">• Resumen Teórico (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-definicion-parte-4"
+              onclick="scrollToSection(event, 'sub-definicion-parte-4')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Definición Formal (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-ejemplo-parte-4"
+              onclick="scrollToSection(event, 'sub-ejemplo-parte-4')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Ejemplo Práctico (Parte 4)</a></li>
+          <li style="margin-left:15px; margin-bottom:8px;"><a href="#sub-tabla-parte-4"
+              onclick="scrollToSection(event, 'sub-tabla-parte-4')" class="nav-link"
+              style="color:#64748b; text-decoration:none;">• Comparación de Tipos (Parte 4)</a></li>
         </ul>
-        <button id="hide-indice-btn" onclick="toggleIndice()" style="margin-top:10px; padding:5px 10px; font-size:0.8rem; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; display:none;">
+        <button id="hide-indice-btn" onclick="toggleIndice()"
+          style="margin-top:10px; padding:5px 10px; font-size:0.8rem; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; display:none;">
           Mostrar Índice
         </button>
       </div>
-      <div class="card">
+
       <%- include('../partials/banco-ejercicios', { ejercicios: ejercicios }); %>
-
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:15px;">🎵 Audio de Apoyo</h3>
-        <% contributions.contribuciones.filter(c=> c.tipo == "AUDIO").forEach(contrib => { %>
-        <div class="audio-container list-item">
-          <p><%= contrib.content %></p>
-          <div class="play-control">
-            <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
-            <div id="controls-audio1" class="controls-wrap" style="display: none;">
-              <audio id="audio1" style="display: none;">
-                <source src="aaa.mp3" type="audio/mpeg">
-                Tu navegador no soporta el elemento de audio.
-              </audio>
+        <div class="card">
+          <h3 style="margin-bottom:15px;">🎵 Audio de Apoyo</h3>
+          <% contributions.contribuciones.filter(c=> c.tipo == "AUDIO").forEach(contrib => { %>
+            <div class="audio-container list-item">
+              <p>
+                <%= contrib.content %>
+              </p>
+              <div class="play-control">
+                <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
+                <div id="controls-audio1" class="controls-wrap" style="display: none;">
+                  <audio id="audio1" style="display: none;">
+                    <source src="aaa.mp3" type="audio/mpeg">
+                    Tu navegador no soporta el elemento de audio.
+                  </audio>
+                </div>
+              </div>
             </div>
+            <% }) %>
+        </div>
+
+
+        <div class="card">
+          <h3 style="margin-bottom:15px;">💬 Comentarios</h3>
+          <div id="comments-list" style="margin-bottom:15px;">
+            <p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>
           </div>
-        </div>
-        <% }) %>
-      </div>
-
-
-      <div class="card">
-        <h3 style="margin-bottom:15px;">💬 Comentarios</h3>
-        <div id="comments-list" style="margin-bottom:15px;">
-          <p style="font-size:0.85rem; color:#64748b;">No hay comentarios nuevos.</p>
-        </div>
-        <div style="margin-bottom:15px;">
-          <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." rows="3" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"><% contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO").forEach(contrib => { %><%= contrib.content %>
+          <div style="margin-bottom:15px;">
+            <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." rows="3"
+              style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; resize:vertical; font-family:inherit;"><% contributions.contribuciones.filter(c=> c.tipo == "COMENTARIO").forEach(contrib => { %><%= contrib.content %>
 <% }) %></textarea>
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button onclick="addComment()" style="flex:1; padding:8px 16px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
-            Publicar Comentario
-          </button>
-          <button onclick="clearComments()" style="flex:1; padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
-            Limpiar
-          </button>
-        </div>
-      </div>
-      <div class="card" style="margin-top:30px;">
-        <h3 style="margin-bottom:15px;">🎥 Vídeos Relacionable</h3>
-        <div id="video-grid" style="display: flex; flex-wrap: wrap; gap: 15px;">
-          <% contributions.contribuciones.filter(c=> c.tipo == "YOUTUBE").forEach(contrib => { %>
-          <div class="video-thumb" onclick="playVideo('rzYDWIQh2r4')" style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px;">
-            <img src="https://img.youtube.com/vi/rzYDWIQh2r4/mqdefault.jpg" style="width:100%; display:block;">
-            <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;"><%= contrib.content %></div>
           </div>
-          <% }) %>
+          <div style="display:flex; gap:10px;">
+            <button onclick="addComment()"
+              style="flex:1; padding:8px 16px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
+              Publicar Comentario
+            </button>
+            <button onclick="clearComments()"
+              style="flex:1; padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem;">
+              Limpiar
+            </button>
+          </div>
         </div>
-      </div>
+        <div class="card" style="margin-top:30px;">
+          <h3 style="margin-bottom:15px;">🎥 Vídeos Relacionable</h3>
+          <div id="video-grid" style="display: flex; flex-wrap: wrap; gap: 15px;">
+            <% contributions.contribuciones.filter(c=> c.tipo == "YOUTUBE").forEach(contrib => { %>
+              <div class="video-thumb" onclick="playVideo('rzYDWIQh2r4')"
+                style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px;">
+                <img src="https://img.youtube.com/vi/rzYDWIQh2r4/mqdefault.jpg" style="width:100%; display:block;">
+                <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;">
+                  <%= contrib.content %>
+                </div>
+              </div>
+              <% }) %>
+          </div>
+        </div>
 
-      <div id="main-player-container" class="card" style="display:none; padding:0; overflow:hidden; border:none; background:#000; position:fixed; top:50%; left:20%; transform: translateY(-50%); width:60%; height:80vh; z-index:9999;">
-        <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-          <iframe id="yt-player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="" frameborder="0" allowfullscreen></iframe>
+        <div id="main-player-container" class="card"
+          style="display:none; padding:0; overflow:hidden; border:none; background:#000; position:fixed; top:50%; left:20%; transform: translateY(-50%); width:60%; height:80vh; z-index:9999;">
+          <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+            <iframe id="yt-player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src=""
+              frameborder="0" allowfullscreen></iframe>
+          </div>
+          <div
+            style="padding:15px; text-align:right; background:#222; position:absolute; bottom:0; left:0; width:100%; flex-shrink: 0;">
+            <button class="btn btn-primary" onclick="closePlayer()" style="font-size:0.8rem; color:white;">Cerrar
+              Vídeo</button>
+          </div>
         </div>
-        <div style="padding:15px; text-align:right; background:#222; position:absolute; bottom:0; left:0; width:100%; flex-shrink: 0;">
-          <button class="btn btn-primary" onclick="closePlayer()" style="font-size:0.8rem; color:white;">Cerrar Vídeo</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -334,16 +393,16 @@
           },
           body: JSON.stringify({ content: editadoContent })
         })
-        .then(response => {
-          if (response.ok) {
-            alert('Cambios guardados correctamente');
-          } else {
-            alert('Error al guardar los cambios');
-          }
-        })
-        .catch(error => {
-          alert('Error al guardar los cambios: ' + error.message);
-        });
+          .then(response => {
+            if (response.ok) {
+              alert('Cambios guardados correctamente');
+            } else {
+              alert('Error al guardar los cambios');
+            }
+          })
+          .catch(error => {
+            alert('Error al guardar los cambios: ' + error.message);
+          });
       }
     }
 
