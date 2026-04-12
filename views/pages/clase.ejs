@@ -1,20 +1,20 @@
 <div class="page-content">
   <div class="breadcrumb">
     <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
-    <% if (ejercicios && ejercicios.length > 0) { %>
+    <% if (ejercicios && ejercicios.length> 0) { %>
       <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent">
         <%= ejercicios[0].materiaId %>: Nombre de materia
       </a> &nbsp; | &nbsp;
-    <% } else { %>
-      <span>Nombre de materia</span> &nbsp; | &nbsp;
-    <% } %>
-    <span style="color:#3b82f5;">
-      <%= clase.content %>
-    </span>
+      <% } else { %>
+        <span>Nombre de materia</span> &nbsp; | &nbsp;
+        <% } %>
+          <span style="color:#3b82f5;">
+            <%= clase.content %>
+          </span>
   </div>
 
   <h1 style="margin-top:20px;">
-   📖 <%= clase.content %>
+    📖 <%= clase.content %>
   </h1>
 
   <!-- SECCIÓN DE CONTENIDO PRINCIPAL -->
@@ -41,7 +41,7 @@
       </div>
 
 
-      
+
 
       <div class="card" id="visualizer-card" style="margin-top: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -51,7 +51,8 @@
             <span id="visualizer-toggle-icon">+</span>
           </button>
         </div>
-        <div id="visualizer-content" style="transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
+        <div id="visualizer-content"
+          style="transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
           <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..."
             onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });"
             style="width: 100%; height: 80vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= clase.content %></textarea>
@@ -64,24 +65,24 @@
 
       <div class="card">
         <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
-        <% const fileContribs = contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>
-        <% if (fileContribs.length > 0) { %>
-          <% fileContribs.forEach(contrib => { %>
-            <div class="list-item">
-              <span>
-                <%= contrib.content %>
-              </span>
-              <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-            </div>
-            <% }) %>
-        <% } else { %>
-          <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay material descargable</p>
-        <% } %>
+        <% const fileContribs=contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>
+          <% if (fileContribs.length> 0) { %>
+            <% fileContribs.forEach(contrib=> { %>
+              <div class="list-item">
+                <span>
+                  <%= contrib.content %>
+                </span>
+                <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+              </div>
+              <% }) %>
+                <% } else { %>
+                  <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay material descargable</p>
+                  <% } %>
       </div>
 
       <%- include('../partials/contribuciones', { contribs: contributions.contribuciones, claseId: clase.id}); %>
 
-      
+
 
 
     </div>
@@ -110,27 +111,27 @@
 
             <div class="card">
               <h3 style="margin-bottom:15px;">🎵 Audio de Apoyo</h3>
-              <% const audioContribs = contributions.contribuciones.filter(c=> c.tipo == "AUDIO"); %>
-              <% if (audioContribs.length > 0) { %>
-                <% audioContribs.forEach(contrib => { %>
-                  <div class="audio-container list-item">
-                    <p>
-                      <%= contrib.content %>
-                    </p>
-                    <div class="play-control">
-                      <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
-                      <div id="controls-audio1" class="controls-wrap" style="display: none;">
-                        <audio id="audio1" style="display: none;">
-                          <source src="aaa.mp3" type="audio/mpeg">
-                          Tu navegador no soporta el elemento de audio.
-                        </audio>
+              <% const audioContribs=contributions.contribuciones.filter(c=> c.tipo == "AUDIO"); %>
+                <% if (audioContribs.length> 0) { %>
+                  <% audioContribs.forEach(contrib=> { %>
+                    <div class="audio-container list-item">
+                      <p>
+                        <%= contrib.content %>
+                      </p>
+                      <div class="play-control">
+                        <div class="play-button" onclick="toggleAudio('audio1', this)" style="cursor: default;">▶️</div>
+                        <div id="controls-audio1" class="controls-wrap" style="display: none;">
+                          <audio id="audio1" style="display: none;">
+                            <source src="aaa.mp3" type="audio/mpeg">
+                            Tu navegador no soporta el elemento de audio.
+                          </audio>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <% }) %>
-              <% } else { %>
-                <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay audios de apoyo</p>
-              <% } %>
+                    <% }) %>
+                      <% } else { %>
+                        <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay audios de apoyo</p>
+                        <% } %>
             </div>
 
 
@@ -144,7 +145,45 @@
 
 
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
   <script>
+    MathJax = {
+      startup: {
+        typeset: false // Evita que procese la página al cargar
+      },
+      tex: {
+        inlineMath: [['\\(', '\\)']],  // Delimitadores para ecuaciones en línea
+        displayMath: [['\\[', '\\]']], // Delimitadores para ecuaciones en modo display
+      },
+    };
+
+    function escapeLatex(text) {
+      // Escapamos las barras invertidas para que no desaparezcan en el proceso de conversión.
+      return text.replace(/\\/g, '\\\\');
+    }
+
+    function transformMarkdownToHTML(markdownText) {
+      let htmlContent = markdownText;
+
+      // Escapamos las barras invertidas antes de convertir el Markdown
+      htmlContent = escapeLatex(htmlContent);
+
+      // Convertimos el Markdown a HTML
+      htmlContent = marked.parse(htmlContent);
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      htmlContent = tempDiv.innerHTML;
+
+      // Restauramos los caracteres especiales
+      htmlContent = htmlContent.replace(/\:\:/g, "_");
+      htmlContent = htmlContent.replace(/\?\?/g, "^*");
+
+      return htmlContent;
+    }
+
     function toggleCard(contentId, button) {
       const content = document.getElementById(contentId);
       const icon = button.querySelector('span');
@@ -168,13 +207,24 @@
       const visualizerBtn = document.getElementById('visualizer-btn');
 
       if (input && editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
-        editadoContent.innerHTML = input.value;
+        // Procesar el Markdown usando la misma lógica que parser.html
+        const markdownText = input.value;
+        const htmlContent = transformMarkdownToHTML(markdownText);
+
+        editadoContent.innerHTML = htmlContent;
         originalContainer.style.display = 'none';
         editadoContainer.style.display = 'block';
         botonesContainer.style.display = 'block';
 
         const h1 = document.querySelector('h1');
         h1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Notificamos a MathJax que debe procesar solo el contenedor editado
+        MathJax.typesetPromise([editadoContent]).then(() => {
+          console.log("MathJax ha renderizado las ecuaciones en el contenedor editado.");
+        }).catch((err) => {
+          console.error("Error al renderizar MathJax:", err);
+        });
       }
     }
 
@@ -204,24 +254,37 @@
         const visualizerBtn = document.getElementById('visualizer-btn');
         const visualizerCard = document.getElementById('visualizer-card');
         const claseId = <%= clase.id %>;
+        const visualizerInput = document.getElementById('visualizer-input');
 
-        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
+        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard && visualizerInput) {
+          // Obtener el texto en Markdown del textarea
+          const markdownText = visualizerInput.value;
+
           fetch(`/api/clases/${claseId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ content: editadoContent.innerHTML })
+            body: JSON.stringify({ content: markdownText })
           })
             .then(response => {
               if (response.ok) {
-                originalContainer.innerHTML = editadoContent.innerHTML;
+                // Convertir el Markdown a HTML renderizado
+                const htmlContent = transformMarkdownToHTML(markdownText);
+                // Actualizar el contenedor original con el HTML renderizado
+                originalContainer.innerHTML = htmlContent;
                 // Ocultar el contenedor editado y los botones
                 editadoContainer.style.display = 'none';
                 botonesContainer.style.display = 'none';
                 originalContainer.style.display = 'block';
                 // Colapsar el card de editar contenido
                 toggleCard('visualizer-content', visualizerCard.querySelector('button'));
+                // Procesar las ecuaciones con MathJax
+                MathJax.typesetPromise([originalContainer]).then(() => {
+                  console.log("MathJax ha renderizado las ecuaciones en el contenedor original.");
+                }).catch((err) => {
+                  console.error("Error al renderizar MathJax:", err);
+                });
               } else {
                 alert('Error al guardar los cambios');
               }
@@ -232,5 +295,23 @@
         }
       }
     }
+
+    // Procesar el contenido del contenedor resumen-teoria-container al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      const resumenContainer = document.getElementById('resumen-teoria-container');
+      if (resumenContainer && resumenContainer.textContent) {
+        const markdownText = resumenContainer.textContent;
+        const htmlContent = transformMarkdownToHTML(markdownText);
+        resumenContainer.innerHTML = htmlContent;
+
+        // Procesar las ecuaciones con MathJax
+        MathJax.typesetPromise([resumenContainer]).then(() => {
+          console.log("MathJax ha renderizado las ecuaciones en el contenedor principal.");
+        }).catch((err) => {
+          console.error("Error al renderizar MathJax:", err);
+        });
+      }
+    });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </div>

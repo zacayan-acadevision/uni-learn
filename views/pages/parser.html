@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown con LaTeX a HTML</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            display: block;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #content {
+            margin-top: 20px;
+        }
+
+        p {
+            max-width: 800px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>Markdown con LaTeX a HTML</h1>
+    <textarea id="markdownInput" placeholder="Escribe aquí tu texto en Markdown..."></textarea>
+    <button onclick="transformMarkdown()">Transformar</button>
+    <div id="content"></div>
+
+    <script>
+          MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],  // Delimitadores para ecuaciones en línea
+                displayMath: [['\\[', '\\]']], // Delimitadores para ecuaciones en modo display
+            },
+        };
+        function escapeLatex(text) {
+            // Escapamos las barras invertidas para que no desaparezcan en el proceso de conversión.
+            return text.replace(/\\/g, '\\\\');
+        }
+
+        function transformMarkdown() {
+            let markdownText = document.getElementById("markdownInput").value;
+
+            markdownText = markdownText.replace(/\_/g, "::");
+            markdownText = markdownText.replace(/\^\*/g, "??");
+            // Escapamos las barras invertidas antes de convertir el Markdown
+            markdownText = escapeLatex(markdownText);
+
+            // Convertimos el Markdown a HTML
+            let htmlContent = marked.parse(markdownText);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlContent;
+            htmlContent = tempDiv.innerHTML;
+            htmlContent = htmlContent.replace(/\:\:/g, "_");
+            htmlContent = htmlContent.replace(/\?\?/g, "^*");
+            console.log(htmlContent);
+            document.getElementById("content").innerHTML = htmlContent;
+
+            // Notificamos a MathJax que debe procesar el contenido dinámico
+            MathJax.typesetPromise().then(() => {
+                console.log("MathJax ha renderizado las ecuaciones.");
+            }).catch((err) => {
+                console.error("Error al renderizar MathJax:", err);
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>
