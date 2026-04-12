@@ -20,6 +20,7 @@
         <input type="text" class="edit-input" value="<%= materia.content %>" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
         <div style="display: flex; gap: 10px;">
           <button onclick="saveEdit(this)" class="btn btn-primary" style="flex: 1;">Guardar</button>
+          <button onclick="eliminarMateria(this)" class="btn btn-danger" style="flex: 1;">Eliminar</button>
           <button onclick="toggleEdit(this)" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
         </div>
       </div>
@@ -74,6 +75,7 @@
               <input type="text" class="edit-input" value="${nuevaMateria.content}" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
               <div style="display: flex; gap: 10px;">
                 <button onclick="saveEdit(this)" class="btn btn-primary" style="flex: 1;">Guardar</button>
+                <button onclick="eliminarMateria(this)" class="btn btn-danger" style="flex: 1;">Eliminar</button>
                 <button onclick="toggleEdit(limpiarVista(this))" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
               </div>
             </div>
@@ -104,11 +106,32 @@
       function limpiarVista(btn) {
         const card = btn.closest('.materia-card');
         const view = card.querySelector('.materia-view');
-        const edit = card.
-        card.querySelector('.materia-edit');
+        const edit = card.querySelector('.materia-edit');
         view.style.display = 'block';
         edit.style.display = 'none';
         return btn;
+      }
+
+      function eliminarMateria(btn) {
+        const card = btn.closest('.materia-card');
+        const id = card.getAttribute('data-id');
+
+        if (confirm('¿Estás seguro de que quieres eliminar esta materia?')) {
+          try {
+            fetch(`/api/materias/${id}`, {
+              method: 'DELETE'
+            }).then(response => {
+              if (response.ok) {
+                card.style.display = 'none';
+              } else {
+                alert('No se pudo eliminar la materia.');
+              }
+            });
+          } catch (error) {
+            console.error('Error:', error);
+            alert('No se pudo eliminar la materia.');
+          }
+        }
       }
 
       async function saveEdit(btn) {
