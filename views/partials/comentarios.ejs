@@ -34,7 +34,7 @@
         if (comments && comments.length > 0) {
           commentsList.innerHTML = '';
 
-          comments.forEach(comment => {
+          comments.forEach((comment, index) => {
             const now = new Date();
             const timeString = now.toLocaleTimeString('es-ES', {
               hour: '2-digit',
@@ -50,7 +50,26 @@
             newComment.style.padding = '10px';
             newComment.style.borderBottom = '1px solid var(--border)';
             newComment.style.fontSize = '0.85rem';
-            newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${comment.msg}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+            newComment.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:5px;">
+                <strong style="color:var(--accent);">Tú:</strong>
+                <div style="display:flex; gap:5px;">
+                  <button onclick="editComment(${index})" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.8rem;">✏️ Editar</button>
+                  <button onclick="confirmDeleteComment(${index})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem;">🗑️ Eliminar</button>
+                </div>
+              </div>
+              <div id="comment-text-${index}">${comment.msg}</div>
+              <div id="comment-edit-${index}" style="display:none;">
+                <textarea id="comment-input-${index}" rows="2" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; font-family:inherit;">${comment.msg}</textarea>
+                <div style="margin-top:5px; display:flex; gap:10px;">
+                  <button onclick="saveComment(${index})" style="flex:1; padding:6px 12px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem;">Actualizar</button>
+                  <button onclick="cancelEditComment(${index})" style="flex:1; padding:6px 12px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem;">Cancelar</button>
+                </div>
+              </div>
+              <div style="margin-top:5px;">
+                <span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>
+              </div>
+            `;
 
             commentsList.appendChild(newComment);
           });
@@ -101,7 +120,26 @@
             newComment.style.padding = '10px';
             newComment.style.borderBottom = '1px solid var(--border)';
             newComment.style.fontSize = '0.85rem';
-            newComment.innerHTML = `<strong style="color:var(--accent);">Tú:</strong> ${commentText}<br><span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>`;
+            newComment.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:5px;">
+                <strong style="color:var(--accent);">Tú:</strong>
+                <div style="display:flex; gap:5px;">
+                  <button onclick="editComment(${commentsList.children.length})" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.8rem;">✏️ Editar</button>
+                  <button onclick="confirmDeleteComment(${commentsList.children.length})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem;">🗑️ Eliminar</button>
+                </div>
+              </div>
+              <div id="comment-text-${commentsList.children.length}">${commentText}</div>
+              <div id="comment-edit-${commentsList.children.length}" style="display:none;">
+                <textarea id="comment-input-${commentsList.children.length}" rows="2" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; font-family:inherit;">${commentText}</textarea>
+                <div style="margin-top:5px; display:flex; gap:10px;">
+                  <button onclick="saveComment(${commentsList.children.length})" style="flex:1; padding:6px 12px; background:var(--accent); color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem;">Actualizar</button>
+                  <button onclick="cancelEditComment(${commentsList.children.length})" style="flex:1; padding:6px 12px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem;">Cancelar</button>
+                </div>
+              </div>
+              <div style="margin-top:5px;">
+                <span style="color:#64748b; font-size:0.75rem;">${dateString} ${timeString}</span>
+              </div>
+            `;
 
             const noComments = commentsList.querySelector('p');
             if (noComments) {
@@ -117,6 +155,32 @@
         .catch(error => {
           alert('Error al guardar el comentario: ' + error.message);
         });
+    }
+  }
+
+  function editComment(index) {
+    document.getElementById(`comment-text-${index}`).style.display = 'none';
+    document.getElementById(`comment-edit-${index}`).style.display = 'block';
+  }
+
+  function cancelEditComment(index) {
+    document.getElementById(`comment-text-${index}`).style.display = 'block';
+    document.getElementById(`comment-edit-${index}`).style.display = 'none';
+  }
+
+  function saveComment(index) {
+    const newCommentText = document.getElementById(`comment-input-${index}`).value.trim();
+    if (newCommentText) {
+      document.getElementById(`comment-text-${index}`).textContent = newCommentText;
+      document.getElementById(`comment-text-${index}`).style.display = 'block';
+      document.getElementById(`comment-edit-${index}`).style.display = 'none';
+    }
+  }
+
+  function confirmDeleteComment(index) {
+    if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
+      const commentElement = document.getElementById(`comment-text-${index}`).closest('div');
+      commentElement.remove();
     }
   }
 
