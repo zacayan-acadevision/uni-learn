@@ -26,9 +26,10 @@ router.get('/', async (req, res) => {
 router.get('/materia/:id', async (req, res) => {
   const materiaId = req.params.id;
   try {
+    const news = await getNews();
     const clases = await getMateriaById(materiaId);
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
-    res.render('pages/materia', { title: 'Home', clases, ejercicios, layout: 'layouts/unilayout' });
+    res.render('pages/materia', { title: 'Home', clases, ejercicios, news, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });

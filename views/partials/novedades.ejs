@@ -1,0 +1,10 @@
+<div class="card">
+  <h3 style="margin-bottom:10px;">📢 Novedades</h3>
+  <% if (locals.news && locals.news.length > 0) { %>
+    <% locals.news.forEach(item=> {%>
+      <p style="font-size: 0.85rem; color: #64748b;">• <%= item.content %></p>
+    <% }) %>
+  <% } else { %>
+    <p style="font-size: 0.85rem; color: #f59e0b;">⚠️ <strong>Variable 'news' no disponible</strong> - Por favor, envía el objeto news al partial en la vista que lo incluye.</p>
+  <% } %>
+</div>
