@@ -98,14 +98,7 @@
         </button>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:15px;">📝 Banco de Ejercicios</h3>
-        <% ejercicios.forEach(ejercicio=> { %>
-        <div class="list-item">
-          <span>Ejercicio <%= ejercicio.id %>: <%= ejercicio.content %></span>
-          <a href="/uni/materia/<%= ejercicio.materiaId %>/ejercicio/<%= ejercicio.id %>" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
-            Ejercicio</a>
-        </div>
-        <% }) %>
+      <%- include('../partials/banco-ejercicios', { ejercicios: ejercicios }); %>
 
       </div>
      
