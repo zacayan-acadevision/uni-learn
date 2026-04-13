@@ -74,14 +74,46 @@
     return htmlContent;
   }
 
+  // Función para procesar todas las contribuciones Markdown existentes al cargar la página
+  function procesarContribucionesMarkdown() {
+    const listaContribucionesMarkdown = document.getElementById('listaContribucionesMarkdown');
+    if (!listaContribucionesMarkdown) return;
+
+    const contribs = listaContribucionesMarkdown.querySelectorAll('[id^="contribMarkdownRenderizado"]');
+    contribs.forEach(function(div) {
+      // Verificar si ya fue procesado
+      if (div.getAttribute('data-procesado')) return;
+
+      // Obtener el contenido original y guardarlo en un atributo
+      const contenidoOriginal = div.textContent;
+      div.setAttribute('data-content-original', contenidoOriginal);
+
+      // Renderizar el contenido Markdown
+      div.innerHTML = renderizarMarkdownMarkdown(contenidoOriginal);
+
+      // Marcar como procesado
+      div.setAttribute('data-procesado', 'true');
+
+      // Procesar las ecuaciones con MathJax
+      if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+        MathJax.typesetPromise([div]).catch((err) => {
+          console.error('Error al renderizar MathJax:', err);
+        });
+      }
+    });
+  }
+
   // Función para mostrar el formulario de edición
   function mostrarFormularioEditarMarkdown(index) {
     const formulario = document.getElementById('formularioEditarMarkdown' + index);
     const contenido = document.getElementById('contribMarkdownRenderizado' + index);
     const textarea = document.getElementById('markdownContrib' + index);
 
-    // Llenar el textarea con el contenido actual
-    textarea.value = contenido.textContent;
+    // Obtener el contenido original guardado en el atributo
+    const contenidoOriginal = contenido.getAttribute('data-content-original');
+
+    // Llenar el textarea con el contenido original
+    textarea.value = contenidoOriginal;
 
     // Ocultar el elemento y mostrar el formulario
     document.getElementById('contribMarkdownItem' + index).style.display = 'none';
@@ -379,4 +411,7 @@
     nuevoItem.parentNode.insertBefore(nuevoFormulario, nuevoItem.nextSibling);
     nuevoFormulario.style.display = 'block';
   }
+
+  // Procesar las contribuciones Markdown al cargar la página
+  document.addEventListener('DOMContentLoaded', procesarContribucionesMarkdown);
 </script>
