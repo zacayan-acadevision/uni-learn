@@ -1,8 +1,24 @@
 <div class="card">
   <h2 style="margin-bottom:15px;">Clases Disponibles</h2>
   <div id="listaClases">
+    <%# Ordenar clases: primero las que tienen fecha, luego las que no tienen fecha %>
+    <% const clasesConFecha = clases.clases.filter(clase => clase.fecha); %>
+    <% const clasesSinFecha = clases.clases.filter(clase => !clase.fecha); %>
 
-    <% clases.clases.forEach(clase => { %>
+    <%# Ordenar por fecha ascendente %>
+    <% clasesConFecha.sort((a, b) => {
+        if (!a.fecha) return 1;
+        if (!b.fecha) return -1;
+        return new Date(a.fecha) - new Date(b.fecha);
+      }); %>
+
+    <%# Ordenar por id para las sin fecha %>
+    <% clasesSinFecha.sort((a, b) => a.id - b.id); %>
+
+    <%# Combinar: primero las con fecha, luego las sin fecha %>
+    <% const clasesOrdenadas = [...clasesConFecha, ...clasesSinFecha]; %>
+
+    <% clasesOrdenadas.forEach(clase => { %>
     <div class="list-item" data-n="clase <%= clase.id %> <%= clase.titulo %>" id="claseItem<%= clase.id %>">
       <span class="item-text"><strong style="color:var(--primary)">Clase <%= clase.id %>:</strong> <%= clase.titulo %></span>
       <div style="display:flex; gap:5px;">

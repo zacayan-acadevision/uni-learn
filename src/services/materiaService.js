@@ -15,7 +15,12 @@ export const getMateriaById = async (id) => {
   return await prisma.materias.findUnique({
     where: { id: parseInt(id) },
     include: {
-      clases: true,
+      clases: {
+        orderBy: [
+          { fecha: 'asc' },  // Primero ordena por fecha ascendente
+          { id: 'asc' }      // Luego por id para mantener consistencia
+        ]
+      },
       ejercicios: true,
     },
   });
