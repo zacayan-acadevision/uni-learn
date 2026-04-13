@@ -33,6 +33,7 @@ async function main() {
         },
         ejercicios: {
           create: Array.from({ length: 3 }, (_, k) => ({
+            titulo: `Título Ejercicio ${k + 1} de Materia ${i}`,
             content: `Ejercicio ${k + 1} de Materia ${i}`,
           })),
         },

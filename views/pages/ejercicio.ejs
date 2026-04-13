@@ -2,10 +2,10 @@
   <div class="breadcrumb">
     <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
     <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent"><%= ejercicios[0].materiaId %>: Nombre de materia</a> &nbsp; | &nbsp;
-    <span style="color:#3b82f5;">Ejercicio</span>
+    <span style="color:#3b82f5;">Ejercicio: <%= ejercicio.titulo %></span>
   </div>
 
-  <h1 style="margin-top:20px;">📝 <%= ejercicio.content %></h1>
+  <h1 style="margin-top:20px;">📝 <%= ejercicio.titulo %></h1>
 
 
 
@@ -13,13 +13,19 @@
   <div style="display: flex; gap: 30px;">
     <!-- Columna Izquierda: Resumen Teórico -->
     <div style="flex: 2;">
-      <div class="card" style="max-height: 600px; overflow-y: auto;">
-        <div id="resumen-teoria-container" style="display: block;">
-          <%= ejercicio.content %>
+      <div class="card" style="max-height: 600px; max-width: 100%; overflow: auto; position: relative;">
+        <div style="position: sticky; top: 0px; right: 0; display: flex; z-index: 10; gap: 5px; text-align: right; flex-direction: row-reverse;">
+          <button onclick="contraerContenido()" style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            ⬆️ Contraer
+          </button>
+          <button onclick="expandirContenido()" style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            ↕️ Expandir
+          </button>
         </div>
+        <div id="resumen-teoria-container" style="display: block;" class="markdown-render-container"><%= ejercicio.content %></div>
 
         <div id="resumen-teoria-editado" style="display: none;">
-          <div id="resumen-teoria-editado-content"></div>
+          <div id="resumen-teoria-editado-content" class="markdown-render-container"></div>
         </div>
 
         <div id="resumen-teoria-botones" style="display: none;">
@@ -42,7 +48,7 @@
           </button>
         </div>
         <div id="visualizer-content" style="transition:max-height 0.3s ease, margin-top 0.3s ease; max-height:0px; overflow:hidden; margin-top:0px;">
-          <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..." onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="width: 100%; height: 80vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= ejercicio.content %></textarea>
+          <textarea id="visualizer-input" placeholder="Pega aquí el contenido o código a visualizar..." onfocus="document.getElementById('visualizer-input').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="width: 100%; height: 40vh; padding: 10px; border: 1px solid var(--border); border-radius: 6px; resize: vertical; font-family: monospace;"><%= ejercicio.content %></textarea>
           <div style="margin-top: 15px;">
             <button id="visualizer-btn" onclick="visualizeContent()" class="btn btn-primary" style="width: 100%;">Visualizar</button>
           </div>
@@ -85,7 +91,45 @@
 
 
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
   <script>
+    MathJax = {
+      startup: {
+        typeset: false // Evita que procese la página al cargar
+      },
+      tex: {
+        inlineMath: [['\\(', '\\)']],  // Delimitadores para ecuaciones en línea
+        displayMath: [['\\[', '\\]']], // Delimitadores para ecuaciones en modo display
+      },
+    };
+
+    function escapeLatex(text) {
+      // Escapamos las barras invertidas para que no desaparezcan en el proceso de conversión.
+      return text.replace(/\\/g, '\\\\');
+    }
+
+    function transformMarkdownToHTML(markdownText) {
+      let htmlContent = markdownText;
+
+      // Escapamos las barras invertidas antes de convertir el Markdown
+      htmlContent = escapeLatex(htmlContent);
+
+      // Convertimos el Markdown a HTML
+      htmlContent = marked.parse(htmlContent);
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      htmlContent = tempDiv.innerHTML;
+
+      // Restauramos los caracteres especiales
+      htmlContent = htmlContent.replace(/\:\:/g, "_");
+      htmlContent = htmlContent.replace(/\?\?/g, "^*");
+
+      return htmlContent;
+    }
+
     function toggleCard(contentId, button) {
       const content = document.getElementById(contentId);
       const icon = button.querySelector('span');
@@ -109,13 +153,24 @@
       const visualizerBtn = document.getElementById('visualizer-btn');
 
       if (input && editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn) {
-        editadoContent.innerHTML = input.value;
+        // Procesar el Markdown usando la misma lógica que parser.html
+        const markdownText = input.value;
+        const htmlContent = transformMarkdownToHTML(markdownText);
+
+        editadoContent.innerHTML = htmlContent;
         originalContainer.style.display = 'none';
         editadoContainer.style.display = 'block';
         botonesContainer.style.display = 'block';
 
         const h1 = document.querySelector('h1');
         h1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Notificamos a MathJax que debe procesar solo el contenedor editado
+        MathJax.typesetPromise([editadoContent]).then(() => {
+          console.log("MathJax ha renderizado las ecuaciones en el contenedor editado.");
+        }).catch((err) => {
+          console.error("Error al renderizar MathJax:", err);
+        });
       }
     }
 
@@ -145,24 +200,37 @@
         const visualizerBtn = document.getElementById('visualizer-btn');
         const visualizerCard = document.getElementById('visualizer-card');
         const ejercicioId = <%= ejercicio.id %>;
+        const visualizerInput = document.getElementById('visualizer-input');
 
-        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard) {
+        if (editadoContent && originalContainer && editadoContainer && botonesContainer && visualizerBtn && visualizerCard && visualizerInput) {
+          // Obtener el texto en Markdown del textarea
+          const markdownText = visualizerInput.value;
+
           fetch(`/api/ejercicios/${ejercicioId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ content: editadoContent.innerHTML })
+            body: JSON.stringify({ content: '\n' + markdownText })
           })
             .then(response => {
               if (response.ok) {
-                originalContainer.innerHTML = editadoContent.innerHTML;
+                // Convertir el Markdown a HTML renderizado
+                const htmlContent = transformMarkdownToHTML(markdownText);
+                // Actualizar el contenedor original con el HTML renderizado
+                originalContainer.innerHTML = htmlContent;
                 // Ocultar el contenedor editado y los botones
                 editadoContainer.style.display = 'none';
                 botonesContainer.style.display = 'none';
                 originalContainer.style.display = 'block';
                 // Colapsar el card de editar contenido
                 toggleCard('visualizer-content', visualizerCard.querySelector('button'));
+                // Procesar las ecuaciones con MathJax
+                MathJax.typesetPromise([originalContainer]).then(() => {
+                  console.log("MathJax ha renderizado las ecuaciones en el contenedor original.");
+                }).catch((err) => {
+                  console.error("Error al renderizar MathJax:", err);
+                });
               } else {
                 alert('Error al guardar los cambios');
               }
@@ -173,5 +241,44 @@
         }
       }
     }
+
+    function expandirContenido() {
+      const card = document.querySelector('.card');
+      const container = document.getElementById('resumen-teoria-container');
+      if (card && container) {
+        card.style.maxHeight = 'none';
+        container.style.maxHeight = 'none';
+      }
+    }
+
+    function contraerContenido() {
+      const card = document.querySelector('.card');
+      const container = document.getElementById('resumen-teoria-container');
+      if (card && container) {
+        //card max-height: 600px; max-width: 100%; overflow: auto; position: relative;
+        card.style.maxHeight = '600px';
+        card.style.maxWidth = '100%';
+        card.style.overflow = 'auto';
+        card.style.position = 'relative';
+      }
+    }
+
+    // Procesar el contenido del contenedor resumen-teoria-container al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      const resumenContainer = document.getElementById('resumen-teoria-container');
+      if (resumenContainer && resumenContainer.textContent) {
+        const markdownText = resumenContainer.textContent;
+        const htmlContent = transformMarkdownToHTML(markdownText);
+        resumenContainer.innerHTML = htmlContent;
+
+        // Procesar las ecuaciones con MathJax
+        MathJax.typesetPromise([resumenContainer]).then(() => {
+          console.log("MathJax ha renderizado las ecuaciones en el contenedor principal.");
+        }).catch((err) => {
+          console.error("Error al renderizar MathJax:", err);
+        });
+      }
+    });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </div>
