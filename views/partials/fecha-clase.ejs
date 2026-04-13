@@ -1,0 +1,64 @@
+<div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+  <label for="fecha-clase" style="font-size: 0.9rem; color: #666;">Fecha:</label>
+  <input type="date" id="fecha-clase" name="fecha-clase"
+    value="<%= fecha ? fecha.toISOString().split('T')[0] : '' %>"
+    onchange="actualizarFecha()"
+    style="padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem;">
+</div>
+
+<script>
+  function actualizarFecha() {
+    const fechaInput = document.getElementById('fecha-clase');
+    const claseId = <%= claseId %>;
+
+    if (fechaInput) {
+      const fechaValue = fechaInput.value;
+
+      // Validar que sea una fecha válida (formato yyyy-mm-dd)
+      if (fechaValue && !isValidDate(fechaValue)) {
+        console.error('Fecha inválida:', fechaValue);
+        return;
+      }
+
+      fetch(`/api/clases/${claseId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fecha: fechaValue || null })
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log('Fecha actualizada correctamente');
+            alert('Fecha guardada: ' + (fechaValue || 'Ninguna'));
+          } else {
+            console.error('Error al actualizar la fecha');
+            alert('Error al guardar la fecha');
+          }
+        })
+        .catch(error => {
+          console.error('Error en la petición:', error);
+          alert('Error al conectar con el servidor');
+        });
+    }
+  }
+
+  function isValidDate(dateString) {
+    // Validar formato yyyy-mm-dd
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(dateString)) {
+      return false;
+    }
+
+    // Validar que sea una fecha real
+    const date = new Date(dateString);
+    const timestamp = date.getTime();
+
+    if (isNaN(timestamp)) {
+      return false;
+    }
+
+    // Verificar que el formato coincida con la fecha parseada
+    return dateString === date.toISOString().split('T')[0];
+  }
+</script>

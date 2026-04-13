@@ -1,6 +1,6 @@
 import express from 'express';
 import { getMateriaById, getMateriasWithClases } from '../../services/materiaService.js';
-import { getClaseById } from '../../services/claseService.js';
+import { getClaseById, updateClaseFecha } from '../../services/claseService.js';
 import { getEjercicioWithNavigation } from '../../services/ejercicioService.js';
 import { getEjerciciosByMateriaId } from '../../services/ejercicioService.js';
 import { getClaseWithContribuciones } from '../../services/contribucionService.js';
@@ -92,7 +92,6 @@ router.get('/materia/:id/ejercicio/:ejercicioId', async (req, res) => {
       return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
     }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
-    const clases = await getMateriaById(materiaId);
     res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, materia, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);

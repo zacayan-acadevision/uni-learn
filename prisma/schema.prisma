@@ -23,6 +23,7 @@ model clases {
   id             Int              @id @default(autoincrement())
   titulo         String
   content        String           @default("")
+  fecha          DateTime?
   materiaId      Int
   materia        materias         @relation(fields: [materiaId], references: [id])
   contribuciones contribuciones[]

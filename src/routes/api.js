@@ -94,10 +94,23 @@ router.post('/clases', async (req, res) => {
 router.put('/clases/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { titulo, content } = req.body;
+    const { titulo, content, fecha } = req.body;
     const updateData = {};
     if (titulo !== undefined) updateData.titulo = titulo;
     if (content !== undefined) updateData.content = content;
+    if (fecha !== undefined) {
+      if (fecha) {
+        // Validar formato yyyy-mm-dd
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (regex.test(fecha)) {
+          updateData.fecha = new Date(fecha);
+        } else {
+          return res.status(400).json({ error: 'Formato de fecha inválido. Use yyyy-mm-dd' });
+        }
+      } else {
+        updateData.fecha = null;
+      }
+    }
     const claseActualizada = await prisma.clases.update({
       where: { id: parseInt(id) },
       data: updateData

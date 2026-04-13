@@ -12,26 +12,32 @@
             <%= clase.titulo %>
           </span>
   </div>
-
-  <h1 style="margin-top:20px;">
-    📖 <%= clase.titulo %>
-  </h1>
-
+  <div id="title-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom:20px;">
+    <h1 style="margin-top:20px; margin-bottom: 0;">
+      📖 <%= clase.titulo %>
+    </h1>
+    <%- include('../partials/fecha-clase', { claseId: clase.id, fecha: clase.fecha }); %>
+  </div>
   <!-- SECCIÓN DE CONTENIDO PRINCIPAL -->
   <div style="display: flex; gap: 30px;">
     <!-- Columna Izquierda: Resumen Teórico -->
     <div style="flex: 2; max-width: 100%; overflow: auto;">
 
       <div class="card" style="max-height: 600px; max-width: 100%; overflow: auto; position: relative;">
-        <div style="position: sticky; top: 0px; right: 0; display: flex; z-index: 10; gap: 5px; text-align: right; flex-direction: row-reverse;">
-          <button onclick="contraerContenido()" style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div
+          style="position: sticky; top: 0px; right: 0; display: flex; z-index: 10; gap: 5px; text-align: right; flex-direction: row-reverse;">
+          <button onclick="contraerContenido()"
+            style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             ⬆️ Contraer
           </button>
-          <button onclick="expandirContenido()" style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <button onclick="expandirContenido()"
+            style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             ↕️ Expandir
           </button>
         </div>
-        <div id="resumen-teoria-container" style="display: block;" class="markdown-render-container"><%= clase.content %></div>
+        <div id="resumen-teoria-container" style="display: block;" class="markdown-render-container">
+          <%= clase.content %>
+        </div>
 
         <div id="resumen-teoria-editado" style="display: none;">
           <div id="resumen-teoria-editado-content" class="markdown-render-container"></div>
@@ -70,26 +76,27 @@
         </div>
       </div>
 
-      <%- include('../partials/contribuciones-markdown', { contribs: contributions.contribuciones, claseId: clase.id }); %>
+      <%- include('../partials/contribuciones-markdown', { contribs: contributions.contribuciones, claseId: clase.id });
+        %>
 
-      <div class="card">
-        <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
-        <% const fileContribs=contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>
-          <% if (fileContribs.length> 0) { %>
-            <% fileContribs.forEach(contrib=> { %>
-              <div class="list-item">
-                <span>
-                  <%= contrib.content %>
-                </span>
-                <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
-              </div>
-              <% }) %>
-                <% } else { %>
-                  <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay material descargable</p>
-                  <% } %>
-      </div>
+        <div class="card">
+          <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
+          <% const fileContribs=contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>
+            <% if (fileContribs.length> 0) { %>
+              <% fileContribs.forEach(contrib=> { %>
+                <div class="list-item">
+                  <span>
+                    <%= contrib.content %>
+                  </span>
+                  <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Descargar</button>
+                </div>
+                <% }) %>
+                  <% } else { %>
+                    <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay material descargable</p>
+                    <% } %>
+        </div>
 
-      <%- include('../partials/contribuciones', { contribs: contributions.contribuciones, claseId: clase.id}); %>
+        <%- include('../partials/contribuciones', { contribs: contributions.contribuciones, claseId: clase.id}); %>
 
 
 
@@ -327,7 +334,7 @@
     }
 
     // Procesar el contenido del contenedor resumen-teoria-container al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const resumenContainer = document.getElementById('resumen-teoria-container');
       if (resumenContainer && resumenContainer.textContent) {
         const markdownText = resumenContainer.textContent;
@@ -343,6 +350,61 @@
         });
       }
     });
+
+    function actualizarFecha() {
+      const fechaInput = document.getElementById('fecha-clase');
+      const claseId = <%= clase.id %>;
+
+      if (fechaInput) {
+        const fechaValue = fechaInput.value;
+
+        // Validar que sea una fecha válida (formato yyyy-mm-dd)
+        if (fechaValue && !isValidDate(fechaValue)) {
+          console.error('Fecha inválida:', fechaValue);
+          return;
+        }
+
+        fetch(`/api/clases/${claseId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ fecha: fechaValue || null })
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Fecha actualizada correctamente');
+              alert('Fecha guardada: ' + (fechaValue || 'Ninguna'));
+            } else {
+              console.error('Error al actualizar la fecha');
+              alert('Error al guardar la fecha');
+            }
+          })
+          .catch(error => {
+            console.error('Error en la petición:', error);
+            alert('Error al conectar con el servidor');
+          });
+      }
+    }
+
+    function isValidDate(dateString) {
+      // Validar formato yyyy-mm-dd
+      const regex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!regex.test(dateString)) {
+        return false;
+      }
+
+      // Validar que sea una fecha real
+      const date = new Date(dateString);
+      const timestamp = date.getTime();
+
+      if (isNaN(timestamp)) {
+        return false;
+      }
+
+      // Verificar que el formato coincida con la fecha parseada
+      return dateString === date.toISOString().split('T')[0];
+    }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </div>

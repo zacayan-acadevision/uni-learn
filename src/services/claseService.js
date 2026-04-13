@@ -40,6 +40,13 @@ export const updateClaseContent = async (id, content) => {
   });
 };
 
+export const updateClaseFecha = async (id, fecha) => {
+  return await prisma.clases.update({
+    where: { id: parseInt(id) },
+    data: { fecha: fecha ? new Date(fecha) : null },
+  });
+};
+
 export const deleteClase = async (id) => {
   return await prisma.clases.delete({
     where: { id: parseInt(id) },
