@@ -2,7 +2,7 @@
   <h2 style="margin-bottom:15px;">📝 Contribuciones Markdown</h2>
 
   <!-- Contenedor específico para contribuciones Markdown -->
-  <div id="listaContribucionesMarkdown" style="margin-top: 15px;">
+  <div id="listaContribucionesMarkdown" style="margin-top: 15px;" class="markdown-render-container">
     <% if (contribs.length > 0) { %>
       <% contribs.forEach((contrib, index) => { %>
         <% if (contrib.tipo === 'MARKDOWN') { %>
@@ -91,8 +91,8 @@
       });
 
       if (response.ok) {
-        // Actualizar el contenido renderizado
-        contenido.textContent = textarea.value;
+        // Renderizar el contenido Markdown usando las funciones de clase.ejs
+        contenido.innerHTML = transformMarkdownToHTML(textarea.value);
 
         // Ocultar el formulario y mostrar el elemento
         formulario.style.display = 'none';
@@ -181,7 +181,9 @@
         divContenido.style.border = '1px solid #e2e8f0';
         divContenido.style.maxHeight = '300px';
         divContenido.style.overflow = 'auto';
-        divContenido.textContent = contenido;
+
+        // Renderizar el contenido Markdown usando las funciones de clase.ejs
+        divContenido.innerHTML = transformMarkdownToHTML(contenido);
 
         const btnEditar = document.createElement('button');
         btnEditar.textContent = 'Editar';
@@ -266,7 +268,9 @@
         });
 
         if (response.ok) {
-          nuevoDivContenido.textContent = nuevoContenido;
+          // Renderizar el contenido Markdown usando las funciones de clase.ejs
+          nuevoDivContenido.innerHTML = transformMarkdownToHTML(nuevoContenido);
+
           nuevoFormulario.remove();
         } else {
           alert('Error al actualizar la contribución');

@@ -1,5 +1,5 @@
 /* Estilos para contenido Markdown y LaTeX */
-#resumen-teoria-container {
+.markdown-render-container {
   max-width: 50vw;
   line-height: 1.6;
   color: #334155;
@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-#resumen-teoria-container pre {
+.markdown-render-container pre {
   max-width: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -22,7 +22,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-#resumen-teoria-container code {
+.markdown-render-container code {
   max-width: 100%;
   overflow-x: auto;
   background: #f1f5f9;
@@ -33,7 +33,7 @@
   font-size: 0.9em;
 }
 
-#resumen-teoria-container p {
+.markdown-render-container p {
   max-width: 100%;
   margin: 12px 0;
   line-height: 1.7;
@@ -41,33 +41,33 @@
   overflow-x: auto;
 }
 
-#resumen-teoria-container ul,
-#resumen-teoria-container ol {
+.markdown-render-container ul,
+.markdown-render-container ol {
   max-width: 100%;
   margin: 12px 0;
   padding-left: 24px;
 }
 
-#resumen-teoria-container ul {
+.markdown-render-container ul {
   list-style-type: disc;
 }
 
-#resumen-teoria-container ol {
+.markdown-render-container ol {
   list-style-type: decimal;
 }
 
-#resumen-teoria-container li {
+.markdown-render-container li {
   max-width: 100%;
   margin: 6px 0;
   line-height: 1.6;
 }
 
-#resumen-teoria-container h1,
-#resumen-teoria-container h2,
-#resumen-teoria-container h3,
-#resumen-teoria-container h4,
-#resumen-teoria-container h5,
-#resumen-teoria-container h6 {
+.markdown-render-container h1,
+.markdown-render-container h2,
+.markdown-render-container h3,
+.markdown-render-container h4,
+.markdown-render-container h5,
+.markdown-render-container h6 {
   max-width: 100%;
   margin: 24px 0 12px 0;
   font-weight: 600;
@@ -75,36 +75,36 @@
   line-height: 1.3;
 }
 
-#resumen-teoria-container h1 {
+.markdown-render-container h1 {
   font-size: 2rem;
   border-bottom: 2px solid #e2e8f0;
   padding-bottom: 8px;
 }
 
-#resumen-teoria-container h2 {
+.markdown-render-container h2 {
   font-size: 1.75rem;
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 6px;
 }
 
-#resumen-teoria-container h3 {
+.markdown-render-container h3 {
   font-size: 1.5rem;
 }
 
-#resumen-teoria-container h4 {
+.markdown-render-container h4 {
   font-size: 1.25rem;
 }
 
-#resumen-teoria-container h5 {
+.markdown-render-container h5 {
   font-size: 1.1rem;
 }
 
-#resumen-teoria-container h6 {
+.markdown-render-container h6 {
   font-size: 1rem;
   color: #64748b;
 }
 
-#resumen-teoria-container table {
+.markdown-render-container table {
   max-width: 100%;
   margin: 16px 0;
   border-collapse: collapse;
@@ -115,14 +115,14 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-#resumen-teoria-container table th,
-#resumen-teoria-container table td {
+.markdown-render-container table th,
+.markdown-render-container table td {
   border: 1px solid #e2e8f0;
   padding: 12px 16px;
   text-align: left;
 }
 
-#resumen-teoria-container table th {
+.markdown-render-container table th {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   font-weight: 600;
@@ -131,20 +131,20 @@
   letter-spacing: 0.5px;
 }
 
-#resumen-teoria-container table td {
+.markdown-render-container table td {
   color: #475569;
   font-size: 0.95rem;
 }
 
-#resumen-teoria-container table tr:nth-child(even) {
+.markdown-render-container table tr:nth-child(even) {
   background: #f8fafc;
 }
 
-#resumen-teoria-container table tr:hover {
+.markdown-render-container table tr:hover {
   background: #f1f5f9;
 }
 
-#resumen-teoria-container blockquote {
+.markdown-render-container blockquote {
   max-width: 100%;
   margin: 16px 0;
   padding: 16px 20px;
@@ -156,7 +156,7 @@
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
-#resumen-teoria-container img {
+.markdown-render-container img {
   max-width: 100%;
   height: auto;
   margin: 16px 0;
@@ -165,7 +165,7 @@
   display: block;
 }
 
-#resumen-teoria-container hr {
+.markdown-render-container hr {
   max-width: 100%;
   margin: 24px 0;
   border: none;
@@ -190,12 +190,12 @@
 }
 
 /* Estilos para elementos inline */
-#resumen-teoria-container span {
+.markdown-render-container span {
   max-width: 100%;
   line-height: 1.6;
 }
 
-#resumen-teoria-container a {
+.markdown-render-container a {
   max-width: 100%;
   color: #3b82f6;
   text-decoration: none;
@@ -203,30 +203,30 @@
   transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
-#resumen-teoria-container a:hover {
+.markdown-render-container a:hover {
   color: #2563eb;
   text-decoration: underline;
 }
 
-#resumen-teoria-container strong {
+.markdown-render-container strong {
   max-width: 100%;
   color: #1e293b;
   font-weight: 700;
 }
 
-#resumen-teoria-container em {
+.markdown-render-container em {
   max-width: 100%;
   font-style: italic;
   color: #475569;
 }
 
-#resumen-teoria-container del {
+.markdown-render-container del {
   max-width: 100%;
   text-decoration: line-through;
   color: #94a3b8;
 }
 
-#resumen-teoria-container ins {
+.markdown-render-container ins {
   max-width: 100%;
   text-decoration: underline;
   text-decoration-style: wavy;
