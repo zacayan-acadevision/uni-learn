@@ -318,8 +318,11 @@
       const card = document.querySelector('.card');
       const container = document.getElementById('resumen-teoria-container');
       if (card && container) {
+        //card max-height: 600px; max-width: 100%; overflow: auto; position: relative;
         card.style.maxHeight = '600px';
-        container.style.maxHeight = '600px';
+        card.style.maxWidth = '100%';
+        card.style.overflow = 'auto';
+        card.style.position = 'relative';
       }
     }
 
