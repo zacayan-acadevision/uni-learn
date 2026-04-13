@@ -45,13 +45,14 @@ router.get('/materia/:id/clase/:claseId', async (req, res) => {
   const claseId = req.params.claseId;
   try {
     const news = await getNews();
+    const materia = await getMateriaById(materiaId);
     const clase = await getClaseById(claseId);
     if (!clase) {
       return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
     }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     const contributions = await getClaseWithContribuciones(claseId);
-    res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, news, layout: 'layouts/unilayout' });
+    res.render('pages/clase', { title: 'Home', clase, ejercicios, contributions, news, materia, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
@@ -85,13 +86,14 @@ router.get('/materia/:id/ejercicio/:ejercicioId', async (req, res) => {
   const ejercicioId = req.params.ejercicioId;
   try {
     const news = await getNews();
+    const materia = await getMateriaById(materiaId);
     const ejercicio = await getEjercicioWithNavigation(ejercicioId);
     if (!ejercicio) {
       return res.status(404).render('404', { title: 'Not Found', layout: 'layouts/layout' });
     }
     const ejercicios = await getEjerciciosByMateriaId(materiaId);
     const clases = await getMateriaById(materiaId);
-    res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, clases, layout: 'layouts/unilayout' });
+    res.render('pages/ejercicio', { title: 'Home', ejercicio, ejercicios, news, materia, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });

@@ -1,9 +1,9 @@
 <div class="page-content">
   <div class="breadcrumb">
     <a href="/uni" target="_parent">🏠 Mis Materias</a> &nbsp; | &nbsp;
-    <% if (ejercicios && ejercicios.length> 0) { %>
-      <a href="/uni/materia/<%= ejercicios[0].materiaId %>" target="_parent">
-        <%= ejercicios[0].materiaId %>: Nombre de materia
+    <% if (materia && materia.content) { %>
+      <a href="/uni/materia/<%= materia.id %>" target="_parent">
+        <%= materia.content %>
       </a> &nbsp; | &nbsp;
       <% } else { %>
         <span>Nombre de materia</span> &nbsp; | &nbsp;
@@ -37,13 +37,13 @@
           <div id="resumen-teoria-editado-content" class="markdown-render-container"></div>
         </div>
 
-        <div id="resumen-teoria-botones" style="display: none;">
-          <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;"
-              onclick="cancelVisualization()">Cancelar</button>
-            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;"
-              onclick="confirmarGuardar()">Guardar cambios</button>
-          </div>
+      </div>
+      <div id="resumen-teoria-botones" style="display: none;">
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;"
+            onclick="cancelVisualization()">Cancelar</button>
+          <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;"
+            onclick="confirmarGuardar()">Guardar cambios</button>
         </div>
       </div>
 
