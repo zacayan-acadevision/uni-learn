@@ -72,6 +72,8 @@
         </div>
       </div>
 
+      <%- include('../partials/contribuciones-markdown', { contribs: contributions.contribuciones, claseId: clase.id }); %>
+
       <div class="card">
         <h2 style="margin-bottom:15px;">📁 Material Descargable</h2>
         <% const fileContribs=contributions.contribuciones.filter(c=> c.tipo == "FILE"); %>

@@ -1,0 +1,325 @@
+<div class="card">
+  <h2 style="margin-bottom:15px;">📝 Contribuciones Markdown</h2>
+
+  <!-- Contenedor específico para contribuciones Markdown -->
+  <div id="listaContribucionesMarkdown" style="margin-top: 15px;">
+    <% if (contribs.length > 0) { %>
+      <% contribs.forEach((contrib, index) => { %>
+        <% if (contrib.tipo === 'MARKDOWN') { %>
+          <div class="list-item" id="contribMarkdownItem<%= index %>" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+            <div style="flex:1; margin-right:10px;">
+              <div id="contribMarkdownRenderizado<%= index %>" style="padding:10px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0; max-height:300px; overflow:auto;">
+                <%= contrib.content %>
+              </div>
+            </div>
+            <button onclick="mostrarFormularioEditarMarkdown(<%= index %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
+          </div>
+
+          <!-- Formulario para editar contribución Markdown -->
+          <div id="formularioEditarMarkdown<%= index %>" style="display:none; margin-top:10px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
+            <input type="hidden" id="contribMarkdownId<%= index %>" value="<%= contrib.id %>">
+            <textarea id="markdownContrib<%= index %>" placeholder="Escribe tu contribución en Markdown..." style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px; height:100px; font-family: monospace;"><%= contrib.content %></textarea>
+            <div style="display:flex; gap:10px;">
+              <button onclick="confirmarEditarMarkdown(<%= index %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Guardar</button>
+              <button onclick="cancelarEditarMarkdown(<%= index %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+              <button onclick="confirmarEliminarMarkdown(<%= index %>)" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+            </div>
+          </div>
+        <% } %>
+      <% }) %>
+    <% } else { %>
+      <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay contribuciones Markdown</p>
+    <% } %>
+  </div>
+
+  <!-- Formulario para crear nueva contribución Markdown -->
+  <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
+    <h3 style="margin:0 0 10px 0; font-size:1rem; color:#166534;">+ Nueva Contribución Markdown</h3>
+    <textarea id="nuevaMarkdownContrib" placeholder="Escribe tu contribución en Markdown..." style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px; height:80px; font-family: monospace;"></textarea>
+    <button onclick="crearNuevaMarkdownContribucion(<%= claseId %>)" class="btn btn-success" style="padding:8px 16px; font-size:0.85rem;">Crear</button>
+  </div>
+
+</div>
+
+<script>
+  // Función para mostrar el formulario de edición
+  function mostrarFormularioEditarMarkdown(index) {
+    const formulario = document.getElementById('formularioEditarMarkdown' + index);
+    const contenido = document.getElementById('contribMarkdownRenderizado' + index);
+    const textarea = document.getElementById('markdownContrib' + index);
+
+    // Llenar el textarea con el contenido actual
+    textarea.value = contenido.textContent;
+
+    // Ocultar el elemento y mostrar el formulario
+    document.getElementById('contribMarkdownItem' + index).style.display = 'none';
+    formulario.style.display = 'block';
+  }
+
+  // Función para cancelar la edición
+  function cancelarEditarMarkdown(index) {
+    const formulario = document.getElementById('formularioEditarMarkdown' + index);
+
+    // Ocultar el formulario y mostrar el elemento
+    formulario.style.display = 'none';
+    document.getElementById('contribMarkdownItem' + index).style.display = 'flex';
+  }
+
+  // Función para confirmar la edición
+  async function confirmarEditarMarkdown(index) {
+    const formulario = document.getElementById('formularioEditarMarkdown' + index);
+    const contenido = document.getElementById('contribMarkdownRenderizado' + index);
+    const textarea = document.getElementById('markdownContrib' + index);
+    const contribId = document.getElementById('contribMarkdownId' + index).value;
+
+    // Verificar si el textarea tiene contenido
+    if (textarea.value.trim() === '') {
+      alert('El contenido no puede estar vacío');
+      return;
+    }
+
+    try {
+      // Hacer la llamada a la API para actualizar
+      const response = await fetch(`/api/contribuciones/${contribId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: textarea.value
+        })
+      });
+
+      if (response.ok) {
+        // Actualizar el contenido renderizado
+        contenido.textContent = textarea.value;
+
+        // Ocultar el formulario y mostrar el elemento
+        formulario.style.display = 'none';
+        document.getElementById('contribMarkdownItem' + index).style.display = 'flex';
+      } else {
+        alert('Error al actualizar la contribución');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al actualizar la contribución: ' + error.message);
+    }
+  }
+
+  // Función para confirmar la eliminación
+  async function confirmarEliminarMarkdown(index) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta contribución?')) {
+      const contribId = document.getElementById('contribMarkdownId' + index).value;
+
+      try {
+        // Hacer la llamada a la API para eliminar
+        const response = await fetch(`/api/contribuciones/${contribId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          const item = document.getElementById('contribMarkdownItem' + index);
+          const formulario = document.getElementById('formularioEditarMarkdown' + index);
+
+          // Eliminar el item y el formulario
+          item.remove();
+          formulario.remove();
+        } else {
+          alert('Error al eliminar la contribución');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error al eliminar la contribución: ' + error.message);
+      }
+    }
+  }
+
+  // Función para crear nueva contribución Markdown
+  async function crearNuevaMarkdownContribucion(claseId) {
+    const textarea = document.getElementById('nuevaMarkdownContrib');
+    const contenido = textarea.value.trim();
+
+    // Verificar si el textarea tiene contenido
+    if (contenido === '') {
+      alert('El contenido no puede estar vacío');
+      return;
+    }
+
+    try {
+      // Hacer la llamada a la API
+      const response = await fetch('/api/contribuciones', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: contenido,
+          claseId: parseInt(claseId),
+          tipo: 'MARKDOWN'
+        })
+      });
+
+      if (response.ok) {
+        const nuevaContribucion = await response.json();
+
+        // Crear el nuevo elemento de la lista
+        const nuevoItem = document.createElement('div');
+        nuevoItem.className = 'list-item';
+        nuevoItem.id = 'contribMarkdownItem_' + nuevaContribucion.id;
+        nuevoItem.style.display = 'flex';
+        nuevoItem.style.justifyContent = 'space-between';
+        nuevoItem.style.alignItems = 'center';
+        nuevoItem.style.marginTop = '10px';
+
+        const divContenido = document.createElement('div');
+        divContenido.style.flex = '1';
+        divContenido.style.marginRight = '10px';
+        divContenido.id = 'contribMarkdownRenderizado_' + nuevaContribucion.id;
+        divContenido.style.padding = '10px';
+        divContenido.style.background = '#f8fafc';
+        divContenido.style.borderRadius = '8px';
+        divContenido.style.border = '1px solid #e2e8f0';
+        divContenido.style.maxHeight = '300px';
+        divContenido.style.overflow = 'auto';
+        divContenido.textContent = contenido;
+
+        const btnEditar = document.createElement('button');
+        btnEditar.textContent = 'Editar';
+        btnEditar.className = 'btn btn-secondary';
+        btnEditar.style.padding = '5px 10px';
+        btnEditar.style.fontSize = '0.8rem';
+        btnEditar.onclick = function() {
+          mostrarFormularioEditarMarkdownNueva(nuevaContribucion.id, contenido, nuevoItem);
+        };
+
+        nuevoItem.appendChild(divContenido);
+        nuevoItem.appendChild(btnEditar);
+
+        // Agregar el nuevo elemento al contenedor de contribuciones Markdown
+        const listaContribucionesMarkdown = document.getElementById('listaContribucionesMarkdown');
+        if (listaContribucionesMarkdown) {
+          listaContribucionesMarkdown.appendChild(nuevoItem);
+        }
+
+        // Limpiar el textarea
+        textarea.value = '';
+      } else {
+        alert('Error al crear la contribución');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al crear la contribución: ' + error.message);
+    }
+  }
+
+  // Función para mostrar el formulario de edición de nueva contribución Markdown
+  async function mostrarFormularioEditarMarkdownNueva(contribId, contenido, nuevoItem) {
+    const nuevoFormulario = document.createElement('div');
+    nuevoFormulario.id = 'formularioEditarMarkdown_' + contribId;
+    nuevoFormulario.style.display = 'none';
+    nuevoFormulario.style.marginTop = '10px';
+    nuevoFormulario.style.padding = '15px';
+    nuevoFormulario.style.background = '#f8fafc';
+    nuevoFormulario.style.borderRadius = '8px';
+    nuevoFormulario.style.border = '1px solid #e2e8f0';
+
+    const textarea = document.createElement('textarea');
+    textarea.id = 'markdownContrib_' + contribId;
+    textarea.placeholder = 'Escribe tu contribución en Markdown...';
+    textarea.style.width = '100%';
+    textarea.style.padding = '10px';
+    textarea.style.marginBottom = '10px';
+    textarea.style.border = '1px solid #cbd5e1';
+    textarea.style.borderRadius = '4px';
+    textarea.style.height = '100px';
+    textarea.style.fontFamily = 'monospace';
+    textarea.value = contenido;
+
+    const divBotones = document.createElement('div');
+    divBotones.style.display = 'flex';
+    divBotones.style.gap = '10px';
+
+    const btnGuardar = document.createElement('button');
+    btnGuardar.textContent = 'Guardar';
+    btnGuardar.className = 'btn btn-primary';
+    btnGuardar.style.padding = '8px 16px';
+    btnGuardar.style.fontSize = '0.85rem';
+    btnGuardar.onclick = async function() {
+      const nuevoDivContenido = nuevoItem.querySelector('#contribMarkdownRenderizado_' + contribId);
+      const nuevoContenido = textarea.value.trim();
+
+      if (nuevoContenido === '') {
+        alert('El contenido no puede estar vacío');
+        return;
+      }
+
+      try {
+        // Hacer la llamada a la API para actualizar
+        const response = await fetch(`/api/contribuciones/${contribId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: nuevoContenido
+          })
+        });
+
+        if (response.ok) {
+          nuevoDivContenido.textContent = nuevoContenido;
+          nuevoFormulario.remove();
+        } else {
+          alert('Error al actualizar la contribución');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error al actualizar la contribución: ' + error.message);
+      }
+    };
+
+    const btnCancelar = document.createElement('button');
+    btnCancelar.textContent = 'Cancelar';
+    btnCancelar.className = 'btn btn-secondary';
+    btnCancelar.style.padding = '8px 16px';
+    btnCancelar.style.fontSize = '0.85rem';
+    btnCancelar.onclick = function() {
+      nuevoFormulario.remove();
+    };
+
+    const btnEliminar = document.createElement('button');
+    btnEliminar.textContent = 'Eliminar';
+    btnEliminar.className = 'btn btn-danger';
+    btnEliminar.style.padding = '8px 16px';
+    btnEliminar.style.fontSize = '0.85rem';
+    btnEliminar.onclick = async function() {
+      if (confirm('¿Estás seguro de que deseas eliminar esta contribución?')) {
+        try {
+          // Hacer la llamada a la API para eliminar
+          const response = await fetch(`/api/contribuciones/${contribId}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            nuevoItem.remove();
+            nuevoFormulario.remove();
+          } else {
+            alert('Error al eliminar la contribución');
+          }
+        } catch (error) {
+          console.error(error);
+          alert('Error al eliminar la contribución: ' + error.message);
+        }
+      }
+    };
+
+    divBotones.appendChild(btnGuardar);
+    divBotones.appendChild(btnCancelar);
+    divBotones.appendChild(btnEliminar);
+
+    nuevoFormulario.appendChild(textarea);
+    nuevoFormulario.appendChild(divBotones);
+
+    nuevoItem.parentNode.insertBefore(nuevoFormulario, nuevoItem.nextSibling);
+    nuevoFormulario.style.display = 'block';
+  }
+</script>
