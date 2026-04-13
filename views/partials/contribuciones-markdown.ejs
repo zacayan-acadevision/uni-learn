@@ -8,9 +8,8 @@
         <% if (contrib.tipo === 'MARKDOWN') { %>
           <div class="list-item" id="contribMarkdownItem<%= index %>" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
             <div style="flex:1; margin-right:10px;">
-              <div id="contribMarkdownRenderizado<%= index %>" style="padding:10px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0; max-height:300px; overflow:auto;">
-                <%= contrib.content %>
-              </div>
+              <div id="contribMarkdownRenderizado<%= index %>" style="padding:10px; background:#f8fafc; border-radius:8px;
+               border:1px solid #e2e8f0; max-height:300px; overflow:auto;"><%= contrib.content %></div>
             </div>
             <button onclick="mostrarFormularioEditarMarkdown(<%= index %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
           </div>
@@ -42,6 +41,39 @@
 </div>
 
 <script>
+  // Función para escapar LaTeX (duplicada para evitar conflictos)
+  function escapeLatexMarkdown(text) {
+    // Escapamos las barras invertidas para que no desaparezcan en el proceso de conversión.
+    return text.replace(/\\/g, '\\\\');
+  }
+
+  // Función para transformar Markdown a HTML (duplicada para evitar conflictos)
+  function transformMarkdownToHTMLMarkdown(markdownText) {
+    let htmlContent = markdownText;
+
+    // Escapamos las barras invertidas antes de convertir el Markdown
+    htmlContent = escapeLatexMarkdown(htmlContent);
+
+    // Convertimos el Markdown a HTML
+    htmlContent = marked.parse(htmlContent);
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    htmlContent = tempDiv.innerHTML;
+
+    // Restauramos los caracteres especiales
+    htmlContent = htmlContent.replace(/\:\:/g, "_");
+    htmlContent = htmlContent.replace(/\?\?/g, "^*");
+
+    return htmlContent;
+  }
+
+  // Función para renderizar contenido Markdown
+  function renderizarMarkdownMarkdown(content) {
+    const htmlContent = transformMarkdownToHTMLMarkdown(content);
+    return htmlContent;
+  }
+
   // Función para mostrar el formulario de edición
   function mostrarFormularioEditarMarkdown(index) {
     const formulario = document.getElementById('formularioEditarMarkdown' + index);
@@ -91,8 +123,15 @@
       });
 
       if (response.ok) {
-        // Renderizar el contenido Markdown usando las funciones de clase.ejs
-        contenido.innerHTML = transformMarkdownToHTML(textarea.value);
+        // Renderizar el contenido Markdown usando las funciones duplicadas
+        contenido.innerHTML = renderizarMarkdownMarkdown(textarea.value);
+
+        // Procesar las ecuaciones con MathJax
+        if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+          MathJax.typesetPromise([contenido]).catch((err) => {
+            console.error('Error al renderizar MathJax:', err);
+          });
+        }
 
         // Ocultar el formulario y mostrar el elemento
         formulario.style.display = 'none';
@@ -182,8 +221,15 @@
         divContenido.style.maxHeight = '300px';
         divContenido.style.overflow = 'auto';
 
-        // Renderizar el contenido Markdown usando las funciones de clase.ejs
-        divContenido.innerHTML = transformMarkdownToHTML(contenido);
+        // Renderizar el contenido Markdown usando las funciones duplicadas
+        divContenido.innerHTML = renderizarMarkdownMarkdown(contenido);
+
+        // Procesar las ecuaciones con MathJax
+        if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+          MathJax.typesetPromise([divContenido]).catch((err) => {
+            console.error('Error al renderizar MathJax:', err);
+          });
+        }
 
         const btnEditar = document.createElement('button');
         btnEditar.textContent = 'Editar';
@@ -268,8 +314,15 @@
         });
 
         if (response.ok) {
-          // Renderizar el contenido Markdown usando las funciones de clase.ejs
-          nuevoDivContenido.innerHTML = transformMarkdownToHTML(nuevoContenido);
+          // Renderizar el contenido Markdown usando las funciones duplicadas
+          nuevoDivContenido.innerHTML = renderizarMarkdownMarkdown(nuevoContenido);
+
+          // Procesar las ecuaciones con MathJax
+          if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+            MathJax.typesetPromise([nuevoDivContenido]).catch((err) => {
+              console.error('Error al renderizar MathJax:', err);
+            });
+          }
 
           nuevoFormulario.remove();
         } else {
