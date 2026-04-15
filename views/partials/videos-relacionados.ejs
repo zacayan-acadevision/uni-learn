@@ -1,14 +1,19 @@
 <div class="card" style="margin-top:30px;">
   <h3 style="margin-bottom:15px;">🎥 Vídeos Relacionados</h3>
-  <div id="video-grid" style="display: flex; flex-wrap: wrap; gap: 15px;">
+  <div id="video-grid" style="display: flex; flex-wrap: wrap; gap: 15px; align-content: center;">
     <% const relatedVideos = contributions.contribuciones.filter(c=> c.tipo == "YOUTUBE"); %>
     <% if (relatedVideos.length > 0) { %>
       <% relatedVideos.forEach(contrib => { %>
-        <div class="video-thumb" onclick="playVideo('rzYDWIQh2r4')"
-          style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px;">
-          <img src="https://img.youtube.com/vi/rzYDWIQh2r4/mqdefault.jpg" style="width:100%; display:block;">
+      <% const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/; %>
+      <% const match = contrib.content.match(regExp); %>
+      <% const id = (match && match[2].length === 11) ? match[2] : 1; %>
+        <div class="video-thumb" onclick="playVideo('<%= id %>')"
+          style="cursor:pointer; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000; width: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <img src="https://img.youtube.com/vi/<%= id %>/mqdefault.jpg" style="width:100%; display:block;">
+          </div>
           <div style="padding: 8px; font-size: 0.8rem; color: #ffffff; text-align:center;">
-            <%= contrib.content %>
+            Video relacionado
           </div>
         </div>
         <% }) %>
@@ -17,6 +22,7 @@
     <% } %>
   </div>
 </div>
+
 
 <div id="main-player-container" class="card"
   style="display:none; padding:0; overflow:hidden; border:none; background:#000; position:fixed; top:50%; left:20%; transform: translateY(-50%); width:60%; height:80vh; z-index:9999;">
@@ -34,14 +40,14 @@
 
 <script>
   function playVideo(id) {
-    const container = document.getElementById('main-player-container');
-    const player = document.getElementById('yt-player');
-    player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
-    container.style.display = 'block';
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+      const container = document.getElementById('main-player-container');
+      const player = document.getElementById('yt-player');
+      player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+      container.style.display = 'block';
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
   }
 
   function closePlayer() {

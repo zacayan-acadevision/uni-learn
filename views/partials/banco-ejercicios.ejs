@@ -1,10 +1,230 @@
 <div class="card">
   <h3 style="margin-bottom:15px;">📝 Banco de Ejercicios</h3>
-  <% ejercicios.forEach(ejercicio=> { %>
-  <div class="list-item">
-    <span>Ejercicio <%= ejercicio.id %>: <%= ejercicio.titulo %></span>
-    <a href="/uni/materia/<%= ejercicio.materiaId %>/ejercicio/<%= ejercicio.id %>" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
-      Ejercicio</a>
+  <div id="listaEjercicios">
+    <% ejercicios.forEach(ejercicio=> { %>
+    <div class="list-item" data-n="ejercicio <%= ejercicio.id %> <%= ejercicio.titulo %>" id="ejercicioItem<%= ejercicio.id %>">
+      <span class="item-text"><strong style="color:var(--primary)">Ejercicio <%= ejercicio.id %>:</strong> <%= ejercicio.titulo %></span>
+      <div style="display:flex; gap:5px;">
+        <a href="/uni/materia/<%= ejercicio.materiaId %>/ejercicio/<%= ejercicio.id %>" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
+          Ejercicio</a>
+        <button onclick="mostrarFormularioEditarEjercicio(<%= ejercicio.id %>)" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
+      </div>
+    </div>
+
+    <!-- Formulario para editar ejercicio -->
+    <div id="formularioEditarEjercicio<%= ejercicio.id %>" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+      <input type="hidden" id="idEjercicio<%= ejercicio.id %>">
+      <input type="text" id="tituloEjercicio<%= ejercicio.id %>" placeholder="Título del ejercicio" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+      <div style="display:flex; gap:10px;">
+        <button onclick="confirmarEditarEjercicio(<%= ejercicio.id %>)" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+        <button onclick="cancelarEditarEjercicio(<%= ejercicio.id %>)" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+        <button onclick="confirmarEliminarEjercicio(<%= ejercicio.id %>)" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+      </div>
+    </div>
+    <% }) %>
+
+    <!-- Formulario para crear ejercicio -->
+    <div id="formularioCrearEjercicio" style="display:none; margin-top:10px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+      <input type="text" id="tituloNuevoEjercicio" placeholder="Título del nuevo ejercicio" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+      <div style="display:flex; gap:10px;">
+        <button onclick="confirmarCrearEjercicio()" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+        <button onclick="cancelarCrearEjercicio()" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="list-item" id="crearEjercicioItem" data-n="ejercicio nuevo">
+      <span class="item-text"><strong style="color:var(--primary)">Crear nuevo ejercicio</strong></span>
+      <button onclick="mostrarFormularioCrearEjercicio()" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Crear</button>
+    </div>
   </div>
-  <% }) %>
+
+  <script>
+    function mostrarFormularioEditarEjercicio(id) {
+      const item = document.getElementById('ejercicioItem' + id);
+      const formulario = document.getElementById('formularioEditarEjercicio' + id);
+
+      // Guardar el contenido original
+      const contenidoOriginal = item.querySelector('.item-text').textContent;
+
+      // Ocultar el ítem y mostrar el formulario
+      item.style.display = 'none';
+      formulario.style.display = 'block';
+
+      // Llenar el formulario con el contenido actual
+      document.getElementById('idEjercicio' + id).value = id;
+      document.getElementById('tituloEjercicio' + id).value = contenidoOriginal.replace('Ejercicio ' + id + ': ', '');
+    }
+
+    function cancelarEditarEjercicio(id) {
+      const item = document.getElementById('ejercicioItem' + id);
+      const formulario = document.getElementById('formularioEditarEjercicio' + id);
+
+      // Ocultar el formulario y mostrar el ítem original
+      formulario.style.display = 'none';
+      item.style.display = 'flex';
+    }
+
+    function confirmarEliminarEjercicio(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar este ejercicio?')) {
+        const item = document.getElementById('ejercicioItem' + id);
+        const formulario = document.getElementById('formularioEditarEjercicio' + id);
+
+        // Hacer llamada al backend para eliminar el ejercicio
+        fetch('/api/ejercicios/' + id, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al eliminar el ejercicio');
+          }
+          return response;
+        })
+        .then(() => {
+          // Eliminar el ítem de la lista
+          item.remove();
+
+          // Ocultar el formulario
+          formulario.style.display = 'none';
+        })
+        .catch(error => {
+          alert('Error al eliminar el ejercicio: ' + error.message);
+        });
+      }
+    }
+
+    function confirmarEditarEjercicio(id) {
+      const titulo = document.getElementById('tituloEjercicio' + id).value;
+      const materiaId = <%= clases.id %>;
+
+      if (titulo.trim() !== '') {
+        // Hacer llamada al backend para actualizar el ejercicio
+        fetch('/api/ejercicios/' + id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            titulo: titulo
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al editar el ejercicio');
+          }
+          return response.json();
+        })
+        .then(ejercicioActualizado => {
+          const item = document.getElementById('ejercicioItem' + id);
+          const formulario = document.getElementById('formularioEditarEjercicio' + id);
+
+          // Actualizar el contenido del ítem
+          item.querySelector('.item-text').innerHTML = `<strong style="color:var(--primary)">Ejercicio ${ejercicioActualizado.id}:</strong> ${ejercicioActualizado.titulo}`;
+
+          // Actualizar el href del enlace
+          const link = item.querySelector('a');
+          link.href = `/uni/materia/${materiaId}/ejercicio/${ejercicioActualizado.id}`;
+
+          // Ocultar el formulario y mostrar el ítem
+          formulario.style.display = 'none';
+          item.style.display = 'flex';
+        })
+        .catch(error => {
+          alert('Error al editar el ejercicio: ' + error.message);
+        });
+      } else {
+        alert('Por favor ingresa un título para el ejercicio');
+      }
+    }
+
+    function mostrarFormularioCrearEjercicio() {
+      const formulario = document.getElementById('formularioCrearEjercicio');
+      const crearItem = document.getElementById('crearEjercicioItem');
+      formulario.style.display = 'block';
+      crearItem.style.display = 'none';
+    }
+
+    function cancelarCrearEjercicio() {
+      const formulario = document.getElementById('formularioCrearEjercicio');
+      const crearItem = document.getElementById('crearEjercicioItem');
+      formulario.style.display = 'none';
+      crearItem.style.display = 'flex';
+      document.getElementById('tituloNuevoEjercicio').value = '';
+    }
+
+    function confirmarCrearEjercicio() {
+      const titulo = document.getElementById('tituloNuevoEjercicio').value;
+      const materiaId = <%= materia.id %>;
+
+      if (titulo.trim() !== '') {
+        // Hacer llamada al backend para crear el ejercicio
+        fetch('/api/ejercicios', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            titulo: titulo,
+            materiaId: materiaId
+          })
+        })
+        .then(response => {
+          if (response.status !== 201) {
+            throw new Error('Error al crear el ejercicio' + JSON.stringify(response))
+          }
+          return response.json();
+        })
+        .then(nuevoEjercicio => {
+          const listaEjercicios = document.getElementById('listaEjercicios');
+          const formulario = document.getElementById('formularioCrearEjercicio');
+
+          // Crear nuevo ítem igual que los demás
+          const nuevoItem = document.createElement('div');
+          nuevoItem.className = 'list-item';
+          nuevoItem.setAttribute('data-n', titulo.toLowerCase());
+          nuevoItem.id = 'ejercicioItem' + nuevoEjercicio.id;
+          nuevoItem.innerHTML = `
+            <span class="item-text"><strong style="color:var(--primary)">Ejercicio ${nuevoEjercicio.id}:</strong> ${nuevoEjercicio.titulo}</span>
+            <div style="display:flex; gap:5px;">
+              <a href="/uni/materia/${materiaId}/ejercicio/${nuevoEjercicio.id}" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver Ejercicio</a>
+              <button onclick="mostrarFormularioEditarEjercicio(${nuevoEjercicio.id})" class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Editar</button>
+            </div>
+          `;
+
+          // Insertar antes del formulario
+          listaEjercicios.insertBefore(nuevoItem, formulario);
+
+          // Crear formulario oculto para editar el nuevo ejercicio
+          const formularioEditar = document.createElement('div');
+          formularioEditar.id = 'formularioEditarEjercicio' + nuevoEjercicio.id;
+          formularioEditar.style.display = 'none';
+          formularioEditar.style.marginTop = '10px';
+          formularioEditar.style.padding = '15px';
+          formularioEditar.style.background = '#f8fafc';
+          formularioEditar.style.borderRadius = '8px';
+          formularioEditar.style.border = '1px solid #e2e8f0';
+          formularioEditar.innerHTML = `
+            <input type="hidden" id="idEjercicio${nuevoEjercicio.id}" value="${nuevoEjercicio.id}">
+            <input type="text" id="tituloEjercicio${nuevoEjercicio.id}" placeholder="Título del ejercicio" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #cbd5e1; border-radius:4px;">
+            <div style="display:flex; gap:10px;">
+              <button onclick="confirmarEditarEjercicio(${nuevoEjercicio.id})" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem;">Confirmar</button>
+              <button onclick="cancelarEditarEjercicio(${nuevoEjercicio.id})" class="btn btn-secondary" style="padding:8px 16px; font-size:0.85rem;">Cancelar</button>
+              <button onclick="confirmarEliminarEjercicio(${nuevoEjercicio.id})" class="btn btn-danger" style="padding:8px 16px; font-size:0.85rem;">Eliminar</button>
+            </div>
+          `;
+          listaEjercicios.insertBefore(formularioEditar, formulario);
+
+          // Ocultar formulario y mostrar el ítem de crear
+          cancelarCrearEjercicio();
+        })
+        .catch(error => {
+          alert('Error al crear el ejercicio: ' + error.message);
+        });
+      } else {
+        alert('Por favor ingresa un título para el ejercicio');
+      }
+    }
+  </script>
 </div>

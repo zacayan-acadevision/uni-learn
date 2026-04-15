@@ -221,15 +221,24 @@ router.get('/ejercicios', async (req, res) => {
 // POST create ejercicio
 router.post('/ejercicios', async (req, res) => {
   try {
-    const { content, materiaId } = req.body;
+    const { titulo, materiaId } = req.body;
+
+    console.log('Datos recibidos:', { titulo, materiaId });
+
+    if (!titulo || !materiaId) {
+      return res.status(400).json({ error: 'El campo titulo y materiaId son requeridos' });
+    }
+
     const nuevoEjercicio = await prisma.ejercicios.create({
       data: {
-        content,
+        titulo,
         materiaId: parseInt(materiaId)
       }
     });
+    console.log('Ejercicio creado:', nuevoEjercicio);
     res.status(201).json(nuevoEjercicio);
   } catch (error) {
+    console.error('Error al crear ejercicio:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -238,10 +247,10 @@ router.post('/ejercicios', async (req, res) => {
 router.put('/ejercicios/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
+    const { titulo, content } = req.body;
     const ejercicioActualizado = await prisma.ejercicios.update({
       where: { id: parseInt(id) },
-      data: { content }
+      data: { titulo, content }
     });
     res.json(ejercicioActualizado);
   } catch (error) {

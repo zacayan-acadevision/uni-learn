@@ -1,0 +1,16 @@
+<div class="card">
+  <h3 style="margin-bottom:15px;">📝 Banco de Ejercicios</h3>
+  <div id="listaEjercicios">
+    <% if (ejercicios.length > 0) { %>
+      <% ejercicios.forEach(ejercicio=> { %>
+      <div class="list-item">
+        <span><strong style="color:var(--primary)">Ejercicio <%= ejercicio.id %>:</strong> <%= ejercicio.titulo %></span>
+        <a href="/uni/materia/<%= ejercicio.materiaId %>/ejercicio/<%= ejercicio.id %>" class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;">Ver
+          Ejercicio</a>
+      </div>
+      <% }) %>
+    <% } else { %>
+      <p style="color: #888; font-size: 0.9rem; padding: 20px;">No hay ejercicios disponibles</p>
+    <% } %>
+  </div>
+</div>
