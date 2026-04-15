@@ -157,7 +157,7 @@ function renderEjercicios() {
 
 // Renderizar contribuciones
 function renderContribuciones() {
-    const contribucionesList = document.getElementById('contribucionesList');
+    const contribucionesList = document.getElementById('contribucionesGrid');
     if (!contribucionesList) return;
 
     const contribuciones = blogData.contribuciones;
@@ -311,7 +311,7 @@ function initClasePage() {
     }
 
     // Renderizar contribuciones
-    const contribucionesList = document.getElementById('contribucionesList');
+    const contribucionesList = document.getElementById('contribucionesGrid');
     const contribuciones = blogData.contribuciones.filter(c => c.materiaId === clase.materiaId);
 
     if (contribuciones.length > 0) {

@@ -6,6 +6,7 @@
     <title>AcadeVision - Plataforma Educativa</title>
     <link rel="stylesheet" href="css/blog-style.css">
     <link rel="stylesheet" href="css/blog-markdown.css">
+    <link rel="stylesheet" href="css/blog-three-columns.css">
 </head>
 <body>
     <!-- Header -->
@@ -35,7 +36,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="blog-container">
+    <div class="blog-container-three-columns">
         <!-- Sidebar Left -->
         <aside class="blog-sidebar-left">
             <div class="sidebar-section">
@@ -65,7 +66,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="blog-main">
+        <main class="blog-main-full">
             <!-- Hero Section -->
             <section class="hero-section">
                 <div class="hero-content">
@@ -96,13 +97,17 @@
             <!-- Ejercicios Section -->
             <section class="ejercicios-section" id="ejercicios">
                 <h2>Ejercicios</h2>
-                <p>No hay ejercicios disponibles.</p>
+                <div class="ejercicios-grid" id="ejerciciosGrid">
+                    <!-- Ejercicios se cargarán dinámicamente -->
+                </div>
             </section>
 
             <!-- Contribuciones Section -->
             <section class="contribuciones-section" id="contribuciones">
                 <h2>Contribuciones</h2>
-                <p>No hay contribuciones disponibles.</p>
+                <div class="contribuciones-list" id="contribucionesGrid">
+                    <!-- Contribuciones se cargarán dinámicamente -->
+                </div>
             </section>
         </main>
 

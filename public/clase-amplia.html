@@ -6,7 +6,7 @@
     <title>Clase - AcadeVision</title>
     <link rel="stylesheet" href="css/blog-style.css">
     <link rel="stylesheet" href="css/blog-markdown.css">
-    <link rel="stylesheet" href="css/blog-three-columns.css">
+    <link rel="stylesheet" href="css/blog-full-width.css">
 </head>
 <body>
     <!-- Header -->
@@ -36,37 +36,9 @@
     </div>
 
     <!-- Main Content -->
-    <div class="blog-container-three-columns">
-        <!-- Sidebar Left -->
-        <aside class="blog-sidebar-left">
-            <div class="sidebar-section">
-                <h3>Categorías</h3>
-                <nav class="category-nav">
-                    <a href="index.html" class="category-link active">Todos</a>
-                    <a href="index.html#materias" class="category-link">Materias</a>
-                    <a href="index.html#clases" class="category-link">Clases</a>
-                    <a href="index.html#ejercicios" class="category-link">Ejercicios</a>
-                    <a href="index.html#contribuciones" class="category-link">Contribuciones</a>
-                </nav>
-            </div>
-
-            <div class="sidebar-section">
-                <h3>Materias</h3>
-                <nav class="materia-nav" id="materiaNav">
-                    <!-- Materias se cargarán dinámicamente -->
-                </nav>
-            </div>
-
-            <div class="sidebar-section">
-                <h3>Etiquetas</h3>
-                <div class="tags-container" id="tagsContainer">
-                    <!-- Tags se cargarán dinámicamente -->
-                </div>
-            </div>
-        </aside>
-
+    <div class="blog-container-full">
         <!-- Main Content Area -->
-        <main class="blog-main">
+        <main class="blog-main-full">
             <!-- Clase Content -->
             <article class="blog-content">
                 <div class="clase-header">
@@ -99,9 +71,9 @@
                 </section>
 
                 <!-- Contributions Section -->
-                <section class="" id="contribuciones">
+                <section class="contributions-section">
                     <h2>Contribuciones</h2>
-                    <div class="contribuciones-list" id="contribucionesGrid">
+                    <div class="contributions-list" id="contributionsList">
                         <!-- Contribuciones se cargarán dinámicamente -->
                     </div>
                 </section>

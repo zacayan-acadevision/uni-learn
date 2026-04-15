@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase - AcadeVision</title>
+    <title>Contribuciones - AcadeVision</title>
     <link rel="stylesheet" href="css/blog-style.css">
     <link rel="stylesheet" href="css/blog-markdown.css">
-    <link rel="stylesheet" href="css/blog-three-columns.css">
+    <link rel="stylesheet" href="css/blog-full-width.css">
 </head>
 <body>
     <!-- Header -->
@@ -36,73 +36,28 @@
     </div>
 
     <!-- Main Content -->
-    <div class="blog-container-three-columns">
-        <!-- Sidebar Left -->
-        <aside class="blog-sidebar-left">
-            <div class="sidebar-section">
-                <h3>Categorías</h3>
-                <nav class="category-nav">
-                    <a href="index.html" class="category-link active">Todos</a>
-                    <a href="index.html#materias" class="category-link">Materias</a>
-                    <a href="index.html#clases" class="category-link">Clases</a>
-                    <a href="index.html#ejercicios" class="category-link">Ejercicios</a>
-                    <a href="index.html#contribuciones" class="category-link">Contribuciones</a>
-                </nav>
-            </div>
-
-            <div class="sidebar-section">
-                <h3>Materias</h3>
-                <nav class="materia-nav" id="materiaNav">
-                    <!-- Materias se cargarán dinámicamente -->
-                </nav>
-            </div>
-
-            <div class="sidebar-section">
-                <h3>Etiquetas</h3>
-                <div class="tags-container" id="tagsContainer">
-                    <!-- Tags se cargarán dinámicamente -->
-                </div>
-            </div>
-        </aside>
-
+    <div class="blog-container-full">
         <!-- Main Content Area -->
-        <main class="blog-main">
-            <!-- Clase Content -->
+        <main class="blog-main-full">
+            <!-- Contribuciones Content -->
             <article class="blog-content">
-                <div class="clase-header">
-                    <h1 id="claseTitulo">Título de la Clase</h1>
-                    <div class="clase-meta">
-                        <span>📅 <span id="claseFecha">Fecha</span></span>
-                        <span>👤 <span id="claseAutor">Autor</span></span>
-                        <span>📚 <span id="claseMateria">Materia</span></span>
-                    </div>
+                <h1 id="contribucionTitulo">Título de las Contribuciones</h1>
+                <div class="contribucion-meta">
+                    <span>📚 <span id="contribucionMateria">Materia</span></span>
                 </div>
+                <p id="contribucionDescripcion" style="color: #64748b; margin-bottom: 2rem;">
+                    Descripción de las contribuciones
+                </p>
 
-                <div id="clase-content" class="blog-markdown-container">
+                <div id="contribucion-content" class="blog-markdown-container">
                     <!-- Contenido se renderizará dinámicamente -->
                 </div>
 
-                <!-- Related Classes -->
-                <section class="related-classes">
-                    <h2>Clases Relacionadas</h2>
-                    <div class="related-classes-grid" id="relatedClasses">
-                        <!-- Clases relacionadas se cargarán dinámicamente -->
-                    </div>
-                </section>
-
-                <!-- Exercise Section -->
-                <section class="exercise-section">
-                    <h2>Ejercicios</h2>
-                    <div class="exercise-list" id="exerciseList">
-                        <!-- Ejercicios se cargarán dinámicamente -->
-                    </div>
-                </section>
-
-                <!-- Contributions Section -->
-                <section class="" id="contribuciones">
-                    <h2>Contribuciones</h2>
-                    <div class="contribuciones-list" id="contribucionesGrid">
-                        <!-- Contribuciones se cargarán dinámicamente -->
+                <!-- Related Contribuciones -->
+                <section class="related-contribuciones">
+                    <h2>Contribuciones Relacionadas</h2>
+                    <div class="related-contribuciones-grid" id="relatedContribuciones">
+                        <!-- Contribuciones relacionadas se cargarán dinámicamente -->
                     </div>
                 </section>
             </article>
@@ -149,6 +104,7 @@
                     <a href="index.html#materias">Materias</a>
                     <a href="index.html#clases">Clases</a>
                     <a href="index.html#ejercicios">Ejercicios</a>
+                    <a href="index.html#contribuciones">Contribuciones</a>
                 </nav>
             </div>
             <div class="footer-section">
@@ -185,8 +141,8 @@
             // Inicializar el blog (materias y etiquetas)
             initBlog();
 
-            // Inicializar la página de clase
-            initClasePage();
+            // Inicializar la página de contribuciones
+            initContribucionesPage();
         });
     </script>
 </body>
