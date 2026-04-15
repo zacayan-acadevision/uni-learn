@@ -1,0 +1,464 @@
+/* Estilos para contenido Markdown del Blog */
+.blog-markdown-container {
+    max-width: 100%;
+    line-height: 1.6;
+    color: #334155;
+    font-size: 1rem;
+    overflow: hidden;
+}
+
+.blog-markdown-container pre {
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.blog-markdown-container code {
+    max-width: 100%;
+    overflow-x: auto;
+    background: #f1f5f9;
+    color: #e11d48;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+.blog-markdown-container p {
+    max-width: 100%;
+    margin: 12px 0;
+    line-height: 1.7;
+    color: #475569;
+    overflow-x: auto;
+}
+
+.blog-markdown-container ul,
+.blog-markdown-container ol {
+    max-width: 100%;
+    margin: 12px 0;
+    padding-left: 24px;
+}
+
+.blog-markdown-container ul {
+    list-style-type: disc;
+}
+
+.blog-markdown-container ol {
+    list-style-type: decimal;
+}
+
+.blog-markdown-container li {
+    max-width: 100%;
+    margin: 6px 0;
+    line-height: 1.6;
+}
+
+.blog-markdown-container h1,
+.blog-markdown-container h2,
+.blog-markdown-container h3,
+.blog-markdown-container h4,
+.blog-markdown-container h5,
+.blog-markdown-container h6 {
+    max-width: 100%;
+    margin: 24px 0 12px 0;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+}
+
+.blog-markdown-container h1 {
+    font-size: 2rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.blog-markdown-container h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+.blog-markdown-container h3 {
+    font-size: 1.5rem;
+}
+
+.blog-markdown-container h4 {
+    font-size: 1.25rem;
+}
+
+.blog-markdown-container h5 {
+    font-size: 1.1rem;
+}
+
+.blog-markdown-container h6 {
+    font-size: 1rem;
+    color: #64748b;
+}
+
+.blog-markdown-container table {
+    max-width: 100%;
+    margin: 16px 0;
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.blog-markdown-container table th,
+.blog-markdown-container table td {
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.blog-markdown-container table th {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.blog-markdown-container table td {
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+.blog-markdown-container table tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.blog-markdown-container table tr:hover {
+    background: #f1f5f9;
+}
+
+.blog-markdown-container blockquote {
+    max-width: 100%;
+    margin: 16px 0;
+    padding: 16px 20px;
+    border-left: 4px solid #3b82f6;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 0 8px 8px 0;
+    color: #1e40af;
+    font-style: italic;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.blog-markdown-container img {
+    max-width: 100%;
+    height: auto;
+    margin: 16px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+.blog-markdown-container hr {
+    max-width: 100%;
+    margin: 24px 0;
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
+    border-radius: 2px;
+}
+
+/* Estilos para MathJax */
+.mjx-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 1.1em;
+}
+
+/* Estilos específicos para MathJax con display mode */
+.mjx-container[display="true"] {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Estilos para elementos inline */
+.blog-markdown-container span {
+    max-width: 100%;
+    line-height: 1.6;
+}
+
+.blog-markdown-container a {
+    max-width: 100%;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.blog-markdown-container a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.blog-markdown-container strong {
+    max-width: 100%;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.blog-markdown-container em {
+    max-width: 100%;
+    font-style: italic;
+    color: #475569;
+}
+
+.blog-markdown-container del {
+    max-width: 100%;
+    text-decoration: line-through;
+    color: #94a3b8;
+}
+
+.blog-markdown-container ins {
+    max-width: 100%;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: #22c55e;
+    color: #15803d;
+}
+
+/* Estilos específicos para el blog */
+.blog-content {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.blog-content h1 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.blog-content h2 {
+    color: var(--primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.blog-content h3 {
+    color: var(--primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.blog-content p {
+    margin-bottom: 1rem;
+}
+
+.blog-content ul,
+.blog-content ol {
+    margin-bottom: 1rem;
+}
+
+.blog-content li {
+    margin-bottom: 0.5rem;
+}
+
+.blog-content code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+.blog-content pre {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.blog-content pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+}
+
+.blog-content blockquote {
+    border-left: 4px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: #475569;
+    font-style: italic;
+}
+
+.blog-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+.blog-content th,
+.blog-content td {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+.blog-content th {
+    background: var(--accent);
+    color: var(--white);
+    font-weight: 600;
+}
+
+.blog-content tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    /* border-radius: 8px;
+    margin: 1.5rem 0; */
+}
+
+.blog-content hr {
+    border: none;
+    height: 2px;
+    background: var(--border);
+    margin: 2rem 0;
+}
+
+.blog-content .math-equation {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    text-align: center;
+    overflow-x: auto;
+}
+
+.blog-content .math-equation .equation {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin: 1rem 0;
+}
+
+.blog-content .exercise {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.blog-content .exercise h4 {
+    color: #166534;
+    margin-bottom: 1rem;
+}
+
+.blog-content .solution {
+    background: #fef9c3;
+    border: 1px solid #fde047;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.blog-content .solution h4 {
+    color: #854d0e;
+    margin-bottom: 1rem;
+}
+
+.blog-content .note {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: #1e40af;
+}
+
+.blog-content .warning {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: #991b1b;
+}
+
+.blog-content .info {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: #166534;
+}
+
+/* Responsive para contenido Markdown */
+@media (max-width: 768px) {
+    .blog-markdown-container {
+        font-size: 0.95rem;
+    }
+
+    .blog-markdown-container h1 {
+        font-size: 1.75rem;
+    }
+
+    .blog-markdown-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .blog-markdown-container h3 {
+        font-size: 1.25rem;
+    }
+
+    .blog-markdown-container pre {
+        font-size: 0.85rem;
+        padding: 1rem;
+    }
+
+    .blog-content {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-markdown-container {
+        font-size: 0.9rem;
+    }
+
+    .blog-markdown-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .blog-markdown-container h2 {
+        font-size: 1.25rem;
+    }
+
+    .blog-markdown-container h3 {
+        font-size: 1.1rem;
+    }
+
+    .blog-content {
+        padding: 1rem;
+    }
+
+    .blog-content pre {
+        padding: 0.75rem;
+    }
+}

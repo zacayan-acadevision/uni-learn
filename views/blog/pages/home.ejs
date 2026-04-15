@@ -1,0 +1,178 @@
+  <!-- Header -->
+    <header class="blog-header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>📚 AcadeVision</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">Inicio</a>
+                <a href="index.html#materias" class="nav-link">Materias</a>
+                <a href="index.html#clases" class="nav-link">Clases</a>
+                <a href="index.html#ejercicios" class="nav-link">Ejercicios</a>
+                <a href="index.html#contribuciones" class="nav-link">Contribuciones</a>
+            </nav>
+            <div class="header-actions">
+                <button class="search-btn" onclick="toggleSearch()">
+                    🔍
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar (Hidden by default) -->
+    <div class="search-bar hidden" id="searchBar">
+        <input type="text" id="searchInput" placeholder="Buscar clases, ejercicios, materias..." onkeyup="searchContent()">
+    </div>
+
+    <!-- Main Content -->
+    <div class="blog-container-three-columns">
+        <!-- Sidebar Left -->
+        <aside class="blog-sidebar-left">
+            <div class="sidebar-section">
+                <h3>Categorías</h3>
+                <nav class="category-nav">
+                    <a href="index.html" class="category-link active">Todos</a>
+                    <a href="index.html#materias" class="category-link">Materias</a>
+                    <a href="index.html#clases" class="category-link">Clases</a>
+                    <a href="index.html#ejercicios" class="category-link">Ejercicios</a>
+                    <a href="index.html#contribuciones" class="category-link">Contribuciones</a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Materias</h3>
+                <nav class="materia-nav" id="materiaNav">
+                    <!-- Materias se cargarán dinámicamente -->
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Etiquetas</h3>
+                <div class="tags-container" id="tagsContainer">
+                    <!-- Tags se cargarán dinámicamente -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="blog-main-full">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h2>Bienvenido a AcadeVision</h2>
+                    <p>Plataforma educativa para aprender matemáticas, álgebra, cálculo y más</p>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/images/hero.jpg" alt="Plataforma Educativa" onerror="this.src='/images/generic-placeholder.svg'">
+                </div>
+            </section>
+
+            <!-- Featured Posts -->
+            <section class="featured-posts">
+                <h2>Clases Destacadas</h2>
+                <div class="posts-grid" id="featuredPosts">
+                    <!-- Posts destacados se cargarán dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Recent Posts -->
+            <section class="recent-posts">
+                <h2>Últimas Clases</h2>
+                <div class="posts-list" id="recentPosts">
+                    <!-- Posts recientes se cargarán dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Ejercicios Section -->
+            <section class="ejercicios-section" id="ejercicios">
+                <h2>Ejercicios</h2>
+                <div class="ejercicios-grid" id="ejerciciosGrid">
+                    <!-- Ejercicios se cargarán dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Contribuciones Section -->
+            <section class="contribuciones-section" id="contribuciones">
+                <h2>Contribuciones</h2>
+                <div class="contribuciones-list" id="contribucionesGrid">
+                    <!-- Contribuciones se cargarán dinámicamente -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar Right -->
+        <aside class="blog-sidebar-right">
+            <div class="sidebar-widget">
+                <h3>Popular Posts</h3>
+                <p>No hay posts populares.</p>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3>Sobre el Blog</h3>
+                <p class="widget-text">
+                    Este blog contiene clases, ejercicios y material educativo para estudiantes de matemáticas y ciencias.
+                </p>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3>Suscríbete</h3>
+                <p class="widget-text">Recibe actualizaciones sobre nuevas clases y ejercicios.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');">
+                    <input type="email" placeholder="Tu correo electrónico" required>
+                    <button type="submit" class="btn btn-primary">Suscribirse</button>
+                </form>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="blog-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AcadeVision</h3>
+                <p>Plataforma educativa para el aprendizaje de matemáticas</p>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces</h3>
+                <nav class="footer-nav">
+                    <a href="index.html">Inicio</a>
+                    <a href="index.html#materias">Materias</a>
+                    <a href="index.html#clases">Clases</a>
+                    <a href="index.html#ejercicios">Ejercicios</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <nav class="footer-nav">
+                    <a href="#">Privacidad</a>
+                    <a href="#">Términos</a>
+                    <a href="#">Contacto</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AcadeVision. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="js/blog-data.js"></script>
+    <script src="js/blog-navigation.js"></script>
+    <script src="js/blog-markdown-render.js"></script>
+    <script src="js/image-placeholder.js"></script>
+    <script>
+        // Manejar imágenes que no se cargan
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('img').forEach(function(img) {
+                img.onerror = function() {
+                    handleImageError(this);
+                };
+            });
+
+            // Inicializar el blog
+            initBlog();
+        });
+    </script>

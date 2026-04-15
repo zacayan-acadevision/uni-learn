@@ -1,0 +1,40 @@
+/* Estilos para páginas con ancho completo (sin columna izquierda) */
+
+/* Container Full Width */
+.blog-container-full {
+    max-width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Main Content Full Width */
+.blog-main-full {
+    min-height: 80vh;
+}
+
+/* Responsive para container full width */
+@media (max-width: 1024px) {
+    .blog-container-full {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+    }
+
+    .blog-sidebar-right {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-container-full {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-container-full {
+        padding: 0 0.5rem;
+    }
+}

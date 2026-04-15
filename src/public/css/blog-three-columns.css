@@ -1,0 +1,49 @@
+/* Estilos para layout de 3 columnas */
+
+/* Container con 3 columnas */
+.blog-container-three-columns {
+    max-width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Main content ocupa todo el espacio disponible */
+.blog-main {
+    min-height: 80vh;
+}
+
+/* Responsive para 3 columnas */
+@media (max-width: 1200px) {
+    .blog-container-three-columns {
+        grid-template-columns: 260px 1fr 280px;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .blog-container-three-columns {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+    }
+
+    .blog-sidebar-left,
+    .blog-sidebar-right {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-container-three-columns {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-container-three-columns {
+        padding: 0 0.5rem;
+    }
+}
