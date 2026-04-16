@@ -78,6 +78,9 @@
           <a href="/uni/materia/<%= ejercicio.nextEjercicio.materiaId %>/ejercicio/<%= ejercicio.nextEjercicio.id %>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Próximo Ejercicio
             &rarr;</a>
           <% } %>
+          <% if (!ejercicio.nextEjercicio && !ejercicio.prevEjercicio) {%>
+            Unico Ejercicio
+          <% } %>
         </div>
       </div>
       
