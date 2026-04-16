@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const materias = await getMateriasWithClases();
-    res.render('blog/pages/home', { title: 'Home', materias, layout: 'blog/layouts/layout' });
+    res.render('pages/home', { title: 'Home', materias, layout: 'layouts/unilayout' });
   } catch (error) {
     console.error(error);
     res.status(500).render('500', { title: 'Internal Server Error', layout: 'layouts/layout' });
