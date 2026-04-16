@@ -3,6 +3,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "npx prisma generate && node src/index.js",
     "test": " $env:NODE_OPTIONS=\"--experimental-vm-modules\"; npx jest test",
     "dev": "nodemon src/index.js",
     "db:migrate": "prisma migrate dev",
