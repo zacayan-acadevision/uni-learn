@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dictado con Grabación Automática</title>
+    <style>
+        :root {
+            --bg-chat: #e5ddd5;
+            --bg-previa: #ffffff;
+            --accent: #25d366;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg-chat); height: 100vh; display: flex; flex-direction: column; }
+        
+        #history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .block { background: white; padding: 15px; border-radius: 15px; align-self: flex-start; max-width: 80%; box-shadow: 0 1px 2px rgba(0,0,0,0.2); line-height: 1.4; }
+
+        #preview-container { 
+            background: var(--bg-previa); 
+            padding: 20px; 
+            border-top: 3px solid var(--accent);
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+        }
+        .preview-label { color: #075e54; font-weight: bold; font-size: 0.85em; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        #preview-text { font-size: 1.1em; color: #333; min-height: 1.2em; line-height: 1.5; }
+        
+        .live-ink { color: #34b7f1; font-weight: 500; border-bottom: 2px solid #34b7f1; }
+
+        .toolbar { background: #f0f0f0; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .timer-circle { background: #075e54; color: white; padding: 8px 15px; border-radius: 20px; font-variant-numeric: tabular-nums; }
+        button { padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-start { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="history"></div>
+
+    <div id="preview-container">
+        <div class="preview-label">
+            <span>BORRADOR EN CURSO:</span>
+            <span id="countdown-text">Faltan -- seg</span>
+        </div>
+        <div id="preview-text"><i>El audio se grabará y transcribirá simultáneamente...</i></div>
+    </div>
+
+    <div class="toolbar">
+        <select id="time-limit">
+            <option value="20">Cada 20 segundos</option>
+            <option value="40">Cada 40 segundos</option>
+            <option value="60">Cada 60 segundos</option>
+        </select>
+        <button id="main-btn" class="btn-start">EMPEZAR A DICTAR</button>
+        <div class="timer-circle" id="timer-ui">00s</div>
+    </div>
+
+    <script>
+        const historyDiv = document.getElementById('history');
+        const previewText = document.getElementById('preview-text');
+        const countdownText = document.getElementById('countdown-text');
+        const timerUi = document.getElementById('timer-ui');
+        const mainBtn = document.getElementById('main-btn');
+        const timeLimit = document.getElementById('time-limit');
+
+        let recognition;
+        let mediaRecorder;
+        let audioChunks = [];
+        let isActive = false;
+        let bufferFinal = ""; 
+        let clock;
+        let elapsed = 0;
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'es-ES';
+
+            recognition.onresult = (event) => {
+                let interim = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        bufferFinal += event.results[i][0].transcript + " ";
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                previewText.innerHTML = `${bufferFinal} <span class="live-ink">${interim}</span>`;
+            };
+
+            recognition.onend = () => { if (isActive) recognition.start(); };
+        }
+
+        function saveToHistory() {
+            if (bufferFinal.trim() !== "") {
+                const block = document.createElement('div');
+                block.className = 'block';
+                block.innerText = bufferFinal;
+                historyDiv.appendChild(block);
+                historyDiv.scrollTop = historyDiv.scrollHeight;
+            }
+            bufferFinal = "";
+            previewText.innerHTML = "<i>Nuevo bloque de tiempo iniciado...</i>";
+        }
+
+        async function toggleService() {
+            if (!isActive) {
+                // 1. Pedir acceso al micrófono para el MediaRecorder
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        // Al terminar, creamos el archivo y lo descargamos
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const url = URL.createObjectURL(audioBlob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `grabacion_${new Date().getTime()}.webm`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    };
+
+                    // Iniciar grabadora y reconocimiento
+                    mediaRecorder.start();
+                    recognition.start();
+                    
+                    isActive = true;
+                    mainBtn.innerText = "PARAR Y DESCARGAR AUDIO";
+                    mainBtn.style.background = "#d9534f";
+                    
+                    elapsed = 0;
+                    const limit = parseInt(timeLimit.value);
+                    
+                    clock = setInterval(() => {
+                        elapsed++;
+                        timerUi.innerText = `${elapsed}s`;
+                        countdownText.innerText = `Faltan ${limit - elapsed} seg`;
+
+                        if (elapsed >= limit) {
+                            saveToHistory();
+                            elapsed = 0;
+                        }
+                    }, 1000);
+
+                } catch (err) {
+                    alert("No se pudo acceder al micrófono: " + err);
+                }
+
+            } else {
+                // Detener todo
+                isActive = false;
+                recognition.stop();
+                mediaRecorder.stop(); // Esto dispara la descarga automática
+                
+                clearInterval(clock);
+                saveToHistory(); 
+                
+                mainBtn.innerText = "EMPEZAR A DICTAR";
+                mainBtn.style.background = "#25d366";
+                timerUi.innerText = "00s";
+                countdownText.innerText = "Faltan -- seg";
+            }
+        }
+
+        mainBtn.onclick = toggleService;
+    </script>
+</body>
+</html>

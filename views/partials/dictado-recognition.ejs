@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dictado con Grabación Automática</title>
+    <style>
+        #dictado-recognition-widget {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 20px;
+            background: #e5ddd5;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        #dictado-recognition-widget #history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+        }
+        #dictado-recognition-widget .block {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            align-self: flex-start;
+            max-width: 80%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            line-height: 1.4;
+        }
+        #dictado-recognition-widget #preview-container {
+            background: #ffffff;
+            padding: 20px;
+            border-top: 3px solid #25d366;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            margin-top: 15px;
+        }
+        #dictado-recognition-widget .preview-label {
+            color: #075e54;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #dictado-recognition-widget #preview-text {
+            font-size: 1.1em;
+            color: #333;
+            min-height: 1.2em;
+            line-height: 1.5;
+        }
+        #dictado-recognition-widget .live-ink {
+            color: #34b7f1;
+            font-weight: 500;
+            border-bottom: 2px solid #34b7f1;
+        }
+        #dictado-recognition-widget .toolbar {
+            background: #f0f0f0;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        #dictado-recognition-widget .timer-circle {
+            background: #075e54;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-variant-numeric: tabular-nums;
+        }
+        #dictado-recognition-widget button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #dictado-recognition-widget .btn-start {
+            background: #25d366;
+            color: white;
+        }
+        #dictado-recognition-widget select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="dictado-recognition-widget" data-clase-id="<%= claseId %>">
+        <div id="history"></div>
+
+        <div id="preview-container">
+            <div class="preview-label">
+                <span>BORRADOR EN CURSO:</span>
+                <span id="countdown-text">Faltan -- seg</span>
+            </div>
+            <div id="preview-text"><i>El audio se grabará y transcribirá simultáneamente...</i></div>
+        </div>
+
+        <div class="toolbar">
+            <select id="time-limit">
+                <option value="20">Cada 20 segundos</option>
+                <option value="40">Cada 40 segundos</option>
+                <option value="60">Cada 60 segundos</option>
+            </select>
+            <button id="main-btn" class="btn-start">EMPEZAR A DICTAR</button>
+            <div class="timer-circle" id="timer-ui">00s</div>
+        </div>
+    </div>
+
+    <script>
+        const historyDiv = document.getElementById('history');
+        const previewText = document.getElementById('preview-text');
+        const countdownText = document.getElementById('countdown-text');
+        const timerUi = document.getElementById('timer-ui');
+        const mainBtn = document.getElementById('main-btn');
+        const timeLimit = document.getElementById('time-limit');
+        const widget = document.getElementById('dictado-recognition-widget');
+        const claseId = widget.getAttribute('data-clase-id');
+
+        let recognition;
+        let mediaRecorder;
+        let audioChunks = [];
+        let isActive = false;
+        let bufferFinal = "";
+        let clock;
+        let elapsed = 0;
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'es-ES';
+
+            recognition.onresult = (event) => {
+                let interim = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        bufferFinal += event.results[i][0].transcript + " ";
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                previewText.innerHTML = `${bufferFinal} <span class="live-ink">${interim}</span>`;
+            };
+
+            recognition.onend = () => { if (isActive) recognition.start(); };
+
+            recognition.onend = () => { if (isActive) recognition.start(); };
+        }
+
+        function saveToHistory() {
+            if (bufferFinal.trim() !== "") {
+                // Enviar comentario a la API
+                fetch('/api/contribuciones', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: bufferFinal.trim(),
+                        claseId: claseId,
+                        tipo: 'COMENTARIO'
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Error al enviar comentario');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar comentario:', error);
+                });
+
+                const block = document.createElement('div');
+                block.className = 'block';
+                block.innerText = bufferFinal;
+                historyDiv.appendChild(block);
+                historyDiv.scrollTop = historyDiv.scrollHeight;
+            }
+            bufferFinal = "";
+            previewText.innerHTML = "<i>Nuevo bloque de tiempo iniciado...</i>";
+        }
+
+        async function toggleService() {
+            if (!isActive) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const url = URL.createObjectURL(audioBlob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `grabacion_${new Date().getTime()}.webm`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    };
+
+                    mediaRecorder.start();
+                    recognition.start();
+
+                    isActive = true;
+                    mainBtn.innerText = "PARAR Y DESCARGAR AUDIO";
+                    mainBtn.style.background = "#d9534f";
+
+                    elapsed = 0;
+                    const limit = parseInt(timeLimit.value);
+
+                    clock = setInterval(() => {
+                        elapsed++;
+                        timerUi.innerText = `${elapsed}s`;
+                        countdownText.innerText = `Faltan ${limit - elapsed} seg`;
+
+                        if (elapsed >= limit) {
+                            saveToHistory();
+                            elapsed = 0;
+                        }
+                    }, 1000);
+
+                } catch (err) {
+                    alert("No se pudo acceder al micrófono: " + err);
+                }
+
+            } else {
+                isActive = false;
+                recognition.stop();
+                mediaRecorder.stop();
+
+                clearInterval(clock);
+                saveToHistory();
+
+                mainBtn.innerText = "EMPEZAR A DICTAR";
+                mainBtn.style.background = "#25d366";
+                timerUi.innerText = "00s";
+                countdownText.innerText = "Faltan -- seg";
+            }
+        }
+
+        mainBtn.onclick = toggleService;
+    </script>
+</body>
+</html>
